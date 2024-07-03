@@ -45,12 +45,12 @@
       <!-- At least one "structures" JAR must also be included -->
 		<dependency>
 			<groupId>ca.uhn.hapi.fhir</groupId>
-			<artifactId>hapi-fhir-structures-r5</artifactId>
+			<artifactId>hapi-fhir-structures-r4</artifactId>
 			<version>${hapifhir_version}</version>
 		</dependency>
       <dependency>
          <groupId>ca.uhn.hapi.fhir</groupId>
-         <artifactId>hapi-fhir-validation-resources-r5</artifactId>
+         <artifactId>hapi-fhir-validation-resources-r4</artifactId>
          <version>${hapifhir_version}</version>
       </dependency>
 

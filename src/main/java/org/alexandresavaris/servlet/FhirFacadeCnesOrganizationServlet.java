@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.uhn.example.provider.OrganizationResourceProvider;
-import ca.uhn.example.provider.PatientResourceProvider;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
@@ -30,7 +29,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
      */
     public FhirFacadeCnesOrganizationServlet() {
         
-    	super(FhirContext.forR5Cached()); // This is an R5 server
+    	super(FhirContext.forR4Cached());
     }
 	
     /**
@@ -68,7 +67,6 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              * type of resource.
              */
             List<IResourceProvider> providers = new ArrayList<>();
-            providers.add(new PatientResourceProvider());
             providers.add(new OrganizationResourceProvider(
                 soapEnvelopeContent, cnesFilter, cnpjFilter));
             setResourceProviders(providers);
