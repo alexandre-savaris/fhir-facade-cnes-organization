@@ -13,13 +13,22 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.alexandresavaris.model.CnesOrganization;
@@ -78,6 +87,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         try {
 
             // Replace the placeholder with the resource ID.
+            // TODO: use constants.
             String snippetFilter = null;
             if (theId.getIdPart().length() == 7) {
                 // Filter by CNES.
@@ -119,20 +129,51 @@ public class OrganizationResourceProvider implements IResourceProvider {
             retVal = new CnesOrganization();
             retVal.setId(IdType.newRandomUuid());
             
-            DocumentBuilder builder
-                = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+//            DocumentBuilder builder
+//                = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+//            Document document
+//                = builder.parse(new InputSource(new StringReader(response.body())));
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
             Document document
                 = builder.parse(new InputSource(new StringReader(response.body())));
             
             // Fill in the resource content.
-            Node node;
+            XPathFactory xpathfactory = XPathFactory.newInstance();
+            XPath xpath = xpathfactory.newXPath();
+            NamespaceContext context = new NamespaceContextMap(
+                "soap", "http://www.w3.org/2003/05/soap-envelope",
+                "S", "http://www.w3.org/2003/05/soap-envelope",
+                "est", "http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice",
+                "dad", "http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes",
+                "ns2", "http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
+            );
+            xpath.setNamespaceContext(context);
+//            xpath.setNamespaceContext(new NamespaceResolver(document));
+//            XPathExpression expr = xpath.compile("//ns2:bookStore/ns2:book/ns2:name/text()");
+            XPathExpression expr = xpath.compile("//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns2:CodigoCNES/ns2:codigo/text()");
+            Object result = expr.evaluate(document, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            Node node2 = nodes.item(0);
 
+
+
+
+
+
+
+            Node node;
+            
             // Identifier: CNES.
             node = document.getElementsByTagName("ns2:codigo").item(0)
                 .getChildNodes().item(0);
             retVal.addIdentifier()
                 .setSystem("http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes")
-                .setValue(node.getNodeValue());
+                //.setValue(node.getNodeValue());
+                .setValue(node2.getNodeValue());
 
             // Identifier: CNPJ.
             node = document.getElementsByTagName("ns6:numeroCNPJ").item(0)
@@ -161,14 +202,177 @@ public class OrganizationResourceProvider implements IResourceProvider {
             retVal.getEmergencyContact().add(contact);
   */
 
+        // TODO: catch each exception type separately.
         } catch (URISyntaxException | IOException | InterruptedException
-            | ParserConfigurationException | SAXException ex) {
+            | ParserConfigurationException | SAXException | XPathExpressionException ex) {
             Logger.getLogger(OrganizationResourceProvider.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
         
         return retVal;
     }
+}
+
+// From: https://howtodoinjava.com/java/xml/xpath-namespace-resolution-example/
+class NamespaceResolver implements NamespaceContext {
+    //Store the source document to search the namespaces.
+    private final Document sourceDocument;
+    
+    public NamespaceResolver(Document document) {
+        
+        sourceDocument = document;
+    }
+ 
+    //The lookup for the namespace uris is delegated to the stored document.
+    @Override
+    public String getNamespaceURI(String prefix) {
+        
+        if (prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
+            return sourceDocument.lookupNamespaceURI(null);
+        } else {
+            return sourceDocument.lookupNamespaceURI(prefix);
+        }
+    }
+ 
+    @Override
+    public String getPrefix(String namespaceURI) {
+        
+        return sourceDocument.lookupPrefix(namespaceURI);
+    }
+ 
+    //@SuppressWarnings("rawtypes")
+    @Override
+    public Iterator getPrefixes(String namespaceURI) {
+        
+        return null;
+    }
+}
+
+/**
+ * An implementation of <a
+ * href="http://java.sun.com/javase/6/docs/api/javax/xml/namespace/NamespaceContext.html">
+ * NamespaceContext </a>. Instances are immutable.
+ * 
+ * @author McDowell
+ */
+final class NamespaceContextMap implements
+    NamespaceContext {
+
+  private final Map<String, String> prefixMap;
+  private final Map<String, Set<String>> nsMap;
+
+  /**
+   * Constructor that takes a map of XML prefix-namespaceURI values. A defensive
+   * copy is made of the map. An IllegalArgumentException will be thrown if the
+   * map attempts to remap the standard prefixes defined in the NamespaceContext
+   * contract.
+   * 
+   * @param prefixMappings
+   *          a map of prefix:namespaceURI values
+   */
+  public NamespaceContextMap(
+      Map<String, String> prefixMappings) {
+    prefixMap = createPrefixMap(prefixMappings);
+    nsMap = createNamespaceMap(prefixMap);
+  }
+
+  /**
+   * Convenience constructor.
+   * 
+   * @param mappingPairs
+   *          pairs of prefix-namespaceURI values
+   */
+  public NamespaceContextMap(String... mappingPairs) {
+    this(toMap(mappingPairs));
+  }
+
+  private static Map<String, String> toMap(
+      String... mappingPairs) {
+    Map<String, String> prefixMappings = new HashMap<String, String>(
+        mappingPairs.length / 2);
+    for (int i = 0; i < mappingPairs.length; i++) {
+      prefixMappings
+          .put(mappingPairs[i], mappingPairs[++i]);
+    }
+    return prefixMappings;
+  }
+
+  private Map<String, String> createPrefixMap(
+      Map<String, String> prefixMappings) {
+    Map<String, String> prefixMap = new HashMap<String, String>(
+        prefixMappings);
+    addConstant(prefixMap, XMLConstants.XML_NS_PREFIX,
+        XMLConstants.XML_NS_URI);
+    addConstant(prefixMap, XMLConstants.XMLNS_ATTRIBUTE,
+        XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+    return Collections.unmodifiableMap(prefixMap);
+  }
+
+  private void addConstant(Map<String, String> prefixMap,
+      String prefix, String nsURI) {
+    String previous = prefixMap.put(prefix, nsURI);
+    if (previous != null && !previous.equals(nsURI)) {
+      throw new IllegalArgumentException(prefix + " -> "
+          + previous + "; see NamespaceContext contract");
+    }
+  }
+
+  private Map<String, Set<String>> createNamespaceMap(
+      Map<String, String> prefixMap) {
+    Map<String, Set<String>> nsMap = new HashMap<String, Set<String>>();
+    for (Map.Entry<String, String> entry : prefixMap
+        .entrySet()) {
+      String nsURI = entry.getValue();
+      Set<String> prefixes = nsMap.get(nsURI);
+      if (prefixes == null) {
+        prefixes = new HashSet<String>();
+        nsMap.put(nsURI, prefixes);
+      }
+      prefixes.add(entry.getKey());
+    }
+    for (Map.Entry<String, Set<String>> entry : nsMap
+        .entrySet()) {
+      Set<String> readOnly = Collections
+          .unmodifiableSet(entry.getValue());
+      entry.setValue(readOnly);
+    }
+    return nsMap;
+  }
+
+  @Override
+  public String getNamespaceURI(String prefix) {
+    checkNotNull(prefix);
+    String nsURI = prefixMap.get(prefix);
+    return nsURI == null ? XMLConstants.NULL_NS_URI : nsURI;
+  }
+
+  @Override
+  public String getPrefix(String namespaceURI) {
+    checkNotNull(namespaceURI);
+    Set<String> set = nsMap.get(namespaceURI);
+    return set == null ? null : set.iterator().next();
+  }
+
+  @Override
+  public Iterator<String> getPrefixes(String namespaceURI) {
+    checkNotNull(namespaceURI);
+    Set<String> set = nsMap.get(namespaceURI);
+    return set.iterator();
+  }
+
+  private void checkNotNull(String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("null");
+    }
+  }
+
+  /**
+   * @return an unmodifiable map of the mappings in the form prefix-namespaceURI
+   */
+  public Map<String, String> getMap() {
+    return prefixMap;
+  }
+
 }
 
 
