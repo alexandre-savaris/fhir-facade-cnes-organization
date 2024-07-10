@@ -11,9 +11,11 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +42,20 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
     public void initialize() {
             
         try {
+            
+            // Load the properties file.
+            String rootPath = Thread.currentThread()
+                .getContextClassLoader()
+                .getResource("")
+                .getPath();
+            String appConfigPath = rootPath + "application.properties";
+            
+            Properties appProps = new Properties();
+            appProps.load(new FileInputStream(appConfigPath));
+            
+            // Retrieve the endpoint to the "EstabelecimentoSaudeService" service.
+            String endpointEstabelecimentoSaudeService
+                = appProps.getProperty("endpoint.cnes.estabelecimentosaudeservice");
                 
             // Load the content of the SOAP envelope to be sent to the endpoint.
             URL url = this.getClass()
@@ -68,6 +84,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              */
             List<IResourceProvider> providers = new ArrayList<>();
             providers.add(new OrganizationResourceProvider(
+                endpointEstabelecimentoSaudeService, 
                 soapEnvelopeContent, cnesFilter, cnpjFilter));
             setResourceProviders(providers);
                 

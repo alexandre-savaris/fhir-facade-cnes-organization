@@ -13,15 +13,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,6 +25,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.alexandresavaris.model.CnesOrganization;
+import org.alexandresavaris.util.NamespaceContextMap;
 import org.hl7.fhir.r4.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -49,6 +43,7 @@ import org.xml.sax.SAXException;
  */
 public class OrganizationResourceProvider implements IResourceProvider {
     // TODO: comment.
+    private String endpointEstabelecimentoSaudeService = null;
     private String soapEnvelopeContent = null;
     private String cnesFilter = null;
     private String cnpjFilter = null;
@@ -56,9 +51,12 @@ public class OrganizationResourceProvider implements IResourceProvider {
     public OrganizationResourceProvider() {
     }
     
-    public OrganizationResourceProvider(String soapEnvelopeContent,
-        String cnesFilter, String cnpjFilter) {
+    public OrganizationResourceProvider(String endpointEstabelecimentoSaudeService,
+        String soapEnvelopeContent,
+        String cnesFilter,
+        String cnpjFilter) {
         
+        this.endpointEstabelecimentoSaudeService = endpointEstabelecimentoSaudeService;
         this.soapEnvelopeContent = soapEnvelopeContent;
         this.cnesFilter = cnesFilter;
         this.cnpjFilter = cnpjFilter;
@@ -81,36 +79,37 @@ public class OrganizationResourceProvider implements IResourceProvider {
      */
     @Read()
     public CnesOrganization getResourceById(@IdParam IdType theId) {
+        // The expected length for a CNES value.
+        final int expectedCnesLength = 7;
+        // The expected length for a CNPJ value.
+        final int expectedCnpjLength = 14;
         // The resource instance to be returned.
         CnesOrganization retVal = null;
         
         try {
 
             // Replace the placeholder with the resource ID.
-            // TODO: use constants.
             String snippetFilter = null;
-            if (theId.getIdPart().length() == 7) {
+            if (theId.getIdPart().length() == expectedCnesLength) {
                 // Filter by CNES.
                 snippetFilter = MessageFormat.format(
                     this.cnesFilter, theId.getIdPart());
-            } else if (theId.getIdPart().length() == 14) {
-                // Filter by CNPJ. TODO: rever.
+            } else if (theId.getIdPart().length() == expectedCnpjLength) {
+                // Filter by CNPJ. TODO: it's not working.
                 snippetFilter = MessageFormat.format(
                     this.cnpjFilter, theId.getIdPart());
             }
             this.soapEnvelopeContent = MessageFormat.format(
                 this.soapEnvelopeContent, snippetFilter);
-
-            // TODO: parameterize URL.
+            
+            // Access the endpoint.
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(
-                    "https://servicoshm.saude.gov.br/cnes/EstabelecimentoSaudeService/v1r0"))
+                .uri(new URI(this.endpointEstabelecimentoSaudeService))
                 .version(HttpClient.Version.HTTP_2)
                 .POST(HttpRequest.BodyPublishers.ofString(this.soapEnvelopeContent))
                 .header("Content-Type", "text/xml")
                 .header("charset", "UTF-8")
                 .build();
-            
             HttpResponse<String> response = HttpClient
                 .newBuilder()
                 .build()
@@ -125,23 +124,18 @@ public class OrganizationResourceProvider implements IResourceProvider {
             if (response.statusCode() != 200) {
                 throw new ResourceNotFoundException(theId);
             }
-
+            
+            // Fill in the resource with data from the response.
             retVal = new CnesOrganization();
             retVal.setId(IdType.newRandomUuid());
-            
 
-//            DocumentBuilder builder
-//                = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//            Document document
-//                = builder.parse(new InputSource(new StringReader(response.body())));
-
+            // For XML parsing.
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document
                 = builder.parse(new InputSource(new StringReader(response.body())));
             
-            // Fill in the resource content.
             XPathFactory xpathfactory = XPathFactory.newInstance();
             XPath xpath = xpathfactory.newXPath();
             NamespaceContext context = new NamespaceContextMap(
@@ -149,43 +143,82 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 "S", "http://www.w3.org/2003/05/soap-envelope",
                 "est", "http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice",
                 "dad", "http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes",
-                "ns2", "http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
+                "ns2", "http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes",
+                "ns6", "http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj",
+                "ns7", "http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico",
+                "ns11", "http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco",
+                "ns13", "http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/bairro",
+                "ns14", "http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/cep",
+                "ns15", "http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio",
+                "ns16", "http://servicos.saude.gov.br/schema/corporativo/v1r1/uf",
+                "ns26", "http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade",
+                "ns27", "http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
             );
             xpath.setNamespaceContext(context);
-//            xpath.setNamespaceContext(new NamespaceResolver(document));
-//            XPathExpression expr = xpath.compile("//ns2:bookStore/ns2:book/ns2:name/text()");
-            XPathExpression expr = xpath.compile("//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns2:CodigoCNES/ns2:codigo/text()");
-            Object result = expr.evaluate(document, XPathConstants.NODESET);
-            NodeList nodes = (NodeList) result;
-            Node node2 = nodes.item(0);
-
-
-
-
-
-
-
-            Node node;
             
-            // Identifier: CNES.
-            node = document.getElementsByTagName("ns2:codigo").item(0)
-                .getChildNodes().item(0);
+            // CodigoCNES -> Identifier: CNES
             retVal.addIdentifier()
                 .setSystem("http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes")
-                //.setValue(node.getNodeValue());
-                .setValue(node2.getNodeValue());
+                .setValue(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns2:CodigoCNES/ns2:codigo/text()")
+                );
 
-            // Identifier: CNPJ.
-            node = document.getElementsByTagName("ns6:numeroCNPJ").item(0)
-                .getChildNodes().item(0);
+            // CodigoUnidade -> Identifier: CodigoUnidade
+            retVal.addIdentifier()
+                .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade")
+                .setValue(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns26:CodigoUnidade/ns26:codigo/text()")
+                );
+
+            // numeroCNPJ -> Identifier: CNPJ
             retVal.addIdentifier()
                 .setSystem("http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj")
-                .setValue(node.getNodeValue());
+                .setValue(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns6:CNPJ/ns6:numeroCNPJ/text()")
+                );
+
+            // nomeFantasia -> name
+            retVal.setName(
+                extractSingleValueFromXml(document, xpath,
+                    "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:nomeFantasia/ns7:Nome/text()")
+            );
+
+            // nomeEmpresarial -> alias
+            retVal.addAlias(
+                extractSingleValueFromXml(document, xpath,
+                    "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:nomeEmpresarial/ns7:Nome/text()")
+            );
             
-            // Nome fantasia.
-            node = document.getElementsByTagName("ns7:Nome").item(0)
-                .getChildNodes().item(0);
-            retVal.setName(node.getNodeValue());
+            // Endereco -> Address
+            String street = extractSingleValueFromXml(document, xpath,
+                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:nomeLogradouro/text()");
+            String number = extractSingleValueFromXml(document, xpath,
+                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:numero/text()");
+            String neighborhood = extractSingleValueFromXml(document, xpath,
+                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Bairro/ns13:descricaoBairro/text()");
+            String city = extractSingleValueFromXml(document, xpath,
+                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:nomeMunicipio/text()");
+            String state = extractSingleValueFromXml(document, xpath,
+                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:UF/ns16:siglaUF/text()");
+            String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
+            String addressText = java.text.MessageFormat.format(
+                addressTextTemplate, street, number, neighborhood, city, state);
+            retVal.addAddress(
+                new Address()
+                    .setUse(Address.AddressUse.WORK)
+                    .setType(Address.AddressType.BOTH)
+                    .setText(addressText)
+                    .setCity(city)
+                    .setState(state)
+                    .setPostalCode(
+                        extractSingleValueFromXml(document, xpath,
+                            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:CEP/ns14:numeroCEP/text()")
+                    )
+                    .setCountry("BRA")
+            );
 
 /*            
             
@@ -211,170 +244,18 @@ public class OrganizationResourceProvider implements IResourceProvider {
         
         return retVal;
     }
-}
 
-// From: https://howtodoinjava.com/java/xml/xpath-namespace-resolution-example/
-class NamespaceResolver implements NamespaceContext {
-    //Store the source document to search the namespaces.
-    private final Document sourceDocument;
-    
-    public NamespaceResolver(Document document) {
+    // Extract a single value from the XML document based on an XPath expression.
+    private String extractSingleValueFromXml(Document document, XPath xpath,
+        String xpathExpression) throws XPathExpressionException {
         
-        sourceDocument = document;
-    }
- 
-    //The lookup for the namespace uris is delegated to the stored document.
-    @Override
-    public String getNamespaceURI(String prefix) {
+        XPathExpression expr = xpath.compile(xpathExpression);
+        Object result = expr.evaluate(document, XPathConstants.NODESET);
+        NodeList nodes = (NodeList) result;
         
-        if (prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-            return sourceDocument.lookupNamespaceURI(null);
-        } else {
-            return sourceDocument.lookupNamespaceURI(prefix);
-        }
-    }
- 
-    @Override
-    public String getPrefix(String namespaceURI) {
-        
-        return sourceDocument.lookupPrefix(namespaceURI);
-    }
- 
-    //@SuppressWarnings("rawtypes")
-    @Override
-    public Iterator getPrefixes(String namespaceURI) {
-        
-        return null;
+        return nodes.item(0).getNodeValue();
     }
 }
-
-/**
- * An implementation of <a
- * href="http://java.sun.com/javase/6/docs/api/javax/xml/namespace/NamespaceContext.html">
- * NamespaceContext </a>. Instances are immutable.
- * 
- * @author McDowell
- */
-final class NamespaceContextMap implements
-    NamespaceContext {
-
-  private final Map<String, String> prefixMap;
-  private final Map<String, Set<String>> nsMap;
-
-  /**
-   * Constructor that takes a map of XML prefix-namespaceURI values. A defensive
-   * copy is made of the map. An IllegalArgumentException will be thrown if the
-   * map attempts to remap the standard prefixes defined in the NamespaceContext
-   * contract.
-   * 
-   * @param prefixMappings
-   *          a map of prefix:namespaceURI values
-   */
-  public NamespaceContextMap(
-      Map<String, String> prefixMappings) {
-    prefixMap = createPrefixMap(prefixMappings);
-    nsMap = createNamespaceMap(prefixMap);
-  }
-
-  /**
-   * Convenience constructor.
-   * 
-   * @param mappingPairs
-   *          pairs of prefix-namespaceURI values
-   */
-  public NamespaceContextMap(String... mappingPairs) {
-    this(toMap(mappingPairs));
-  }
-
-  private static Map<String, String> toMap(
-      String... mappingPairs) {
-    Map<String, String> prefixMappings = new HashMap<String, String>(
-        mappingPairs.length / 2);
-    for (int i = 0; i < mappingPairs.length; i++) {
-      prefixMappings
-          .put(mappingPairs[i], mappingPairs[++i]);
-    }
-    return prefixMappings;
-  }
-
-  private Map<String, String> createPrefixMap(
-      Map<String, String> prefixMappings) {
-    Map<String, String> prefixMap = new HashMap<String, String>(
-        prefixMappings);
-    addConstant(prefixMap, XMLConstants.XML_NS_PREFIX,
-        XMLConstants.XML_NS_URI);
-    addConstant(prefixMap, XMLConstants.XMLNS_ATTRIBUTE,
-        XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
-    return Collections.unmodifiableMap(prefixMap);
-  }
-
-  private void addConstant(Map<String, String> prefixMap,
-      String prefix, String nsURI) {
-    String previous = prefixMap.put(prefix, nsURI);
-    if (previous != null && !previous.equals(nsURI)) {
-      throw new IllegalArgumentException(prefix + " -> "
-          + previous + "; see NamespaceContext contract");
-    }
-  }
-
-  private Map<String, Set<String>> createNamespaceMap(
-      Map<String, String> prefixMap) {
-    Map<String, Set<String>> nsMap = new HashMap<String, Set<String>>();
-    for (Map.Entry<String, String> entry : prefixMap
-        .entrySet()) {
-      String nsURI = entry.getValue();
-      Set<String> prefixes = nsMap.get(nsURI);
-      if (prefixes == null) {
-        prefixes = new HashSet<String>();
-        nsMap.put(nsURI, prefixes);
-      }
-      prefixes.add(entry.getKey());
-    }
-    for (Map.Entry<String, Set<String>> entry : nsMap
-        .entrySet()) {
-      Set<String> readOnly = Collections
-          .unmodifiableSet(entry.getValue());
-      entry.setValue(readOnly);
-    }
-    return nsMap;
-  }
-
-  @Override
-  public String getNamespaceURI(String prefix) {
-    checkNotNull(prefix);
-    String nsURI = prefixMap.get(prefix);
-    return nsURI == null ? XMLConstants.NULL_NS_URI : nsURI;
-  }
-
-  @Override
-  public String getPrefix(String namespaceURI) {
-    checkNotNull(namespaceURI);
-    Set<String> set = nsMap.get(namespaceURI);
-    return set == null ? null : set.iterator().next();
-  }
-
-  @Override
-  public Iterator<String> getPrefixes(String namespaceURI) {
-    checkNotNull(namespaceURI);
-    Set<String> set = nsMap.get(namespaceURI);
-    return set.iterator();
-  }
-
-  private void checkNotNull(String value) {
-    if (value == null) {
-      throw new IllegalArgumentException("null");
-    }
-  }
-
-  /**
-   * @return an unmodifiable map of the mappings in the form prefix-namespaceURI
-   */
-  public Map<String, String> getMap() {
-    return prefixMap;
-  }
-
-}
-
 
 /*
 <?xml version="1.0" encoding="UTF-8"?>
@@ -386,90 +267,6 @@ final class NamespaceContextMap implements
 			xmlns:est="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice">
 			<dad:DadosGeraisEstabelecimentoSaude
 				xmlns:dad="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes">
-				<ns26:CodigoUnidade
-					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
-					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
-					xmlns:ns26="http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade"
-					xmlns:ns27="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
-					xmlns:ns28="http://servicos.saude.gov.br/schema/cnes/v1r0/diretor"
-					xmlns:ns21="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/msfalha"
-					xmlns:ns22="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/mensagem"
-					xmlns:ns23="http://servicos.saude.gov.br/schema/cnes/v1r0/localizacao"
-					xmlns:ns24="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/filtropesquisaestabelecimento.v1r0"
-					xmlns:ns20="http://servicos.saude.gov.br/schema/corporativo/v1r2/email"
-					xmlns:ns40="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaestabelecimentosaude"
-					xmlns:ns16="http://servicos.saude.gov.br/schema/corporativo/v1r1/uf"
-					xmlns:ns17="http://servicos.saude.gov.br/schema/corporativo/v1r2/pais"
-					xmlns:ns14="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/cep"
-					xmlns:ns15="http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio"
-					xmlns:ns38="http://servicos.saude.gov.br/schema/corporativo/v1r3/municipio"
-					xmlns:ns39="http://servicos.saude.gov.br/schema/cnes/v1r0/listatipounidade"
-					xmlns:ns36="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/resultadopesquisaestabelecimento.v1r0"
-					xmlns:ns18="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r2/telefone"
-					xmlns:ns37="http://servicos.saude.gov.br/schema/corporativo/v1r2/uf"
-					xmlns:ns19="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r1/tipotelefone"
-					xmlns:ns9="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/naturezajuridica"
-					xmlns:ns34="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacoes"
-					xmlns:ns35="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados"
-					xmlns:ns32="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializado"
-					xmlns:ns33="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacao"
-					xmlns:ns5="http://servicos.saude.gov.br/schema/corporativo/documento/v1r2/cpf"
-					xmlns:ns12="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/tipologradouro"
-					xmlns:ns30="http://servicos.saude.gov.br/schema/cnes/v1r0/tipounidade"
-					xmlns:ns6="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj"
-					xmlns:ns13="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/bairro"
-					xmlns:ns31="http://servicos.saude.gov.br/schema/cnes/v1r0/esferaadministrativa"
-					xmlns:ns7="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico"
-					xmlns:ns10="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/tiponaturezajuridica"
-					xmlns:ns8="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosprecadastrocnes"
-					xmlns:ns11="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco"
-					xmlns:ns2="http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
-					xmlns:ns4="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice"
-					xmlns:ns3="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaprecadastrocnes">
-					<ns26:codigo>4205402691841</ns26:codigo>
-				</ns26:CodigoUnidade>
-				<ns27:nomeEmpresarial
-					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
-					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
-					xmlns:ns26="http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade"
-					xmlns:ns27="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
-					xmlns:ns28="http://servicos.saude.gov.br/schema/cnes/v1r0/diretor"
-					xmlns:ns21="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/msfalha"
-					xmlns:ns22="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/mensagem"
-					xmlns:ns23="http://servicos.saude.gov.br/schema/cnes/v1r0/localizacao"
-					xmlns:ns24="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/filtropesquisaestabelecimento.v1r0"
-					xmlns:ns20="http://servicos.saude.gov.br/schema/corporativo/v1r2/email"
-					xmlns:ns40="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaestabelecimentosaude"
-					xmlns:ns16="http://servicos.saude.gov.br/schema/corporativo/v1r1/uf"
-					xmlns:ns17="http://servicos.saude.gov.br/schema/corporativo/v1r2/pais"
-					xmlns:ns14="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/cep"
-					xmlns:ns15="http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio"
-					xmlns:ns38="http://servicos.saude.gov.br/schema/corporativo/v1r3/municipio"
-					xmlns:ns39="http://servicos.saude.gov.br/schema/cnes/v1r0/listatipounidade"
-					xmlns:ns36="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/resultadopesquisaestabelecimento.v1r0"
-					xmlns:ns18="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r2/telefone"
-					xmlns:ns37="http://servicos.saude.gov.br/schema/corporativo/v1r2/uf"
-					xmlns:ns19="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r1/tipotelefone"
-					xmlns:ns9="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/naturezajuridica"
-					xmlns:ns34="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacoes"
-					xmlns:ns35="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados"
-					xmlns:ns32="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializado"
-					xmlns:ns33="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacao"
-					xmlns:ns5="http://servicos.saude.gov.br/schema/corporativo/documento/v1r2/cpf"
-					xmlns:ns12="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/tipologradouro"
-					xmlns:ns30="http://servicos.saude.gov.br/schema/cnes/v1r0/tipounidade"
-					xmlns:ns6="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj"
-					xmlns:ns13="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/bairro"
-					xmlns:ns31="http://servicos.saude.gov.br/schema/cnes/v1r0/esferaadministrativa"
-					xmlns:ns7="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico"
-					xmlns:ns10="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/tiponaturezajuridica"
-					xmlns:ns8="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosprecadastrocnes"
-					xmlns:ns11="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco"
-					xmlns:ns2="http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
-					xmlns:ns4="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice"
-					xmlns:ns3="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaprecadastrocnes">
-					<ns7:Nome>SECRETARIA DE ESTADO DA SAUDE</ns7:Nome>
-				</ns27:nomeEmpresarial>
 				<ns11:Endereco
 					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
 					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
@@ -1612,10 +1409,6 @@ work:WorkContext
 S:Body
 est:responseConsultarEstabelecimentoSaude
 dad:DadosGeraisEstabelecimentoSaude
-ns26:CodigoUnidade
-ns26:codigo
-ns27:nomeEmpresarial
-ns7:Nome
 ns11:Endereco
 ns11:nomeLogradouro
 ns11:numero
