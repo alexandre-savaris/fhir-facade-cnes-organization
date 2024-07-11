@@ -1,0 +1,59 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "extension-cnes-dataatualizacao",
+  "language": "pt-BR",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao",
+  "version": "1.0.0",
+  "name": "DataAtualizacao",
+  "title": "Data da atualização dos dados do estabelecimento de saúde",
+  "status": "active",
+  "experimental": false,
+  "date": "2024-07-11",
+  "publisher": "Alexandre Savaris",
+  "contact": [
+    {
+      "name": "Alexandre Savaris",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "alexandre.savaris@gmail.com"
+        }
+      ]
+    }
+  ],
+  "description": "Data em que os dados do estabelecimento de saúde foram atualizados.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "BRA",
+          "display": "Brazil",
+          "userSelected": false
+        }
+      ]
+    }
+  ],
+  "purpose": "Registrar a data em que os dados do estabelecimento de saúde foram atualizados.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": true,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Organization"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao"
+      }
+    ]
+  }
+}

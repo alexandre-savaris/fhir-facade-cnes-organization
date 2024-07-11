@@ -28,7 +28,6 @@ import org.alexandresavaris.model.CnesOrganization;
 import org.alexandresavaris.util.NamespaceContextMap;
 import org.hl7.fhir.r4.model.*;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -144,6 +143,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 "est", "http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice",
                 "dad", "http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes",
                 "ns2", "http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes",
+                "ns5", "http://servicos.saude.gov.br/schema/corporativo/documento/v1r2/cpf",
                 "ns6", "http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj",
                 "ns7", "http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico",
                 "ns11", "http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco",
@@ -152,11 +152,13 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 "ns15", "http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio",
                 "ns16", "http://servicos.saude.gov.br/schema/corporativo/v1r1/uf",
                 "ns26", "http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade",
-                "ns27", "http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
+                "ns27", "http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes",
+                "ns28", "http://servicos.saude.gov.br/schema/cnes/v1r0/diretor",
+                "ns29", "http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
             );
             xpath.setNamespaceContext(context);
             
-            // CodigoCNES -> Identifier: CNES
+            // CodigoCNES -> Identifier: CNES.
             retVal.addIdentifier()
                 .setSystem("http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes")
                 .setValue(
@@ -164,7 +166,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
                         "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns2:CodigoCNES/ns2:codigo/text()")
                 );
 
-            // CodigoUnidade -> Identifier: CodigoUnidade
+            // CodigoUnidade -> Identifier: CodigoUnidade.
             retVal.addIdentifier()
                 .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade")
                 .setValue(
@@ -172,7 +174,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
                         "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns26:CodigoUnidade/ns26:codigo/text()")
                 );
 
-            // numeroCNPJ -> Identifier: CNPJ
+            // numeroCNPJ -> Identifier: CNPJ.
             retVal.addIdentifier()
                 .setSystem("http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj")
                 .setValue(
@@ -180,19 +182,19 @@ public class OrganizationResourceProvider implements IResourceProvider {
                         "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns6:CNPJ/ns6:numeroCNPJ/text()")
                 );
 
-            // nomeFantasia -> name
+            // nomeFantasia -> name.
             retVal.setName(
                 extractSingleValueFromXml(document, xpath,
                     "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:nomeFantasia/ns7:Nome/text()")
             );
 
-            // nomeEmpresarial -> alias
+            // nomeEmpresarial -> alias.
             retVal.addAlias(
                 extractSingleValueFromXml(document, xpath,
                     "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:nomeEmpresarial/ns7:Nome/text()")
             );
             
-            // Endereco -> Address
+            // Endereco -> Address.
             String street = extractSingleValueFromXml(document, xpath,
                 "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:nomeLogradouro/text()");
             String number = extractSingleValueFromXml(document, xpath,
@@ -219,11 +221,46 @@ public class OrganizationResourceProvider implements IResourceProvider {
                     )
                     .setCountry("BRA")
             );
+            // Extension - city code.
+            retVal.setCityCodeIbge(
+                new CodeType(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:codigoMunicipio/text()")
+                )
+            );
+            // Extension - state code.
+            retVal.setStateCodeIbge(
+                new CodeType(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:UF/ns16:codigoUF/text()")
+                )
+            );
+
+            // dataAtualizacao -> Extension (update date).
+            retVal.setUpdateDate(
+                new DateType(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:dataAtualizacao/text()")
+                )
+            );
+
+            // numeroCPF -> Extension (Director's CPF).
+            retVal.setCpfDirector(
+                new CodeType(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns28:Diretor/ns28:CPF/ns5:numeroCPF/text()")
+                )
+            );
+
+            // Nome -> Extension (Director's name).
+            retVal.setNameDirector(
+                new HumanName().setText(
+                    extractSingleValueFromXml(document, xpath,
+                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns28:Diretor/ns28:nome/ns29:Nome/text()")
+                )
+            );
 
 /*            
-            
-            retVal.addContact().getAddress().addLine("123 Fake Street").setCity("Toronto");
-            retVal.addContact().getTelecomFirstRep().setUse(ContactPointUse.WORK).setValue("1-888-123-4567");
             
             // Populate the first, primitive extension
             retVal.setBillingCode(new CodeType("00102-1"));
@@ -267,151 +304,6 @@ public class OrganizationResourceProvider implements IResourceProvider {
 			xmlns:est="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice">
 			<dad:DadosGeraisEstabelecimentoSaude
 				xmlns:dad="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes">
-				<ns11:Endereco
-					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
-					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
-					xmlns:ns26="http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade"
-					xmlns:ns27="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
-					xmlns:ns28="http://servicos.saude.gov.br/schema/cnes/v1r0/diretor"
-					xmlns:ns21="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/msfalha"
-					xmlns:ns22="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/mensagem"
-					xmlns:ns23="http://servicos.saude.gov.br/schema/cnes/v1r0/localizacao"
-					xmlns:ns24="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/filtropesquisaestabelecimento.v1r0"
-					xmlns:ns20="http://servicos.saude.gov.br/schema/corporativo/v1r2/email"
-					xmlns:ns40="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaestabelecimentosaude"
-					xmlns:ns16="http://servicos.saude.gov.br/schema/corporativo/v1r1/uf"
-					xmlns:ns17="http://servicos.saude.gov.br/schema/corporativo/v1r2/pais"
-					xmlns:ns14="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/cep"
-					xmlns:ns15="http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio"
-					xmlns:ns38="http://servicos.saude.gov.br/schema/corporativo/v1r3/municipio"
-					xmlns:ns39="http://servicos.saude.gov.br/schema/cnes/v1r0/listatipounidade"
-					xmlns:ns36="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/resultadopesquisaestabelecimento.v1r0"
-					xmlns:ns18="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r2/telefone"
-					xmlns:ns37="http://servicos.saude.gov.br/schema/corporativo/v1r2/uf"
-					xmlns:ns19="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r1/tipotelefone"
-					xmlns:ns9="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/naturezajuridica"
-					xmlns:ns34="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacoes"
-					xmlns:ns35="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados"
-					xmlns:ns32="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializado"
-					xmlns:ns33="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacao"
-					xmlns:ns5="http://servicos.saude.gov.br/schema/corporativo/documento/v1r2/cpf"
-					xmlns:ns12="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/tipologradouro"
-					xmlns:ns30="http://servicos.saude.gov.br/schema/cnes/v1r0/tipounidade"
-					xmlns:ns6="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj"
-					xmlns:ns13="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/bairro"
-					xmlns:ns31="http://servicos.saude.gov.br/schema/cnes/v1r0/esferaadministrativa"
-					xmlns:ns7="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico"
-					xmlns:ns10="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/tiponaturezajuridica"
-					xmlns:ns8="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosprecadastrocnes"
-					xmlns:ns11="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco"
-					xmlns:ns2="http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
-					xmlns:ns4="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice"
-					xmlns:ns3="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaprecadastrocnes">
-					<ns11:nomeLogradouro>IRMA BENWARDA</ns11:nomeLogradouro>
-					<ns11:numero>297</ns11:numero>
-					<ns11:Bairro>
-						<ns13:descricaoBairro>CENTRO</ns13:descricaoBairro>
-					</ns11:Bairro>
-					<ns11:CEP>
-						<ns14:numeroCEP>88015270</ns14:numeroCEP>
-					</ns11:CEP>
-					<ns11:Municipio>
-						<ns15:codigoMunicipio>420540</ns15:codigoMunicipio>
-						<ns15:nomeMunicipio>FLORIANOPOLIS</ns15:nomeMunicipio>
-						<ns15:UF>
-							<ns16:codigoUF>42</ns16:codigoUF>
-							<ns16:siglaUF>SC</ns16:siglaUF>
-						</ns15:UF>
-					</ns11:Municipio>
-				</ns11:Endereco>
-				<ns27:dataAtualizacao
-					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
-					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
-					xmlns:ns26="http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade"
-					xmlns:ns27="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
-					xmlns:ns28="http://servicos.saude.gov.br/schema/cnes/v1r0/diretor"
-					xmlns:ns21="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/msfalha"
-					xmlns:ns22="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/mensagem"
-					xmlns:ns23="http://servicos.saude.gov.br/schema/cnes/v1r0/localizacao"
-					xmlns:ns24="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/filtropesquisaestabelecimento.v1r0"
-					xmlns:ns20="http://servicos.saude.gov.br/schema/corporativo/v1r2/email"
-					xmlns:ns40="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaestabelecimentosaude"
-					xmlns:ns16="http://servicos.saude.gov.br/schema/corporativo/v1r1/uf"
-					xmlns:ns17="http://servicos.saude.gov.br/schema/corporativo/v1r2/pais"
-					xmlns:ns14="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/cep"
-					xmlns:ns15="http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio"
-					xmlns:ns38="http://servicos.saude.gov.br/schema/corporativo/v1r3/municipio"
-					xmlns:ns39="http://servicos.saude.gov.br/schema/cnes/v1r0/listatipounidade"
-					xmlns:ns36="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/resultadopesquisaestabelecimento.v1r0"
-					xmlns:ns18="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r2/telefone"
-					xmlns:ns37="http://servicos.saude.gov.br/schema/corporativo/v1r2/uf"
-					xmlns:ns19="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r1/tipotelefone"
-					xmlns:ns9="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/naturezajuridica"
-					xmlns:ns34="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacoes"
-					xmlns:ns35="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados"
-					xmlns:ns32="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializado"
-					xmlns:ns33="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacao"
-					xmlns:ns5="http://servicos.saude.gov.br/schema/corporativo/documento/v1r2/cpf"
-					xmlns:ns12="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/tipologradouro"
-					xmlns:ns30="http://servicos.saude.gov.br/schema/cnes/v1r0/tipounidade"
-					xmlns:ns6="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj"
-					xmlns:ns13="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/bairro"
-					xmlns:ns31="http://servicos.saude.gov.br/schema/cnes/v1r0/esferaadministrativa"
-					xmlns:ns7="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico"
-					xmlns:ns10="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/tiponaturezajuridica"
-					xmlns:ns8="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosprecadastrocnes"
-					xmlns:ns11="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco"
-					xmlns:ns2="http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
-					xmlns:ns4="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice"
-					xmlns:ns3="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaprecadastrocnes">2024-06-20
-				</ns27:dataAtualizacao>
-				<ns28:Diretor
-					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
-					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
-					xmlns:ns26="http://servicos.saude.gov.br/schema/cnes/v1r0/codigounidade"
-					xmlns:ns27="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosgeraiscnes"
-					xmlns:ns28="http://servicos.saude.gov.br/schema/cnes/v1r0/diretor"
-					xmlns:ns21="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/msfalha"
-					xmlns:ns22="http://servicos.saude.gov.br/wsdl/mensageria/falha/v5r0/mensagem"
-					xmlns:ns23="http://servicos.saude.gov.br/schema/cnes/v1r0/localizacao"
-					xmlns:ns24="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/filtropesquisaestabelecimento.v1r0"
-					xmlns:ns20="http://servicos.saude.gov.br/schema/corporativo/v1r2/email"
-					xmlns:ns40="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaestabelecimentosaude"
-					xmlns:ns16="http://servicos.saude.gov.br/schema/corporativo/v1r1/uf"
-					xmlns:ns17="http://servicos.saude.gov.br/schema/corporativo/v1r2/pais"
-					xmlns:ns14="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/cep"
-					xmlns:ns15="http://servicos.saude.gov.br/schema/corporativo/v1r2/municipio"
-					xmlns:ns38="http://servicos.saude.gov.br/schema/corporativo/v1r3/municipio"
-					xmlns:ns39="http://servicos.saude.gov.br/schema/cnes/v1r0/listatipounidade"
-					xmlns:ns36="http://servicos.saude.gov.br/wsdl/mensageria/estabelecimentosaudeservice/v2r0/resultadopesquisaestabelecimento.v1r0"
-					xmlns:ns18="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r2/telefone"
-					xmlns:ns37="http://servicos.saude.gov.br/schema/corporativo/v1r2/uf"
-					xmlns:ns19="http://servicos.saude.gov.br/schema/corporativo/telefone/v1r1/tipotelefone"
-					xmlns:ns9="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/naturezajuridica"
-					xmlns:ns34="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacoes"
-					xmlns:ns35="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados"
-					xmlns:ns32="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializado"
-					xmlns:ns33="http://servicos.saude.gov.br/schema/cnes/v1r0/servicoclassificacao"
-					xmlns:ns5="http://servicos.saude.gov.br/schema/corporativo/documento/v1r2/cpf"
-					xmlns:ns12="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/tipologradouro"
-					xmlns:ns30="http://servicos.saude.gov.br/schema/cnes/v1r0/tipounidade"
-					xmlns:ns6="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/cnpj"
-					xmlns:ns13="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r1/bairro"
-					xmlns:ns31="http://servicos.saude.gov.br/schema/cnes/v1r0/esferaadministrativa"
-					xmlns:ns7="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/nomejuridico"
-					xmlns:ns10="http://servicos.saude.gov.br/schema/corporativo/pessoajuridica/v1r0/tiponaturezajuridica"
-					xmlns:ns8="http://servicos.saude.gov.br/schema/cnes/v1r0/dadosprecadastrocnes"
-					xmlns:ns11="http://servicos.saude.gov.br/schema/corporativo/endereco/v1r2/endereco"
-					xmlns:ns2="http://servicos.saude.gov.br/schema/cnes/v1r0/codigocnes"
-					xmlns:ns4="http://servicos.saude.gov.br/cnes/v1r0/estabelecimentosaudeservice"
-					xmlns:ns3="http://servicos.saude.gov.br/wsdl/mensageria/v1r0/filtropesquisaprecadastrocnes">
-					<ns28:CPF>
-						<ns5:numeroCPF>03267927919</ns5:numeroCPF>
-					</ns28:CPF>
-					<ns28:nome>
-						<ns29:Nome>MICHEL MAXIMIANO FARACO</ns29:Nome>
-					</ns28:nome>
-				</ns28:Diretor>
 				<ns30:tipoUnidade
 					xmlns:ns29="http://servicos.saude.gov.br/schema/corporativo/pessoafisica/v1r2/nomecompleto"
 					xmlns:ns25="http://servicos.saude.gov.br/wsdl/mensageria/v1/paginacao"
@@ -1409,25 +1301,6 @@ work:WorkContext
 S:Body
 est:responseConsultarEstabelecimentoSaude
 dad:DadosGeraisEstabelecimentoSaude
-ns11:Endereco
-ns11:nomeLogradouro
-ns11:numero
-ns11:Bairro
-ns13:descricaoBairro
-ns11:CEP
-ns14:numeroCEP
-ns11:Municipio
-ns15:codigoMunicipio
-ns15:nomeMunicipio
-ns15:UF
-ns16:codigoUF
-ns16:siglaUF
-ns27:dataAtualizacao
-ns28:Diretor
-ns28:CPF
-ns5:numeroCPF
-ns28:nome
-ns29:Nome
 ns30:tipoUnidade
 ns30:codigo
 ns30:descricao
