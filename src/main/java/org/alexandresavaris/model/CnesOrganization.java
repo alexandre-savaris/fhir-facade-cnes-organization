@@ -46,7 +46,23 @@ public class CnesOrganization extends Organization {
         definedLocally = true)
     @Child(name = "nameDirector")
     private HumanName nameDirector;
-
+    // Unity's/Organization's type.  TODO: rever para "type".
+    @Description(shortDefinition = "The Organization's type.")
+    @ca.uhn.fhir.model.api.annotation.Extension(
+        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/TipoUnidade",
+        isModifier = false,
+        definedLocally = true)
+    @Child(name = "unityType")
+    private Coding unityType;
+    // Location.
+//    @Description(shortDefinition = "The Organization's location.")
+//    @ca.uhn.fhir.model.api.annotation.Extension(
+//        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/Localizacao",
+//        isModifier = false,
+//        definedLocally = true)
+//    @Child(name = "location", min = 0, max = 1)
+//    private List<Location> location;
+    
     // Getters and Setters.
     public CodeType getCityCodeIbge() {
         
@@ -117,6 +133,34 @@ public class CnesOrganization extends Organization {
         
         this.nameDirector = nameDirector;
     }
+
+    public Coding getUnityType() {
+        
+        if (this.unityType == null) {
+            this.unityType = new Coding();
+        }
+        
+        return this.unityType;
+    }
+    
+    public void setUnityType(Coding unityType) {
+        
+        this.unityType = unityType;
+    }
+
+//    public List<Location> getLocation() {
+//        
+//        if (this.location == null) {
+//            this.location = new ArrayList<>();
+//        }
+//        
+//        return this.location;
+//    }
+//    
+//    public void setLocation(List<Location> location) {
+//        
+//        this.location = location;
+//    }
     
     // Are all elements of the resource instance null?
     @Override
@@ -127,6 +171,8 @@ public class CnesOrganization extends Organization {
           this.stateCodeIbge,
           this.updateDate,
           this.cpfDirector,
-          this.nameDirector);
+          this.nameDirector,
+          this.unityType);
+//          this.location);
    }
 }

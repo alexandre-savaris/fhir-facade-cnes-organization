@@ -1,0 +1,44 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "namingsystem-cnes-tipoemail",
+  "language": "pt-BR",
+  "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoEmail",
+  "version": "1.0.0",
+  "name": "TipoEmail",
+  "title": "Código do tipo de email",
+  "status": "active",
+  "experimental": false,
+  "date": "2024-07-13",
+  "publisher": "Alexandre Savaris",
+  "contact": [
+    {
+      "name": "Alexandre Savaris",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "alexandre.savaris@gmail.com"
+        }
+      ]
+    }
+  ],
+  "description": "Código do tipo de email mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "BRA",
+          "display": "Brazil",
+          "userSelected": false
+        }
+      ]
+    }
+  ],
+  "purpose": "Categorizar um email de contato por meio de um código definido e mantido pelo DATASUS.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": true,
+  "type": "NamingSystem",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/NamingSystem",
+  "derivation": "constraint"
+}
