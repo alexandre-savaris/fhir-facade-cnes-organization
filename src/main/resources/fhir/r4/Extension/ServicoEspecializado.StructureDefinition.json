@@ -1,0 +1,59 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "extension-cnes-servicoespecializado",
+  "language": "pt-BR",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado",
+  "version": "1.0.0",
+  "name": "ServicoEspecializado",
+  "title": "Serviço especializado ofertado pelo estabelecimento de saúde",
+  "status": "active",
+  "experimental": false,
+  "date": "2024-07-14",
+  "publisher": "Alexandre Savaris",
+  "contact": [
+    {
+      "name": "Alexandre Savaris",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "alexandre.savaris@gmail.com"
+        }
+      ]
+    }
+  ],
+  "description": "Código, descrição e classificações do serviço especializado ofertado pelo estabelecimento de saúde.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "BRA",
+          "display": "Brazil",
+          "userSelected": false
+        }
+      ]
+    }
+  ],
+  "purpose": "Caracterizar um serviço especializado ofertado por um estabelecimento de saúde por meio de um código, uma descrição e uma ou mais classificações.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": true,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Organization"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado"
+      }
+    ]
+  }
+}

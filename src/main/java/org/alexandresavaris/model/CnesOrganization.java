@@ -2,6 +2,8 @@ package org.alexandresavaris.model;
 
 import ca.uhn.fhir.model.api.annotation.*;
 import ca.uhn.fhir.util.ElementUtil;
+import java.util.ArrayList;
+import java.util.List;
 import org.hl7.fhir.r4.model.*;
 
 @ResourceDef(name = "Organization")
@@ -62,6 +64,22 @@ public class CnesOrganization extends Organization {
         definedLocally = false)
     @Child(name = "geolocation")
     private Geolocation geolocation;
+    // Is the Organization part of SUS?
+    @Description(shortDefinition = "Is the Organization part of SUS?")
+    @ca.uhn.fhir.model.api.annotation.Extension(
+        url = "http://www.saude.gov.br/fhir/r4/StructureDefinition/BRAtendeSUS-1.0",
+        isModifier = false,
+        definedLocally = false)
+    @Child(name = "isSus")
+    private BooleanType isSus;
+    // Specialized Services.
+    @Description(shortDefinition = "Specialized Services offered by the Organization.")
+    @ca.uhn.fhir.model.api.annotation.Extension(
+        url = "SpecializedServices",
+        isModifier = false,
+        definedLocally = true)
+    @Child(name = "specializedServices")
+    private List<SpecializedService> specializedServices;
     
     // Getters and Setters.
     public CodeType getCityCodeIbge() {
@@ -161,6 +179,43 @@ public class CnesOrganization extends Organization {
         
         this.geolocation = geolocation;
     }
+
+    public BooleanType getIsSus() {
+        
+        if (this.isSus == null) {
+            this.isSus = new BooleanType();
+        }
+        
+        return this.isSus;
+    }
+    
+    public void setIsSus(BooleanType isSus) {
+        
+        this.isSus = isSus;
+    }
+
+    public List<SpecializedService> getSpecializedServices() {
+        
+        if (this.specializedServices == null) {
+            this.specializedServices = new ArrayList<>();
+        }
+        
+        return this.specializedServices;
+    }
+    
+    public void setSpecializedServices(List<SpecializedService> specializedServices) {
+        
+        this.specializedServices = specializedServices;
+    }
+
+    public void addSpecializedService(SpecializedService specializedService) {
+        
+        if (this.specializedServices == null) {
+            this.specializedServices = new ArrayList<>();
+        }
+        
+        this.specializedServices.add(specializedService);
+    }
     
     // Are all elements of the resource instance null?
     @Override
@@ -173,9 +228,10 @@ public class CnesOrganization extends Organization {
           this.cpfDirector,
           this.nameDirector,
           this.unityType,
-          this.geolocation);
+          this.geolocation,
+          this.isSus,
+          this.specializedServices);
    }
-
 
    /**
     * This "block definition" defines an extension type with multiple child extensions.
@@ -205,6 +261,7 @@ public class CnesOrganization extends Organization {
          if (this.latitude == null) {
             this.latitude = new DecimalType();
          }
+         
          return this.latitude;
       }
 
@@ -218,6 +275,7 @@ public class CnesOrganization extends Organization {
          if (this.longitude == null) {
             this.longitude = new DecimalType();
          }
+         
          return this.longitude;
       }
 
@@ -246,6 +304,59 @@ public class CnesOrganization extends Organization {
       public boolean isEmpty() {
           
          return ElementUtil.isEmpty(this.latitude, this.longitude);
+      }
+   }
+
+   /**
+    * This "block definition" defines an extension type with multiple child extensions.
+    */
+   @Block
+   public static class SpecializedService extends BackboneElement {
+       // Specialized Service.
+       @Description(shortDefinition = "The Specialized Service provided by the Organization.")
+       @ca.uhn.fhir.model.api.annotation.Extension(
+           url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado",
+           isModifier = false,
+           definedLocally = true)
+       @Child(name = "specializedService")
+       private Coding specializedService;
+       
+       // Getters and Setters.
+      public Coding getSpecializedService() {
+          
+         if (this.specializedService == null) {
+            this.specializedService = new Coding();
+         }
+         
+         return this.specializedService;
+      }
+
+      public SpecializedService setSpecializedService(Coding specializedService) {
+          
+         this.specializedService = specializedService;
+         
+         return this;
+      }
+
+      /* *****************************
+       * Boilerplate methods- Hopefully these will be removed or made optional
+       * in a future version of HAPI but for now they need to be added to all block
+       * types. These two methods follow a simple pattern where a utility method from
+       * ElementUtil is called and all fields are passed in.
+       * *****************************/
+      @Override
+      public BackboneElement copy() {
+          
+         SpecializedService specializedService = new SpecializedService();
+         specializedService.setSpecializedService(this.specializedService);
+         
+         return specializedService;
+      }
+
+      @Override
+      public boolean isEmpty() {
+          
+         return ElementUtil.isEmpty(this.specializedService);
       }
    }
 }
