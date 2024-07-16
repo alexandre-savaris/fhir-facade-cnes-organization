@@ -231,132 +231,248 @@ public class CnesOrganization extends Organization {
           this.geolocation,
           this.isSus,
           this.specializedServices);
-   }
+    }
+    
+    /**
+     * This "block definition" defines an extension type with multiple child extensions.
+     */
+    @Block
+    public static class Geolocation extends BackboneElement {
+        // Latitude.
+        @Description(shortDefinition = "The latitude for the Organization's location.")
+        @ca.uhn.fhir.model.api.annotation.Extension(
+            url = "latitude",
+            isModifier = false,
+            definedLocally = false)
+        @Child(name = "latitude")
+        private DecimalType latitude;
+        // Longitude.
+        @Description(shortDefinition = "The longitude for the Organization's location.")
+        @ca.uhn.fhir.model.api.annotation.Extension(
+            url = "longitude",
+            isModifier = false,
+            definedLocally = false)
+        @Child(name = "longitude")
+        private DecimalType longitude;
+        
+        // Getters and Setters.
+        public DecimalType getLatitude() {
+            
+            if (this.latitude == null) {
+                this.latitude = new DecimalType();
+            }
+            
+            return this.latitude;
+        }
+        
+        public void setLatitude(DecimalType latitude) {
+            
+            this.latitude = latitude;
+        }
+        
+        public DecimalType getLongitude() {
+            
+            if (this.longitude == null) {
+                this.longitude = new DecimalType();
+            }
+            
+            return this.longitude;
+        }
+        
+        public void setLongitude(DecimalType longitude) {
+            
+            this.longitude = longitude;
+        }
+        
+        /* *****************************
+         * Boilerplate methods- Hopefully these will be removed or made optional
+         * in a future version of HAPI but for now they need to be added to all block
+         * types. These two methods follow a simple pattern where a utility method from
+         * ElementUtil is called and all fields are passed in.
+         * *****************************/
+        @Override
+        public BackboneElement copy() {
+            
+            Geolocation geolocation = new Geolocation();
+            geolocation.setLatitude(this.latitude);
+            geolocation.setLongitude(this.longitude);
+            
+            return geolocation;
+        }
+        
+        @Override
+        public boolean isEmpty() {
+            
+            return ElementUtil.isEmpty(this.latitude, this.longitude);
+        }
+    }
+    
+    /**
+     * This "block definition" defines an extension type with multiple child extensions.
+     */
+    @Block
+    public static class SpecializedService extends BackboneElement {
+        // Specialized Service.
+        @Description(shortDefinition = "The Specialized Service provided by the Organization.")
+        @ca.uhn.fhir.model.api.annotation.Extension(
+            url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado",
+            isModifier = false,
+            definedLocally = true)
+        @Child(name = "specializedService")
+        private Coding specializedService;
+        // Specialized Service Classifications.
+        @Description(shortDefinition = "Classifications of the Specialized Service offered by the Organization.")
+        @ca.uhn.fhir.model.api.annotation.Extension(
+            url = "SpecializedServiceClassifications",
+            isModifier = false,
+            definedLocally = true)
+        @Child(name = "SpecializedServiceClassifications")
+        private List<SpecializedServiceClassification> specializedServiceClassifications;
+        
+        // Getters and Setters.
+        public Coding getSpecializedService() {
+            
+            if (this.specializedService == null) {
+                this.specializedService = new Coding();
+            }
+            
+            return this.specializedService;
+        }
+        
+        public SpecializedService setSpecializedService(Coding specializedService) {
+            
+            this.specializedService = specializedService;
+            
+            return this;
+        }
 
-   /**
-    * This "block definition" defines an extension type with multiple child extensions.
-    */
-   @Block
-   public static class Geolocation extends BackboneElement {
-       // Latitude.
-       @Description(shortDefinition = "The latitude for the Organization's location.")
-       @ca.uhn.fhir.model.api.annotation.Extension(
-           url = "latitude",
-           isModifier = false,
-           definedLocally = false)
-       @Child(name = "latitude")
-       private DecimalType latitude;
-       // Longitude.
-       @Description(shortDefinition = "The longitude for the Organization's location.")
-       @ca.uhn.fhir.model.api.annotation.Extension(
-           url = "longitude",
-           isModifier = false,
-           definedLocally = false)
-       @Child(name = "longitude")
-       private DecimalType longitude;
-       
-       // Getters and Setters.
-      public DecimalType getLatitude() {
-          
-         if (this.latitude == null) {
-            this.latitude = new DecimalType();
-         }
-         
-         return this.latitude;
-      }
+        public List<SpecializedServiceClassification> getSpecializedServiceClassifications() {
 
-      public void setLatitude(DecimalType latitude) {
-          
-         this.latitude = latitude;
-      }
+            if (this.specializedServiceClassifications == null) {
+                this.specializedServiceClassifications = new ArrayList<>();
+            }
 
-      public DecimalType getLongitude() {
-          
-         if (this.longitude == null) {
-            this.longitude = new DecimalType();
-         }
-         
-         return this.longitude;
-      }
+            return this.specializedServiceClassifications;
+        }
 
-      public void setLongitude(DecimalType longitude) {
-          
-         this.longitude = longitude;
-      }
+        public void setSpecializedServiceClassifications(
+            List<SpecializedServiceClassification> specializedServiceClassifications) {
 
-      /* *****************************
-       * Boilerplate methods- Hopefully these will be removed or made optional
-       * in a future version of HAPI but for now they need to be added to all block
-       * types. These two methods follow a simple pattern where a utility method from
-       * ElementUtil is called and all fields are passed in.
-       * *****************************/
-      @Override
-      public BackboneElement copy() {
-          
-         Geolocation geolocation = new Geolocation();
-         geolocation.setLatitude(this.latitude);
-         geolocation.setLongitude(this.longitude);
-         
-         return geolocation;
-      }
+            this.specializedServiceClassifications = specializedServiceClassifications;
+        }
 
-      @Override
-      public boolean isEmpty() {
-          
-         return ElementUtil.isEmpty(this.latitude, this.longitude);
-      }
-   }
+        public void addSpecializedServiceClassification(
+            SpecializedServiceClassification specializedServiceClassification) {
 
-   /**
-    * This "block definition" defines an extension type with multiple child extensions.
-    */
-   @Block
-   public static class SpecializedService extends BackboneElement {
-       // Specialized Service.
-       @Description(shortDefinition = "The Specialized Service provided by the Organization.")
-       @ca.uhn.fhir.model.api.annotation.Extension(
-           url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado",
-           isModifier = false,
-           definedLocally = true)
-       @Child(name = "specializedService")
-       private Coding specializedService;
-       
-       // Getters and Setters.
-      public Coding getSpecializedService() {
-          
-         if (this.specializedService == null) {
-            this.specializedService = new Coding();
-         }
-         
-         return this.specializedService;
-      }
+            if (this.specializedServiceClassifications == null) {
+                this.specializedServiceClassifications = new ArrayList<>();
+            }
 
-      public SpecializedService setSpecializedService(Coding specializedService) {
-          
-         this.specializedService = specializedService;
-         
-         return this;
-      }
+            this.specializedServiceClassifications.add(specializedServiceClassification);
+        }
+        
+        /* *****************************
+         * Boilerplate methods- Hopefully these will be removed or made optional
+         * in a future version of HAPI but for now they need to be added to all block
+         * types. These two methods follow a simple pattern where a utility method from
+         * ElementUtil is called and all fields are passed in.
+         * *****************************/
+        @Override
+        public BackboneElement copy() {
+            
+            SpecializedService specializedService = new SpecializedService();
+            specializedService.setSpecializedService(this.specializedService);
+            
+            return specializedService;
+        }
+        
+        @Override
+        public boolean isEmpty() {
+            
+            return ElementUtil.isEmpty(this.specializedService);
+        }
+        
+        /**
+         * This "block definition" defines an extension type with multiple child extensions.
+         */
+        @Block
+        public static class SpecializedServiceClassification extends BackboneElement {
+            // Specialized Service Classification.
+            @Description(shortDefinition = "The classification for the Specialized Service provided by the Organization.")
+            @ca.uhn.fhir.model.api.annotation.Extension(
+                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacao",
+                isModifier = false,
+                definedLocally = true)
+            @Child(name = "specializedServiceClassification")
+            private Coding specializedServiceClassification;
+            // Specialized Service Classification Characteristic.
+            @Description(shortDefinition = "The characteristic from the classification for the Specialized Service provided by the Organization.")
+            @ca.uhn.fhir.model.api.annotation.Extension(
+                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica",
+                isModifier = false,
+                definedLocally = true)
+            @Child(name = "specializedServiceClassificationCharacteristic")
+            private CodeType specializedServiceClassificationCharacteristic;
 
-      /* *****************************
-       * Boilerplate methods- Hopefully these will be removed or made optional
-       * in a future version of HAPI but for now they need to be added to all block
-       * types. These two methods follow a simple pattern where a utility method from
-       * ElementUtil is called and all fields are passed in.
-       * *****************************/
-      @Override
-      public BackboneElement copy() {
-          
-         SpecializedService specializedService = new SpecializedService();
-         specializedService.setSpecializedService(this.specializedService);
-         
-         return specializedService;
-      }
+            // Getters and Setters.
+            public Coding getSpecializedServiceClassification() {
 
-      @Override
-      public boolean isEmpty() {
-          
-         return ElementUtil.isEmpty(this.specializedService);
-      }
-   }
+                if (this.specializedServiceClassification == null) {
+                    this.specializedServiceClassification = new Coding();
+                }
+
+                return this.specializedServiceClassification;
+            }
+
+            public SpecializedServiceClassification setSpecializedServiceClassification(
+                Coding specializedServiceClassification) {
+
+                this.specializedServiceClassification = specializedServiceClassification;
+
+                return this;
+            }
+
+            public CodeType getSpecializedServiceClassificationCharacteristic() {
+
+                if (this.specializedServiceClassificationCharacteristic == null) {
+                    this.specializedServiceClassificationCharacteristic = new CodeType();
+                }
+
+                return this.specializedServiceClassificationCharacteristic;
+            }
+
+            public SpecializedServiceClassification setSpecializedServiceClassificationCharacteristic(
+                CodeType specializedServiceClassificationCharacteristic) {
+
+                this.specializedServiceClassificationCharacteristic = specializedServiceClassificationCharacteristic;
+
+                return this;
+            }
+
+            /* *****************************
+             * Boilerplate methods- Hopefully these will be removed or made optional
+             * in a future version of HAPI but for now they need to be added to all block
+             * types. These two methods follow a simple pattern where a utility method from
+             * ElementUtil is called and all fields are passed in.
+             * *****************************/
+            @Override
+            public BackboneElement copy() {
+
+                SpecializedServiceClassification specializedServiceClassification
+                    = new SpecializedServiceClassification();
+                specializedServiceClassification.setSpecializedServiceClassification(
+                    this.specializedServiceClassification);
+
+                return specializedServiceClassification;
+            }
+
+            @Override
+            public boolean isEmpty() {
+
+                return ElementUtil.isEmpty(
+                    this.specializedServiceClassification,
+                    this.specializedServiceClassificationCharacteristic);
+            }
+        }
+    }
 }

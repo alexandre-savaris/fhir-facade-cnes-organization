@@ -403,7 +403,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
                 = xpath.compile("//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:servicoespecializados/ns35:servicoespecializado");
             Object result = expr.evaluate(document, XPathConstants.NODESET);
             NodeList nodeList = (NodeList) result;
-            //printNode(nodeList, 0, "");
+            printNode(nodeList, 0, "");
             List<CnesOrganization.SpecializedService> specializedServices
                 = new ArrayList<>();
             fillInResourceInstanceWithSpecializedServices(nodeList, "",
@@ -554,24 +554,64 @@ public class OrganizationResourceProvider implements IResourceProvider {
         
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
+            path = path + "/" + node.getNodeName();
             if (node.getNodeType() == Node.TEXT_NODE) {
-                //path = path + "/" + node.getNodeName();
-                System.out.println(path + ": " + node.getNodeType());
-                switch (path + "/" + node.getNodeName()) {
-                    case "/ns35:servicoespecializado/ns32:codigo/#text" -> {
-                        specializedServices.add(
-                            new CnesOrganization.SpecializedService()
-                                .setSpecializedService(
-                                    new Coding()
-                                        .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoServicoEspecializado")
-                                        .setCode(node.getNodeValue())
-                                )
-                        );
-                    }
+                if (path.endsWith("ns32:codigo/#text")) {
+                    // For the system and code values, create a new extension instance.
+                    specializedServices.add(
+                        new CnesOrganization.SpecializedService()
+                            .setSpecializedService(
+                                new Coding()
+                                    .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoServicoEspecializado")
+                                    .setCode(node.getNodeValue())
+                            )
+                    );
+                } else if (path.endsWith("ns32:descricao/#text")) {
+                    // For the display, use the last created extension instance
+                    // of Specialized Service.
+                    CnesOrganization.SpecializedService specializedService
+                        = specializedServices.get(specializedServices.size() - 1);
+                    specializedService.getSpecializedService()
+                        .setDisplay(node.getNodeValue());
+                } else if (path.endsWith("ns33:codigo/#text")) {
+                    // For the system and code values, retrieve the last created
+                    // extension instance of Specialized Service.
+                    CnesOrganization.SpecializedService specializedService
+                        = specializedServices.get(specializedServices.size() - 1);
+                    // Retrieve the list of Classifications, adding a new one afterward.
+                    List<CnesOrganization.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                        = specializedService.getSpecializedServiceClassifications();
+                    specializedServiceClassifications.add(
+                        new CnesOrganization.SpecializedService.SpecializedServiceClassification()
+                            .setSpecializedServiceClassification(
+                                new Coding()
+                                    .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado")
+                                    .setCode(node.getNodeValue())
+                            )
+                    );
+                } else if (path.endsWith("ns33:descricao/#text")) {
+                    // For the display value, retrieve the last created
+                    // extension instance of Specialized Service Classification.
+                    CnesOrganization.SpecializedService specializedService
+                        = specializedServices.get(specializedServices.size() - 1);
+                    List<CnesOrganization.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                        = specializedService.getSpecializedServiceClassifications();
+                    CnesOrganization.SpecializedService.SpecializedServiceClassification specializedServiceClassification
+                        = specializedServiceClassifications.get(specializedServiceClassifications.size() - 1);
+                    specializedServiceClassification.getSpecializedServiceClassification()
+                        .setDisplay(node.getNodeValue());
+                } else if (path.endsWith("ns33:codigoCaracteristica/#text")) {
+                    // For the characteristic code, retrieve the last created
+                    // extension instance of Specialized Service Classification.
+                    CnesOrganization.SpecializedService specializedService
+                        = specializedServices.get(specializedServices.size() - 1);
+                    List<CnesOrganization.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                        = specializedService.getSpecializedServiceClassifications();
+                    CnesOrganization.SpecializedService.SpecializedServiceClassification specializedServiceClassification
+                        = specializedServiceClassifications.get(specializedServiceClassifications.size() - 1);
+                    specializedServiceClassification.getSpecializedServiceClassificationCharacteristic()
+                        .setValue(node.getNodeValue());
                 }
-            }
-            else {
-                path = path + "/" + node.getNodeName();
             }
             fillInResourceInstanceWithSpecializedServices(
                 node.getChildNodes(),

@@ -1,0 +1,44 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "namingsystem-cnes-classificacaoservicoespecializado",
+  "language": "pt-BR",
+  "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado",
+  "version": "1.0.0",
+  "name": "ClassificacaoServicoEspecializado",
+  "title": "Classificação de um Serviço Especializado",
+  "status": "active",
+  "experimental": false,
+  "date": "2024-07-16",
+  "publisher": "Alexandre Savaris",
+  "contact": [
+    {
+      "name": "Alexandre Savaris",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "alexandre.savaris@gmail.com"
+        }
+      ]
+    }
+  ],
+  "description": "Classificação de um Serviço Especializado mantida pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "BRA",
+          "display": "Brazil",
+          "userSelected": false
+        }
+      ]
+    }
+  ],
+  "purpose": "Caracterizar um Serviço Especializado por meio de uma Classificação definida e mantida pelo DATASUS.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": true,
+  "type": "NamingSystem",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/NamingSystem",
+  "derivation": "constraint"
+}
