@@ -1,15 +1,20 @@
 package org.alexandresavaris.util;
 
-// Utility methods and constants.
-
 import java.util.HashMap;
 import java.util.Map;
 
+// Utility methods and constants.
 public class Utils {
-    // Map of xmlNamespaces for parsing XML content.
+    // Map of namespaces for parsing XML content.
     public static final Map<String, String> xmlNamespaces = new HashMap<>();
+    // Map of NamingSystems used by the OrganizationCnes instance.
+    public static final Map<String, String> namingSystems = new HashMap<>();
+    // Map of XPath expressions for extracting XML content.
+    public static final Map<String, String> xpathExpressions = new HashMap<>();
     
-    static{
+    static {
+
+        // Insert namespaces.
         xmlNamespaces.put("soap",
             "http://www.w3.org/2003/05/soap-envelope");
         xmlNamespaces.put("S",
@@ -58,5 +63,48 @@ public class Utils {
             "http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializado");
         xmlNamespaces.put("ns35",
             "http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados");
+
+        // Insert NamingSystems.
+        namingSystems.put("cnes",
+            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes");
+        namingSystems.put("unityCode",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade");
+        namingSystems.put("cnpj",
+            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj");
+
+        // Insert XPath expressions.
+        xpathExpressions.put("cnes",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns2:CodigoCNES/ns2:codigo/text()");
+        xpathExpressions.put("unityCode",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns26:CodigoUnidade/ns26:codigo/text()");
+        xpathExpressions.put("cnpj",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns6:CNPJ/ns6:numeroCNPJ/text()");
+        xpathExpressions.put("name",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:nomeFantasia/ns7:Nome/text()");
+        xpathExpressions.put("alias",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:nomeEmpresarial/ns7:Nome/text()");
+        xpathExpressions.put("street",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:nomeLogradouro/text()");
+        xpathExpressions.put("number",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:numero/text()");
+        xpathExpressions.put("neighborhood",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Bairro/ns13:descricaoBairro/text()");
+        xpathExpressions.put("city",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:nomeMunicipio/text()");
+        xpathExpressions.put("state",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:UF/ns16:siglaUF/text()");
+        xpathExpressions.put("postalCode",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:CEP/ns14:numeroCEP/text()");
+        xpathExpressions.put("cityCode",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:codigoMunicipio/text()");
+        xpathExpressions.put("stateCode",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:UF/ns16:codigoUF/text()");
+        xpathExpressions.put("updateDate",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:dataAtualizacao/text()");
+        xpathExpressions.put("cpfDirector",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns28:Diretor/ns28:CPF/ns5:numeroCPF/text()");
+        xpathExpressions.put("nameDirector",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns28:Diretor/ns28:nome/ns29:Nome/text()");
+
     }
 }
