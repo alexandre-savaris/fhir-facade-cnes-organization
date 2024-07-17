@@ -1,3 +1,4 @@
+// TODO: rever CodeType e Coding
 package org.alexandresavaris.model;
 
 import ca.uhn.fhir.model.api.annotation.*;
@@ -7,7 +8,7 @@ import java.util.List;
 import org.hl7.fhir.r4.model.*;
 
 @ResourceDef(name = "Organization")
-public class CnesOrganization extends Organization {
+public class OrganizationCnes extends Organization {
     // City code.
     @Description(shortDefinition = "The city code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE).")
     @ca.uhn.fhir.model.api.annotation.Extension(
@@ -48,14 +49,6 @@ public class CnesOrganization extends Organization {
         definedLocally = true)
     @Child(name = "nameDirector")
     private HumanName nameDirector;
-    // Unity's/Organization's type.  TODO: rever para "type".
-    @Description(shortDefinition = "The Organization's type.")
-    @ca.uhn.fhir.model.api.annotation.Extension(
-        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/TipoUnidade",
-        isModifier = false,
-        definedLocally = true)
-    @Child(name = "unityType")
-    private Coding unityType;
     // Geolocation.
     @Description(shortDefinition = "The Organization's geolocation.")
     @ca.uhn.fhir.model.api.annotation.Extension(
@@ -72,6 +65,14 @@ public class CnesOrganization extends Organization {
         definedLocally = false)
     @Child(name = "isSus")
     private BooleanType isSus;
+    // Client flow.
+    @Description(shortDefinition = "The client flow expected for the Organization.")
+    @ca.uhn.fhir.model.api.annotation.Extension(
+        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/FluxoClientela",
+        isModifier = false,
+        definedLocally = true)
+    @Child(name = "clientFlow")
+    private CodeType clientFlow;
     // Specialized Services.
     @Description(shortDefinition = "Specialized Services offered by the Organization.")
     @ca.uhn.fhir.model.api.annotation.Extension(
@@ -152,20 +153,6 @@ public class CnesOrganization extends Organization {
         this.nameDirector = nameDirector;
     }
 
-    public Coding getUnityType() {
-        
-        if (this.unityType == null) {
-            this.unityType = new Coding();
-        }
-        
-        return this.unityType;
-    }
-    
-    public void setUnityType(Coding unityType) {
-        
-        this.unityType = unityType;
-    }
-
     public Geolocation getGeolocation() {
         
         if (this.geolocation == null) {
@@ -192,6 +179,20 @@ public class CnesOrganization extends Organization {
     public void setIsSus(BooleanType isSus) {
         
         this.isSus = isSus;
+    }
+
+    public CodeType getClientFlow() {
+        
+        if (this.clientFlow == null) {
+            this.clientFlow = new CodeType();
+        }
+        
+        return this.clientFlow;
+    }
+    
+    public void setClientFlow(CodeType clientFlow) {
+        
+        this.clientFlow = clientFlow;
     }
 
     public List<SpecializedService> getSpecializedServices() {
@@ -227,9 +228,9 @@ public class CnesOrganization extends Organization {
           this.updateDate,
           this.cpfDirector,
           this.nameDirector,
-          this.unityType,
           this.geolocation,
           this.isSus,
+          this.clientFlow,
           this.specializedServices);
     }
     
@@ -412,7 +413,15 @@ public class CnesOrganization extends Organization {
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCharacteristic")
-            private CodeType specializedServiceClassificationCharacteristic;
+            private Coding specializedServiceClassificationCharacteristic;
+            // Specialized Service Classification Cnes.
+            @Description(shortDefinition = "The CNES from the classification for the Specialized Service provided by the Organization.")
+            @ca.uhn.fhir.model.api.annotation.Extension(
+                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCnes",
+                isModifier = false,
+                definedLocally = true)
+            @Child(name = "specializedServiceClassificationCnes")
+            private Coding specializedServiceClassificationCnes;
 
             // Getters and Setters.
             public Coding getSpecializedServiceClassification() {
@@ -432,19 +441,36 @@ public class CnesOrganization extends Organization {
                 return this;
             }
 
-            public CodeType getSpecializedServiceClassificationCharacteristic() {
+            public Coding getSpecializedServiceClassificationCharacteristic() {
 
                 if (this.specializedServiceClassificationCharacteristic == null) {
-                    this.specializedServiceClassificationCharacteristic = new CodeType();
+                    this.specializedServiceClassificationCharacteristic = new Coding();
                 }
 
                 return this.specializedServiceClassificationCharacteristic;
             }
 
             public SpecializedServiceClassification setSpecializedServiceClassificationCharacteristic(
-                CodeType specializedServiceClassificationCharacteristic) {
+                Coding specializedServiceClassificationCharacteristic) {
 
                 this.specializedServiceClassificationCharacteristic = specializedServiceClassificationCharacteristic;
+
+                return this;
+            }
+
+            public Coding getSpecializedServiceClassificationCnes() {
+
+                if (this.specializedServiceClassificationCnes == null) {
+                    this.specializedServiceClassificationCnes = new Coding();
+                }
+
+                return this.specializedServiceClassificationCnes;
+            }
+
+            public SpecializedServiceClassification setSpecializedServiceClassificationCnes(
+                Coding specializedServiceClassificationCnes) {
+
+                this.specializedServiceClassificationCnes = specializedServiceClassificationCnes;
 
                 return this;
             }
@@ -471,7 +497,8 @@ public class CnesOrganization extends Organization {
 
                 return ElementUtil.isEmpty(
                     this.specializedServiceClassification,
-                    this.specializedServiceClassificationCharacteristic);
+                    this.specializedServiceClassificationCharacteristic,
+                    this.specializedServiceClassificationCnes);
             }
         }
     }

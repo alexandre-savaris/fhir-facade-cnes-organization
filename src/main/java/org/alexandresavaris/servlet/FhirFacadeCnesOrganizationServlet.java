@@ -3,7 +3,7 @@ package org.alexandresavaris.servlet;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.uhn.example.provider.OrganizationResourceProvider;
+import org.alexandresavaris.provider.OrganizationCnesResourceProvider;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
@@ -83,7 +83,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              * type of resource.
              */
             List<IResourceProvider> providers = new ArrayList<>();
-            providers.add(new OrganizationResourceProvider(
+            providers.add(new OrganizationCnesResourceProvider(
                 endpointEstabelecimentoSaudeService, 
                 soapEnvelopeContent, cnesFilter, cnpjFilter));
             setResourceProviders(providers);

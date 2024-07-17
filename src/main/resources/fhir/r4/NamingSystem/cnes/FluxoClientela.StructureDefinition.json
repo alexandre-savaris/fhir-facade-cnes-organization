@@ -1,0 +1,44 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "namingsystem-cnes-fluxoclientela",
+  "language": "pt-BR",
+  "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/FluxoClientela",
+  "version": "1.0.0",
+  "name": "FluxoClientela",
+  "title": "Código descritivo de um fluxo de clientela",
+  "status": "active",
+  "experimental": false,
+  "date": "2024-07-17",
+  "publisher": "Alexandre Savaris",
+  "contact": [
+    {
+      "name": "Alexandre Savaris",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "alexandre.savaris@gmail.com"
+        }
+      ]
+    }
+  ],
+  "description": "Código descritivo de um fluxo de clientela mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "BRA",
+          "display": "Brazil",
+          "userSelected": false
+        }
+      ]
+    }
+  ],
+  "purpose": "Categorizar um fluxo de clientela por meio de um código descritivo definido e mantido pelo DATASUS.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": true,
+  "type": "NamingSystem",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/NamingSystem",
+  "derivation": "constraint"
+}
