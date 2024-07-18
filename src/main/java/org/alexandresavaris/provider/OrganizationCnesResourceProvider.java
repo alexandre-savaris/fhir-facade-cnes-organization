@@ -177,7 +177,8 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .setValue(
                     extractSingleValueFromXml(document, xpath,
                         Utils.xpathExpressions.get("unityCode"),
-                        0)
+                        0
+                    )
                 );
 
             // numeroCNPJ -> Identifier: CNPJ.
@@ -186,39 +187,47 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .setValue(
                     extractSingleValueFromXml(document, xpath,
                         Utils.xpathExpressions.get("cnpj"),
-                        0)
+                        0
+                    )
                 );
 
             // nomeFantasia -> name.
             retVal.setName(
                 extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("name"),
-                    0)
+                    0
+                )
             );
 
             // nomeEmpresarial -> alias.
             retVal.addAlias(
                 extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("alias"),
-                    0)
+                    0
+                )
             );
             
             // Endereco -> Address.
             String street = extractSingleValueFromXml(document, xpath,
                 Utils.xpathExpressions.get("street"),
-                0);
+                0
+            );
             String number = extractSingleValueFromXml(document, xpath,
                 Utils.xpathExpressions.get("number"),
-                0);
+                0
+            );
             String neighborhood = extractSingleValueFromXml(document, xpath,
                 Utils.xpathExpressions.get("neighborhood"),
-                0);
+                0
+            );
             String city = extractSingleValueFromXml(document, xpath,
                 Utils.xpathExpressions.get("city"),
-                0);
+                0
+            );
             String state = extractSingleValueFromXml(document, xpath,
                 Utils.xpathExpressions.get("state"),
-                0);
+                0
+            );
             String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
             String addressText = java.text.MessageFormat.format(
                 addressTextTemplate, street, number, neighborhood, city, state);
@@ -232,7 +241,8 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     .setPostalCode(
                         extractSingleValueFromXml(document, xpath,
                             Utils.xpathExpressions.get("postalCode"),
-                            0)
+                            0
+                        )
                     )
                     .setCountry("BRA")
             );
@@ -240,16 +250,18 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             retVal.setCityCodeIbge(
                 new CodeType(
                     extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("cityCode"),
-                        0)
+                        Utils.xpathExpressions.get("cityCodeIbge"),
+                        0
+                    )
                 )
             );
             // Extension - state code.
             retVal.setStateCodeIbge(
                 new CodeType(
                     extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("stateCode"),
-                        0)
+                        Utils.xpathExpressions.get("stateCodeIbge"),
+                        0
+                    )
                 )
             );
 
@@ -258,25 +270,28 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 new DateType(
                     extractSingleValueFromXml(document, xpath,
                         Utils.xpathExpressions.get("updateDate"),
-                        0)
+                        0
+                    )
                 )
             );
 
             // numeroCPF -> Extension (Director's CPF).
-            retVal.setCpfDirector(
+            retVal.setDirectorCpf(
                 new CodeType(
                     extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("cpfDirector"),
-                        0)
+                        Utils.xpathExpressions.get("directorCpf"),
+                        0
+                    )
                 )
             );
 
             // Nome -> Extension (Director's name).
-            retVal.setNameDirector(
+            retVal.setDirectorName(
                 new HumanName().setText(
                     extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("nameDirector"),
-                        0)
+                        Utils.xpathExpressions.get("directorName"),
+                        0
+                    )
                 )
             );
 
@@ -284,16 +299,18 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             retVal.addType(
                 new CodeableConcept(
                     new Coding()
-                        .setSystem("http://www.saude.gov.br/fhir/r4/ValueSet/BRTipoEstabelecimentoSaude-1.0")
+                        .setSystem(Utils.valueSets.get("type"))
                         .setCode(
                             extractSingleValueFromXml(document, xpath,
-                                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns30:tipoUnidade/ns30:codigo/text()",
-                                0)
+                                Utils.xpathExpressions.get("unityType"),
+                                0
+                            )
                         )
                         .setDisplay(
                             extractSingleValueFromXml(document, xpath,
-                                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns30:tipoUnidade/ns30:descricao/text()",
-                                0)
+                                Utils.xpathExpressions.get("unityDescription"),
+                                0
+                            )
                         )
                 )
             );
@@ -303,11 +320,13 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             String phone = java.text.MessageFormat.format(
                 phoneTemplate,
                     extractSingleValueFromXml(document, xpath,
-                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:DDD/text()",
-                        0),
+                        Utils.xpathExpressions.get("phoneAreaCode"),
+                        0
+                    ),
                     extractSingleValueFromXml(document, xpath,
-                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:numeroTelefone/text()",
-                        0)
+                        Utils.xpathExpressions.get("phoneNumber"),
+                        0
+                    )
                 );
             retVal.addContact()
                 .addTelecom(
@@ -319,16 +338,20 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .setPurpose(
                     new CodeableConcept(
                         new Coding()
-                            .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoTelefone")
+                            .setSystem(Utils.namingSystems.get("phoneType"))
                             .setCode(
                                 extractSingleValueFromXml(document, xpath,
-                                    "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:TipoTelefone/ns19:codigoTipoTelefone/text()",
-                                    0)
+                                    Utils.xpathExpressions.get("phoneType"),
+                                    0
+                                )
                             )
                             .setDisplay(
                                 extractSingleValueFromXml(document, xpath,
-                                    "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:TipoTelefone/ns19:descricaoTipoTelefone/text()",
-                                    0)
+                                    Utils.xpathExpressions.get(
+                                        "phoneDescription"
+                                    ),
+                                    0
+                                )
                             )
                     )
                 );
@@ -340,19 +363,21 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                         .setSystem(ContactPoint.ContactPointSystem.EMAIL)
                         .setValue(
                             extractSingleValueFromXml(document, xpath,
-                                "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Email/ns20:descricaoEmail/text()",
-                                0)
+                                Utils.xpathExpressions.get("email"),
+                                0
+                            )
                         )
                         .setUse(ContactPoint.ContactPointUse.WORK)
                 )
                 .setPurpose(
                     new CodeableConcept(
                         new Coding()
-                            .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoEmail")
+                            .setSystem(Utils.namingSystems.get("emailType"))
                             .setCode(
                                 extractSingleValueFromXml(document, xpath,
-                                    "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Email/ns20:tipoEmail/text()",
-                                    0)
+                                    Utils.xpathExpressions.get("emailType"),
+                                    0
+                                )
                             )
                     )
                 );
@@ -363,15 +388,17 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             geolocation.setLatitude(
                 new DecimalType(
                     extractSingleValueFromXml(document, xpath,
-                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Localizacao/ns23:latitude/text()",
-                        0)
+                        Utils.xpathExpressions.get("latitude"),
+                        0
+                    )
                 )
             );
             geolocation.setLongitude(
                 new DecimalType(
                     extractSingleValueFromXml(document, xpath,
-                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Localizacao/ns23:longitude/text()",
-                        0)
+                        Utils.xpathExpressions.get("longitude"),
+                        0
+                    )
                 )
             );
             retVal.setGeolocation(geolocation);
@@ -380,26 +407,29 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             retVal.setIsSus(
                 new BooleanType(
                     extractSingleValueFromXml(document, xpath,
-                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:perteceSistemaSUS/text()",
-                        0)
+                        Utils.xpathExpressions.get("isSus"),
+                        0
+                    )
                 )
             );
 
-            // fluxoClientela -> Extension (The client flow expected for the Organization).
+            // fluxoClientela -> Extension (The client flow expected for the
+            // Organization).
             retVal.setClientFlow(
                 new CodeType(
                     extractSingleValueFromXml(document, xpath,
-                        "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:fluxoClientela/text()",
+                        Utils.xpathExpressions.get("clientFlow"),
                         0
                     )
-                ).setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/FluxoClientela")
+                ).setSystem(Utils.namingSystems.get("clientFlow"))
             );
             
             // servicoespecializados -> Extension (specializedServices).
             XPathExpression expr
-                = xpath.compile("//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:servicoespecializados/ns35:servicoespecializado");
+                = xpath.compile(Utils.xpathExpressions.get("specializedService"));
             Object result = expr.evaluate(document, XPathConstants.NODESET);
             NodeList nodeList = (NodeList) result;
+            // TODO: remove.
             printNode(nodeList, 0, "");
             List<OrganizationCnes.SpecializedService> specializedServices
                 = new ArrayList<>();
@@ -407,9 +437,9 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 specializedServices);
             retVal.setSpecializedServices(specializedServices);
 
-        // TODO: catch each exception type separately.
         } catch (URISyntaxException | IOException | InterruptedException
-            | ParserConfigurationException | SAXException | XPathExpressionException ex) {
+            | ParserConfigurationException | SAXException
+            | XPathExpressionException ex) {
             Logger.getLogger(OrganizationCnesResourceProvider.class.getName())
                     .log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -475,72 +505,145 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             Node node = nodeList.item(i);
             path = path + "/" + node.getNodeName();
             if (node.getNodeType() == Node.TEXT_NODE) {
-                if (path.endsWith("ns32:codigo/#text")) {
-                    // For the system and code values, create a new extension instance.
-                    specializedServices.add(new OrganizationCnes.SpecializedService()
+                if (
+                    path.endsWith(
+                        Utils.xpathExpressionSuffixes.get(
+                            "specializedServiceCode"
+                        )
+                    )
+                ) {
+                    // Specialized service.
+                    // For the system and code values, create a new extension
+                    // instance.
+                    specializedServices.add(
+                        new OrganizationCnes.SpecializedService()
                             .setSpecializedService(
                                 new Coding()
-                                    .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoServicoEspecializado")
+                                    .setSystem(
+                                        Utils.namingSystems.get(
+                                            "specializedServiceType"
+                                        )
+                                    )
                                     .setCode(node.getNodeValue())
                             )
                     );
-                } else if (path.endsWith("ns32:descricao/#text")) {
+                } else if (
+                    path.endsWith(
+                        Utils.xpathExpressionSuffixes.get(
+                            "specializedServiceDescription"
+                        )
+                    )
+                ) {
+                    // Specialized service.
                     // For the display, use the last created extension instance
                     // of Specialized Service.
                     OrganizationCnes.SpecializedService specializedService
                         = specializedServices.get(specializedServices.size() - 1);
                     specializedService.getSpecializedService()
                         .setDisplay(node.getNodeValue());
-                } else if (path.endsWith("ns33:codigo/#text")) {
+                } else if (
+                    path.endsWith(
+                        Utils.xpathExpressionSuffixes.get(
+                            "specializedServiceClassificationCode"
+                        )
+                    )
+                ) {
+                    // Specialized service classification.
                     // For the system and code values, retrieve the last created
-                    // extension instance of Specialized Service.
+                    // extension instance of the Specialized service.
                     OrganizationCnes.SpecializedService specializedService
                         = specializedServices.get(specializedServices.size() - 1);
-                    // Retrieve the list of Classifications, adding a new one afterward.
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                    // Retrieve the list of Classifications, adding a new one
+                    // afterward.
+                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+                        specializedServiceClassifications
                         = specializedService.getSpecializedServiceClassifications();
-                    specializedServiceClassifications.add(new OrganizationCnes.SpecializedService.SpecializedServiceClassification()
+                    specializedServiceClassifications.add(
+                        new OrganizationCnes.SpecializedService.SpecializedServiceClassification()
                             .setSpecializedServiceClassification(
                                 new Coding()
-                                    .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado")
+                                    .setSystem(
+                                        Utils.namingSystems.get(
+                                            "specializedServiceClassification"
+                                        )
+                                    )
                                     .setCode(node.getNodeValue())
                             )
                     );
-                } else if (path.endsWith("ns33:descricao/#text")) {
+                } else if (
+                    path.endsWith(
+                        Utils.xpathExpressionSuffixes.get(
+                            "specializedServiceClassificationDescription"
+                        )
+                    )
+                ) {
+                    // Specialized service classification.
                     // For the display value, retrieve the last created
-                    // extension instance of Specialized Service Classification.
+                    // extension instance of the Specialized service
+                    // classification.
                     OrganizationCnes.SpecializedService specializedService
                         = specializedServices.get(specializedServices.size() - 1);
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+                        specializedServiceClassifications
                         = specializedService.getSpecializedServiceClassifications();
                     OrganizationCnes.SpecializedService.SpecializedServiceClassification specializedServiceClassification
-                        = specializedServiceClassifications.get(specializedServiceClassifications.size() - 1);
+                        = specializedServiceClassifications.get(
+                            specializedServiceClassifications.size() - 1
+                        );
                     specializedServiceClassification.getSpecializedServiceClassification()
                         .setDisplay(node.getNodeValue());
-                } else if (path.endsWith("ns33:codigoCaracteristica/#text")) {
+                } else if (
+                    path.endsWith(
+                        Utils.xpathExpressionSuffixes.get(
+                            "specializedServiceClassificationCharacteristicCode"
+                        )
+                    )
+                ) {
+                    // Specialized service classification characteristic.
                     // For the characteristic code, retrieve the last created
-                    // extension instance of Specialized Service Classification.
+                    // extension instance of the Specialized service
+                    // classification.
                     OrganizationCnes.SpecializedService specializedService
                         = specializedServices.get(specializedServices.size() - 1);
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+                        specializedServiceClassifications
                         = specializedService.getSpecializedServiceClassifications();
-                    OrganizationCnes.SpecializedService.SpecializedServiceClassification specializedServiceClassification
-                        = specializedServiceClassifications.get(specializedServiceClassifications.size() - 1);
+                    OrganizationCnes.SpecializedService.SpecializedServiceClassification
+                        specializedServiceClassification
+                        = specializedServiceClassifications.get(
+                            specializedServiceClassifications.size() - 1
+                        );
                     specializedServiceClassification.getSpecializedServiceClassificationCharacteristic()
-                        .setSystem("https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CaracteristicaClassificacaoServicoEspecializado")
-                        .setCode(node.getNodeValue());
-                } else if (path.endsWith("ns33:cnes/#text")) {
+                        .setSystem(
+                            Utils.namingSystems.get(
+                                "specializedServiceClassificationCharacteristic"
+                            )
+                        )
+                        .setValue(node.getNodeValue());
+                } else if (
+                    path.endsWith(
+                        Utils.xpathExpressionSuffixes.get(
+                            "specializedServiceClassificationCharacteristicCnes"
+                        )
+                    )
+                ) {
+                    // Specialized service classification characteristic.
                     // For the CNES code, retrieve the last created
-                    // extension instance of Specialized Service Classification.
+                    // extension instance of the Specialized service
+                    // classification.
                     OrganizationCnes.SpecializedService specializedService
                         = specializedServices.get(specializedServices.size() - 1);
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification> specializedServiceClassifications
+                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+                        specializedServiceClassifications
                         = specializedService.getSpecializedServiceClassifications();
-                    OrganizationCnes.SpecializedService.SpecializedServiceClassification specializedServiceClassification
-                        = specializedServiceClassifications.get(specializedServiceClassifications.size() - 1);
+                    OrganizationCnes.SpecializedService.SpecializedServiceClassification
+                        specializedServiceClassification
+                        = specializedServiceClassifications.get(
+                            specializedServiceClassifications.size() - 1
+                        );
                     specializedServiceClassification.getSpecializedServiceClassificationCnes()
                         .setSystem(Utils.namingSystems.get("cnes"))
-                        .setCode(node.getNodeValue());
+                        .setValue(node.getNodeValue());
                 }
             }
             fillInResourceInstanceWithSpecializedServices(

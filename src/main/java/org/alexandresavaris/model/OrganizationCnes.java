@@ -5,50 +5,68 @@ import ca.uhn.fhir.model.api.annotation.*;
 import ca.uhn.fhir.util.ElementUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.alexandresavaris.util.*;
 import org.hl7.fhir.r4.model.*;
 
 @ResourceDef(name = "Organization")
 public class OrganizationCnes extends Organization {
+
     // City code.
-    @Description(shortDefinition = "The city code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE).")
+    @Description(
+        shortDefinition
+            = "The city code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE)."
+    )
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoMunicipioIbge",
         isModifier = false,
         definedLocally = true)
     @Child(name = "cityCodeIbge")
     private CodeType cityCodeIbge;
+
     // State code.
-    @Description(shortDefinition = "The state code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE).")
+    @Description(
+        shortDefinition
+            = "The state code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE).")
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge",
         isModifier = false,
         definedLocally = true)
     @Child(name = "stateCodeIbge")
     private CodeType stateCodeIbge;
+    
     // Update date.
-    @Description(shortDefinition = "The date when the resource instance's data were updated.")
+    @Description(
+        shortDefinition
+            = "The date when the resource instance's data were updated.")
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao",
         isModifier = false,
         definedLocally = true)
     @Child(name = "updateDate")
     private DateType updateDate;
+
     // Director's CPF.
-    @Description(shortDefinition = "The CPF number (Cadastro de Pessoa Física) of the Organization's Director.")
+    @Description(
+        shortDefinition
+            = "The CPF number (Cadastro de Pessoa Física) of the Organization's Director.")
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CpfDiretor",
         isModifier = false,
         definedLocally = true)
-    @Child(name = "cpfDirector")
-    private CodeType cpfDirector;
+    @Child(name = "directorCpf")
+    private CodeType directorCpf;
+    
     // Director's name.
-    @Description(shortDefinition = "The name of the Organization's Director.")
+    @Description(
+        shortDefinition
+            = "The name of the Organization's Director.")
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/NomeDiretor",
         isModifier = false,
         definedLocally = true)
-    @Child(name = "nameDirector")
-    private HumanName nameDirector;
+    @Child(name = "directorName")
+    private HumanName directorName;
+
     // Geolocation.
     @Description(shortDefinition = "The Organization's geolocation.")
     @ca.uhn.fhir.model.api.annotation.Extension(
@@ -57,6 +75,7 @@ public class OrganizationCnes extends Organization {
         definedLocally = false)
     @Child(name = "geolocation")
     private Geolocation geolocation;
+    
     // Is the Organization part of SUS?
     @Description(shortDefinition = "Is the Organization part of SUS?")
     @ca.uhn.fhir.model.api.annotation.Extension(
@@ -65,16 +84,23 @@ public class OrganizationCnes extends Organization {
         definedLocally = false)
     @Child(name = "isSus")
     private BooleanType isSus;
+
     // Client flow.
-    @Description(shortDefinition = "The client flow expected for the Organization.")
+    @Description(
+        shortDefinition = "The client flow expected for the Organization."
+    )
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/FluxoClientela",
         isModifier = false,
         definedLocally = true)
     @Child(name = "clientFlow")
     private CodeType clientFlow;
+
     // Specialized Services.
-    @Description(shortDefinition = "Specialized Services offered by the Organization.")
+    @Description(
+        shortDefinition
+            = "Specialized Services offered by the Organization."
+    )
     @ca.uhn.fhir.model.api.annotation.Extension(
         url = "SpecializedServices",
         isModifier = false,
@@ -125,32 +151,32 @@ public class OrganizationCnes extends Organization {
         this.updateDate = updateDate;
     }
 
-    public CodeType getCpfDirector() {
+    public CodeType getDirectorCpf() {
         
-        if (this.cpfDirector == null) {
-            this.cpfDirector = new CodeType();
+        if (this.directorCpf == null) {
+            this.directorCpf = new CodeType();
         }
         
-        return this.cpfDirector;
+        return this.directorCpf;
     }
     
-    public void setCpfDirector(CodeType cpfDirector) {
+    public void setDirectorCpf(CodeType directorCpf) {
         
-        this.cpfDirector = cpfDirector;
+        this.directorCpf = directorCpf;
     }
 
-    public HumanName getNameDirector() {
+    public HumanName getDirectorName() {
         
-        if (this.nameDirector == null) {
-            this.nameDirector = new HumanName();
+        if (this.directorName == null) {
+            this.directorName = new HumanName();
         }
         
-        return this.nameDirector;
+        return this.directorName;
     }
     
-    public void setNameDirector(HumanName nameDirector) {
+    public void setDirectorName(HumanName directorName) {
         
-        this.nameDirector = nameDirector;
+        this.directorName = directorName;
     }
 
     public Geolocation getGeolocation() {
@@ -204,7 +230,8 @@ public class OrganizationCnes extends Organization {
         return this.specializedServices;
     }
     
-    public void setSpecializedServices(List<SpecializedService> specializedServices) {
+    public void setSpecializedServices(
+        List<SpecializedService> specializedServices) {
         
         this.specializedServices = specializedServices;
     }
@@ -226,8 +253,8 @@ public class OrganizationCnes extends Organization {
           this.cityCodeIbge,
           this.stateCodeIbge,
           this.updateDate,
-          this.cpfDirector,
-          this.nameDirector,
+          this.directorCpf,
+          this.directorName,
           this.geolocation,
           this.isSus,
           this.clientFlow,
@@ -235,20 +262,27 @@ public class OrganizationCnes extends Organization {
     }
     
     /**
-     * This "block definition" defines an extension type with multiple child extensions.
+     * This "block definition" defines an extension type with multiple child
+     * extensions.
      */
     @Block
     public static class Geolocation extends BackboneElement {
+        
         // Latitude.
-        @Description(shortDefinition = "The latitude for the Organization's location.")
+        @Description(
+            shortDefinition = "The latitude of the Organization's location."
+        )
         @ca.uhn.fhir.model.api.annotation.Extension(
             url = "latitude",
             isModifier = false,
             definedLocally = false)
         @Child(name = "latitude")
         private DecimalType latitude;
+        
         // Longitude.
-        @Description(shortDefinition = "The longitude for the Organization's location.")
+        @Description(
+            shortDefinition = "The longitude of the Organization's location."
+        )
         @ca.uhn.fhir.model.api.annotation.Extension(
             url = "longitude",
             isModifier = false,
@@ -287,9 +321,10 @@ public class OrganizationCnes extends Organization {
         
         /* *****************************
          * Boilerplate methods- Hopefully these will be removed or made optional
-         * in a future version of HAPI but for now they need to be added to all block
-         * types. These two methods follow a simple pattern where a utility method from
-         * ElementUtil is called and all fields are passed in.
+         * in a future version of HAPI but for now they need to be added to all
+         * block types. These two methods follow a simple pattern where a
+         * utility method from ElementUtil is called and all fields are passed
+         * in.
          * *****************************/
         @Override
         public BackboneElement copy() {
@@ -309,26 +344,35 @@ public class OrganizationCnes extends Organization {
     }
     
     /**
-     * This "block definition" defines an extension type with multiple child extensions.
+     * This "block definition" defines an extension type with multiple child
+     * extensions.
      */
     @Block
     public static class SpecializedService extends BackboneElement {
+        
         // Specialized Service.
-        @Description(shortDefinition = "The Specialized Service provided by the Organization.")
+        @Description(
+            shortDefinition
+                = "The Specialized Service provided by the Organization."
+        )
         @ca.uhn.fhir.model.api.annotation.Extension(
             url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado",
             isModifier = false,
             definedLocally = true)
         @Child(name = "specializedService")
         private Coding specializedService;
+        
         // Specialized Service Classifications.
-        @Description(shortDefinition = "Classifications of the Specialized Service offered by the Organization.")
+        @Description(
+            shortDefinition
+                = "Classifications of the Specialized Service offered by the Organization.")
         @ca.uhn.fhir.model.api.annotation.Extension(
             url = "SpecializedServiceClassifications",
             isModifier = false,
             definedLocally = true)
         @Child(name = "SpecializedServiceClassifications")
-        private List<SpecializedServiceClassification> specializedServiceClassifications;
+        private List<SpecializedServiceClassification>
+            specializedServiceClassifications;
         
         // Getters and Setters.
         public Coding getSpecializedService() {
@@ -340,7 +384,8 @@ public class OrganizationCnes extends Organization {
             return this.specializedService;
         }
         
-        public SpecializedService setSpecializedService(Coding specializedService) {
+        public SpecializedService setSpecializedService(
+            Coding specializedService) {
             
             this.specializedService = specializedService;
             
@@ -359,7 +404,8 @@ public class OrganizationCnes extends Organization {
         public void setSpecializedServiceClassifications(
             List<SpecializedServiceClassification> specializedServiceClassifications) {
 
-            this.specializedServiceClassifications = specializedServiceClassifications;
+            this.specializedServiceClassifications
+                = specializedServiceClassifications;
         }
 
         public void addSpecializedServiceClassification(
@@ -369,14 +415,17 @@ public class OrganizationCnes extends Organization {
                 this.specializedServiceClassifications = new ArrayList<>();
             }
 
-            this.specializedServiceClassifications.add(specializedServiceClassification);
+            this.specializedServiceClassifications.add(
+                specializedServiceClassification
+            );
         }
         
         /* *****************************
          * Boilerplate methods- Hopefully these will be removed or made optional
-         * in a future version of HAPI but for now they need to be added to all block
-         * types. These two methods follow a simple pattern where a utility method from
-         * ElementUtil is called and all fields are passed in.
+         * in a future version of HAPI but for now they need to be added to all
+         * block types. These two methods follow a simple pattern where a
+         * utility method from ElementUtil is called and all fields are passed
+         * in.
          * *****************************/
         @Override
         public BackboneElement copy() {
@@ -394,34 +443,43 @@ public class OrganizationCnes extends Organization {
         }
         
         /**
-         * This "block definition" defines an extension type with multiple child extensions.
+         * This "block definition" defines an extension type with multiple child
+         * extensions.
          */
         @Block
-        public static class SpecializedServiceClassification extends BackboneElement {
+        public static class SpecializedServiceClassification
+            extends BackboneElement {
+            
             // Specialized Service Classification.
-            @Description(shortDefinition = "The classification for the Specialized Service provided by the Organization.")
+            @Description(
+                shortDefinition
+                    = "The classification for the Specialized Service provided by the Organization.")
             @ca.uhn.fhir.model.api.annotation.Extension(
                 url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacao",
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassification")
             private Coding specializedServiceClassification;
+            
             // Specialized Service Classification Characteristic.
-            @Description(shortDefinition = "The characteristic from the classification for the Specialized Service provided by the Organization.")
+            @Description(
+                shortDefinition
+                    = "The Characteristic from the Classification for the Specialized Service provided by the Organization.")
             @ca.uhn.fhir.model.api.annotation.Extension(
                 url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica",
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCharacteristic")
-            private Coding specializedServiceClassificationCharacteristic;
+            private CodeType specializedServiceClassificationCharacteristic;
+            
             // Specialized Service Classification Cnes.
-            @Description(shortDefinition = "The CNES from the classification for the Specialized Service provided by the Organization.")
+            @Description(shortDefinition = "The CNES from the Classification for the Specialized Service provided by the Organization.")
             @ca.uhn.fhir.model.api.annotation.Extension(
                 url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCnes",
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCnes")
-            private Coding specializedServiceClassificationCnes;
+            private CodeType specializedServiceClassificationCnes;
 
             // Getters and Setters.
             public Coding getSpecializedServiceClassification() {
@@ -436,50 +494,55 @@ public class OrganizationCnes extends Organization {
             public SpecializedServiceClassification setSpecializedServiceClassification(
                 Coding specializedServiceClassification) {
 
-                this.specializedServiceClassification = specializedServiceClassification;
+                this.specializedServiceClassification
+                    = specializedServiceClassification;
 
                 return this;
             }
 
-            public Coding getSpecializedServiceClassificationCharacteristic() {
+            public CodeType getSpecializedServiceClassificationCharacteristic() {
 
                 if (this.specializedServiceClassificationCharacteristic == null) {
-                    this.specializedServiceClassificationCharacteristic = new Coding();
+                    this.specializedServiceClassificationCharacteristic
+                        = new CodeType();
                 }
 
                 return this.specializedServiceClassificationCharacteristic;
             }
 
             public SpecializedServiceClassification setSpecializedServiceClassificationCharacteristic(
-                Coding specializedServiceClassificationCharacteristic) {
+                CodeType specializedServiceClassificationCharacteristic) {
 
-                this.specializedServiceClassificationCharacteristic = specializedServiceClassificationCharacteristic;
+                this.specializedServiceClassificationCharacteristic
+                    = specializedServiceClassificationCharacteristic;
 
                 return this;
             }
 
-            public Coding getSpecializedServiceClassificationCnes() {
+            public CodeType getSpecializedServiceClassificationCnes() {
 
                 if (this.specializedServiceClassificationCnes == null) {
-                    this.specializedServiceClassificationCnes = new Coding();
+                    this.specializedServiceClassificationCnes = new CodeType();
                 }
 
                 return this.specializedServiceClassificationCnes;
             }
 
             public SpecializedServiceClassification setSpecializedServiceClassificationCnes(
-                Coding specializedServiceClassificationCnes) {
+                CodeType specializedServiceClassificationCnes) {
 
-                this.specializedServiceClassificationCnes = specializedServiceClassificationCnes;
+                this.specializedServiceClassificationCnes
+                    = specializedServiceClassificationCnes;
 
                 return this;
             }
 
             /* *****************************
-             * Boilerplate methods- Hopefully these will be removed or made optional
-             * in a future version of HAPI but for now they need to be added to all block
-             * types. These two methods follow a simple pattern where a utility method from
-             * ElementUtil is called and all fields are passed in.
+             * Boilerplate methods- Hopefully these will be removed or made
+             * optional in a future version of HAPI but for now they need to be
+             * added to all block types. These two methods follow a simple
+             * pattern where a utility method from ElementUtil is called and all
+             * fields are passed in.
              * *****************************/
             @Override
             public BackboneElement copy() {

@@ -7,10 +7,15 @@ import java.util.Map;
 public class Utils {
     // Map of namespaces for parsing XML content.
     public static final Map<String, String> xmlNamespaces = new HashMap<>();
-    // Map of NamingSystems used by the OrganizationCnes instance.
-    public static final Map<String, String> namingSystems = new HashMap<>();
     // Map of XPath expressions for extracting XML content.
     public static final Map<String, String> xpathExpressions = new HashMap<>();
+    // Map of XPath expression suffixes for extracting XML content.
+    public static final Map<String, String> xpathExpressionSuffixes
+        = new HashMap<>();
+    // Map of NamingSystems used in the OrganizationCnes instance.
+    public static final Map<String, String> namingSystems = new HashMap<>();
+    // Map of ValueSets used in the OrganizationCnes instance.
+    public static final Map<String, String> valueSets = new HashMap<>();
     
     static {
 
@@ -64,14 +69,6 @@ public class Utils {
         xmlNamespaces.put("ns35",
             "http://servicos.saude.gov.br/schema/cnes/v1r0/servicoespecializados");
 
-        // Insert NamingSystems.
-        namingSystems.put("cnes",
-            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes");
-        namingSystems.put("unityCode",
-            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade");
-        namingSystems.put("cnpj",
-            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj");
-
         // Insert XPath expressions.
         xpathExpressions.put("cnes",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns2:CodigoCNES/ns2:codigo/text()");
@@ -95,16 +92,83 @@ public class Utils {
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:UF/ns16:siglaUF/text()");
         xpathExpressions.put("postalCode",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:CEP/ns14:numeroCEP/text()");
-        xpathExpressions.put("cityCode",
+        xpathExpressions.put("cityCodeIbge",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:codigoMunicipio/text()");
-        xpathExpressions.put("stateCode",
+        xpathExpressions.put("stateCodeIbge",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns11:Endereco/ns11:Municipio/ns15:UF/ns16:codigoUF/text()");
         xpathExpressions.put("updateDate",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:dataAtualizacao/text()");
-        xpathExpressions.put("cpfDirector",
+        xpathExpressions.put("directorCpf",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns28:Diretor/ns28:CPF/ns5:numeroCPF/text()");
-        xpathExpressions.put("nameDirector",
+        xpathExpressions.put("directorName",
             "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns28:Diretor/ns28:nome/ns29:Nome/text()");
+        xpathExpressions.put("unityType",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns30:tipoUnidade/ns30:codigo/text()");
+        xpathExpressions.put("unityDescription",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns30:tipoUnidade/ns30:descricao/text()");
+        xpathExpressions.put("phoneAreaCode",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:DDD/text()");
+        xpathExpressions.put("phoneNumber",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:numeroTelefone/text()");
+        xpathExpressions.put("phoneType",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:TipoTelefone/ns19:codigoTipoTelefone/text()");
+        xpathExpressions.put("phoneDescription",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Telefone/ns18:TipoTelefone/ns19:descricaoTipoTelefone/text()");
+        xpathExpressions.put("email",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Email/ns20:descricaoEmail/text()");
+        xpathExpressions.put("emailType",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Email/ns20:tipoEmail/text()");
+        xpathExpressions.put("latitude",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Localizacao/ns23:latitude/text()");
+        xpathExpressions.put("longitude",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:Localizacao/ns23:longitude/text()");
+        xpathExpressions.put("isSus",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:perteceSistemaSUS/text()");
+        xpathExpressions.put("clientFlow",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:fluxoClientela/text()");
+        xpathExpressions.put("specializedService",
+            "//soap:Envelope/S:Body/est:responseConsultarEstabelecimentoSaude/dad:DadosGeraisEstabelecimentoSaude/ns27:servicoespecializados/ns35:servicoespecializado");
+        
+        // Insert XPath expression suffixes.
+        xpathExpressionSuffixes.put("specializedServiceCode",
+            "ns32:codigo/#text");
+        xpathExpressionSuffixes.put("specializedServiceDescription",
+            "ns32:descricao/#text");
+        xpathExpressionSuffixes.put("specializedServiceClassificationCode",
+            "ns33:codigo/#text");
+        xpathExpressionSuffixes.put("specializedServiceClassificationDescription",
+            "ns33:descricao/#text");
+        xpathExpressionSuffixes.put(
+            "specializedServiceClassificationCharacteristicCode",
+            "ns33:codigoCaracteristica/#text"
+        );
+        xpathExpressionSuffixes.put(
+            "specializedServiceClassificationCharacteristicCnes",
+            "ns33:cnes/#text"
+        );
+        
+        // Insert NamingSystems.
+        namingSystems.put("cnes",
+            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes");
+        namingSystems.put("unityCode",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade");
+        namingSystems.put("cnpj",
+            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj");
+        namingSystems.put("phoneType",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoTelefone");
+        namingSystems.put("emailType",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoEmail");
+        namingSystems.put("clientFlow",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/FluxoClientela");
+        namingSystems.put("specializedServiceType",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoServicoEspecializado");
+        namingSystems.put("specializedServiceClassification",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado");
+        namingSystems.put("specializedServiceClassificationCharacteristic",
+            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CaracteristicaClassificacaoServicoEspecializado");
 
+        // Insert ValueSets.
+        valueSets.put("type",
+            "http://www.saude.gov.br/fhir/r4/ValueSet/BRTipoEstabelecimentoSaude-1.0");
     }
 }
