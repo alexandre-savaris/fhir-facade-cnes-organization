@@ -41,6 +41,9 @@ import org.xml.sax.SAXException;
 public class OrganizationCnesResourceProvider implements IResourceProvider {
     // Endpoint for accessing the SOAP webservice.
     private String endpointEstabelecimentoSaudeService = null;
+    // Username and password for the service.
+    private String username;
+    private String password;
     // The content of the SOAP envelope to be sent to the webservice.
     private String contentOfSoapEnvelope = null;
     // Code snippets for filtering.
@@ -54,12 +57,16 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     // The parameterized constructor.
     public OrganizationCnesResourceProvider(
         String endpointEstabelecimentoSaudeService,
+        String username,
+        String password,
         String soapEnvelopeContent,
         String cnesFilter,
         String cnpjFilter) {
         
         this.endpointEstabelecimentoSaudeService
             = endpointEstabelecimentoSaudeService;
+        this.username = username;
+        this.password = password;
         this.contentOfSoapEnvelope = soapEnvelopeContent;
         this.codeSnippetForFilteringByCnes = cnesFilter;
         this.codeSnippetForFilteringByCnpj = cnpjFilter;
@@ -101,14 +108,17 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             if (theId.getIdPart().length() == expectedCnesLength) {
                 // Filter by CNES.
                 snippetFilter = MessageFormat.format(
-                    this.codeSnippetForFilteringByCnes, theId.getIdPart());
+                    this.codeSnippetForFilteringByCnes, theId.getIdPart()
+                );
             } else if (theId.getIdPart().length() == expectedCnpjLength) {
                 // Filter by CNPJ. TODO: it's not working.
                 snippetFilter = MessageFormat.format(
-                    this.codeSnippetForFilteringByCnpj, theId.getIdPart());
+                    this.codeSnippetForFilteringByCnpj, theId.getIdPart()
+                );
             }
             this.contentOfSoapEnvelope = MessageFormat.format(
-                this.contentOfSoapEnvelope, snippetFilter);
+                this.contentOfSoapEnvelope, username, password, snippetFilter
+            );
             
             // Access the SOAP webservice.
             HttpRequest request = HttpRequest.newBuilder()
@@ -538,7 +548,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the display, use the last created extension instance
                     // of Specialized Service.
                     OrganizationCnes.SpecializedService specializedService
-                        = specializedServices.get(specializedServices.size() - 1);
+                        = getLastSpecializedService(specializedServices);
                     specializedService.getSpecializedService()
                         .setDisplay(node.getNodeValue());
                 } else if (
@@ -551,13 +561,12 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // Specialized service classification.
                     // For the system and code values, retrieve the last created
                     // extension instance of the Specialized service.
-                    OrganizationCnes.SpecializedService specializedService
-                        = specializedServices.get(specializedServices.size() - 1);
                     // Retrieve the list of Classifications, adding a new one
                     // afterward.
                     List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
                         specializedServiceClassifications
-                        = specializedService.getSpecializedServiceClassifications();
+                        = getListOfSpecializedServiceClassifications(
+                            specializedServices);
                     specializedServiceClassifications.add(
                         new OrganizationCnes.SpecializedService.SpecializedServiceClassification()
                             .setSpecializedServiceClassification(
@@ -581,15 +590,11 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the display value, retrieve the last created
                     // extension instance of the Specialized service
                     // classification.
-                    OrganizationCnes.SpecializedService specializedService
-                        = specializedServices.get(specializedServices.size() - 1);
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
-                        specializedServiceClassifications
-                        = specializedService.getSpecializedServiceClassifications();
-                    OrganizationCnes.SpecializedService.SpecializedServiceClassification specializedServiceClassification
-                        = specializedServiceClassifications.get(
-                            specializedServiceClassifications.size() - 1
-                        );
+                    OrganizationCnes.SpecializedService.SpecializedServiceClassification
+                        specializedServiceClassification
+                            = getLastSpecializedServiceClassification(
+                                specializedServices
+                            );
                     specializedServiceClassification.getSpecializedServiceClassification()
                         .setDisplay(node.getNodeValue());
                 } else if (
@@ -603,16 +608,11 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the characteristic code, retrieve the last created
                     // extension instance of the Specialized service
                     // classification.
-                    OrganizationCnes.SpecializedService specializedService
-                        = specializedServices.get(specializedServices.size() - 1);
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
-                        specializedServiceClassifications
-                        = specializedService.getSpecializedServiceClassifications();
                     OrganizationCnes.SpecializedService.SpecializedServiceClassification
                         specializedServiceClassification
-                        = specializedServiceClassifications.get(
-                            specializedServiceClassifications.size() - 1
-                        );
+                            = getLastSpecializedServiceClassification(
+                                specializedServices
+                            );
                     specializedServiceClassification.getSpecializedServiceClassificationCharacteristic()
                         .setSystem(
                             Utils.namingSystems.get(
@@ -631,16 +631,11 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the CNES code, retrieve the last created
                     // extension instance of the Specialized service
                     // classification.
-                    OrganizationCnes.SpecializedService specializedService
-                        = specializedServices.get(specializedServices.size() - 1);
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
-                        specializedServiceClassifications
-                        = specializedService.getSpecializedServiceClassifications();
                     OrganizationCnes.SpecializedService.SpecializedServiceClassification
                         specializedServiceClassification
-                        = specializedServiceClassifications.get(
-                            specializedServiceClassifications.size() - 1
-                        );
+                            = getLastSpecializedServiceClassification(
+                                specializedServices
+                            );
                     specializedServiceClassification.getSpecializedServiceClassificationCnes()
                         .setSystem(Utils.namingSystems.get("cnes"))
                         .setValue(node.getNodeValue());
@@ -651,5 +646,40 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 path,
                 specializedServices);
         }
+    }
+    
+    // Get the last Specialized Service from the list.
+    private OrganizationCnes.SpecializedService getLastSpecializedService
+        (List<OrganizationCnes.SpecializedService> specializedServices) {
+            
+        return specializedServices.get(specializedServices.size() - 1);
+    }
+        
+    // Get the list of Specialized Service Classifications from the last
+    // Specialized Service.
+    private List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+        getListOfSpecializedServiceClassifications(
+            List<OrganizationCnes.SpecializedService> specializedServices) {
+            
+        OrganizationCnes.SpecializedService specializedService
+            = getLastSpecializedService(specializedServices);
+            
+        return specializedService.getSpecializedServiceClassifications();
+    }
+
+    // Get the last Specialized Service Classification from the list.
+    private OrganizationCnes.SpecializedService.SpecializedServiceClassification
+        getLastSpecializedServiceClassification(
+            List<OrganizationCnes.SpecializedService> specializedServices) {
+            
+        List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+            specializedServiceClassifications
+                = getListOfSpecializedServiceClassifications(
+                    specializedServices
+                );
+            
+        return specializedServiceClassifications.get(
+            specializedServiceClassifications.size() - 1
+        );
     }
 }

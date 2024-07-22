@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Tipo de um Serviço Especializado mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "description": "Tipo de um Serviço Especializado, mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS).",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Identificar um Serviço Especializado por meio de um Tipo definido e mantido pelo DATASUS.",
+  "purpose": "Categorizar um Serviço Especializado por meio de um Tipo definido e mantido pelo DATASUS.",
   "fhirVersion": "4.0.1",
   "kind": "resource",
   "abstract": true,

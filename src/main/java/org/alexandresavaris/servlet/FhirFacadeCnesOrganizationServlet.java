@@ -18,16 +18,16 @@ import java.nio.file.Files;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.alexandresavaris.interceptor.BearerAuthorizationInterceptor;
 
 /**
- * This servlet is the actual FHIR server itself
+ * This servlet is the actual FHIR server itself.
  */
 public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
-
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructor
+     * Default constructor.
      */
     public FhirFacadeCnesOrganizationServlet() {
         
@@ -35,8 +35,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
     }
 	
     /**
-     * This method is called automatically when the
-     * servlet is initializing.
+     * This method is called automatically when the servlet is initializing.
      */
     @Override
     public void initialize() {
@@ -53,16 +52,28 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             Properties appProps = new Properties();
             appProps.load(new FileInputStream(appConfigPath));
             
-            // Retrieve the endpoint to the "EstabelecimentoSaudeService" service.
             String endpointEstabelecimentoSaudeService
-                = appProps.getProperty("endpoint.cnes.estabelecimentosaudeservice");
+                = appProps.getProperty(
+                    "endpoint.cnes.estabelecimentosaudeservice"
+                );
+            String username
+                = appProps.getProperty(
+                    "endpoint.cnes.estabelecimentosaudeservice.username"
+                );
+            String password
+                = appProps.getProperty(
+                    "endpoint.cnes.estabelecimentosaudeservice.password"
+                );
                 
             // Load the content of the SOAP envelope to be sent to the endpoint.
             URL url = this.getClass()
                 .getClassLoader()
-                .getResource("soap/envelopes/consultarEstabelecimentoSaude.xml");
+                .getResource(
+                    "soap/envelopes/consultarEstabelecimentoSaude.xml"
+                );
             File file = new File(url.getFile());
-            String soapEnvelopeContent = new String(Files.readAllBytes(file.toPath()));
+            String soapEnvelopeContent
+                = new String(Files.readAllBytes(file.toPath()));
 
             // Load the XML snippet for filtering by CNES.
             url = this.getClass()
@@ -79,13 +90,16 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             String cnpjFilter = new String(Files.readAllBytes(file.toPath()));
 
             /*
-             * Two resource providers are defined. Each one handles a specific
-             * type of resource.
+             * Resource providers that handle specific types of resources.
              */
             List<IResourceProvider> providers = new ArrayList<>();
             providers.add(new OrganizationCnesResourceProvider(
-                endpointEstabelecimentoSaudeService, 
-                soapEnvelopeContent, cnesFilter, cnpjFilter));
+                endpointEstabelecimentoSaudeService,
+                username,
+                password,
+                soapEnvelopeContent,
+                cnesFilter,
+                cnpjFilter));
             setResourceProviders(providers);
                 
             /*
@@ -93,14 +107,19 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              * but can be useful as it causes HAPI to generate narratives for
              * resources which don't otherwise have one.
              */
-            INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
+            INarrativeGenerator narrativeGen
+                = new DefaultThymeleafNarrativeGenerator();
             getFhirContext().setNarrativeGenerator(narrativeGen);
                 
             /*
-             * Use nice coloured HTML when a browser is used to request the content
+             * Use nice coloured HTML when a browser is used to request the
+             * content.
              */
             registerInterceptor(new ResponseHighlighterInterceptor());
-                
+            
+            // For Bearer Authorization.
+            registerInterceptor(new BearerAuthorizationInterceptor());
+            
         } catch (IOException ex) {
             Logger.getLogger(FhirFacadeCnesOrganizationServlet.class.getName())
                 .log(Level.SEVERE, null, ex);

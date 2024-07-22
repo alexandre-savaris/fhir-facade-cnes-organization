@@ -5,7 +5,7 @@
   "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/FluxoClientela",
   "version": "1.0.0",
   "name": "FluxoClientela",
-  "title": "Código descritivo de um fluxo de clientela",
+  "title": "Código descritivo de um Fluxo de Clientela",
   "status": "active",
   "experimental": false,
   "date": "2024-07-17",
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código descritivo de um fluxo de clientela mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "description": "Código descritivo de um Fluxo de Clientela, mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS).",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Categorizar um fluxo de clientela por meio de um código descritivo definido e mantido pelo DATASUS.",
+  "purpose": "Categorizar um Fluxo de Clientela por meio de um código descritivo definido e mantido pelo DATASUS.",
   "fhirVersion": "4.0.1",
   "kind": "resource",
   "abstract": true,

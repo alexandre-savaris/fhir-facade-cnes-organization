@@ -5,7 +5,7 @@
   "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CaracteristicaClassificacaoServicoEspecializado",
   "version": "1.0.0",
   "name": "CaracteristicaClassificacaoServicoEspecializado",
-  "title": "Código da característica da classificação de um Serviço Especializado",
+  "title": "Código da Característica de uma Classificação de um Serviço Especializado",
   "status": "active",
   "experimental": false,
   "date": "2024-07-17",
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código da característica da classificação de um Serviço Especializado mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "description": "Código da Característica de uma Classificação de um Serviço Especializado, mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS).",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Identificar uma característica de uma classificação relacionada a um Serviço Especializado por meio de um código definido e mantido pelo DATASUS.",
+  "purpose": "Identificar uma Característica atribuída a uma Classificação relacionada a um Serviço Especializado por meio de um código definido e mantido pelo DATASUS.",
   "fhirVersion": "4.0.1",
   "kind": "resource",
   "abstract": true,

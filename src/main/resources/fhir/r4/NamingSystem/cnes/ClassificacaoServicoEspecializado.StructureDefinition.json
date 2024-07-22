@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Classificação de um Serviço Especializado mantida pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "description": "Classificação de um Serviço Especializado, mantida pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS).",
   "jurisdiction": [
     {
       "coding": [

@@ -5,7 +5,7 @@
   "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade",
   "version": "1.0.0",
   "name": "CodigoUnidade",
-  "title": "Código da Unidade de Saúde",
+  "title": "Código da Unidade/Estabelecimento de Saúde",
   "status": "active",
   "experimental": false,
   "date": "2024-07-10",
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código da Unidade de Saúde mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "description": "Código da Unidade/Estabelecimento de Saúde, mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS).",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Identificar uma Unidade de Saúde por meio de um código definido e mantido pelo DATASUS.",
+  "purpose": "Identificar uma Unidade/Estabelecimento de Saúde por meio de um código definido e mantido pelo DATASUS.",
   "fhirVersion": "4.0.1",
   "kind": "resource",
   "abstract": true,

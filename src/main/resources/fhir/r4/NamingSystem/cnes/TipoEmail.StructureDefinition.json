@@ -5,7 +5,7 @@
   "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoEmail",
   "version": "1.0.0",
   "name": "TipoEmail",
-  "title": "Código do tipo de email",
+  "title": "Código do Tipo de Email",
   "status": "active",
   "experimental": false,
   "date": "2024-07-13",
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código do tipo de email mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde (DATASUS).",
+  "description": "Código do Tipo de Email, mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS).",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Categorizar um email de contato por meio de um código definido e mantido pelo DATASUS.",
+  "purpose": "Categorizar um Email de contato por meio de um código definido e mantido pelo DATASUS.",
   "fhirVersion": "4.0.1",
   "kind": "resource",
   "abstract": true,
