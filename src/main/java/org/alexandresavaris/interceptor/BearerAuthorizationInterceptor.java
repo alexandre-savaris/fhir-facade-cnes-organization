@@ -9,14 +9,23 @@ import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
 import java.util.List;
 
 public class BearerAuthorizationInterceptor extends AuthorizationInterceptor {
+    // The Bearer Token to authorize access with.
+    private String bearerToken = null;
+    
+    public BearerAuthorizationInterceptor() {
+    }
+
+    public BearerAuthorizationInterceptor(String bearerToken) {
+        
+        this.bearerToken = bearerToken;
+    }
 
     // Build the rules list to be verified on each request.
     @Override
     public List<IAuthRule> buildRuleList(RequestDetails theRequestDetails) {
         
         String authHeader = theRequestDetails.getHeader("Authorization");
-        // TODO: introduce DB.
-        if ("Bearer dfw98h38r".equals(authHeader)) {
+        if (("Bearer " + this.bearerToken).equals(authHeader)) {
             return new RuleBuilder().allowAll().build();
         } else {
             throw new AuthenticationException(

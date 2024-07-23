@@ -10,6 +10,7 @@ import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
+import ca.uhn.fhir.storage.interceptor.balp.BalpAuditCaptureInterceptor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,6 +20,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.alexandresavaris.interceptor.BearerAuthorizationInterceptor;
+import org.alexandresavaris.interceptor.LoggingInterceptor;
+import org.alexandresavaris.interceptor.balp.BalpAuditContextService;
+import org.alexandresavaris.interceptor.balp.FileBalpSink;
 
 /**
  * This servlet is the actual FHIR server itself.
@@ -63,6 +67,10 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             String password
                 = appProps.getProperty(
                     "endpoint.cnes.estabelecimentosaudeservice.password"
+                );
+            String bearerToken
+                = appProps.getProperty(
+                    "authorization.bearer_token"
                 );
                 
             // Load the content of the SOAP envelope to be sent to the endpoint.
@@ -118,7 +126,22 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             registerInterceptor(new ResponseHighlighterInterceptor());
             
             // For Bearer Authorization.
-            registerInterceptor(new BearerAuthorizationInterceptor());
+            registerInterceptor(
+                new BearerAuthorizationInterceptor(bearerToken)
+            );
+
+            // For logging.
+            registerInterceptor(new LoggingInterceptor());
+            
+            // For Basic Audit Log Patterns (BALP).
+            // Generation and persistence of AuditEvent instances.
+            registerInterceptor(
+                // TODO: review (not working).
+                new org.alexandresavaris.interceptor.balp.BalpAuditCaptureInterceptor(
+                    new FileBalpSink(this.getFhirContext(), "/data"),
+                    new BalpAuditContextService()
+                )
+            );
             
         } catch (IOException ex) {
             Logger.getLogger(FhirFacadeCnesOrganizationServlet.class.getName())
