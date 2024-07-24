@@ -1,14 +1,14 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-servicoespecializadoclassificacaocaracteristica",
+  "id": "extension-cnes-nomediretor",
   "language": "pt-BR",
-  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/NomeDiretor",
   "version": "1.0.0",
-  "name": "ServicoEspecializadoClassificacaoCaracteristica",
-  "title": "Característica da classificação do Serviço especializado ofertado pelo estabelecimento de saúde",
+  "name": "NomeDiretor",
+  "title": "Nome do Diretor do Estabelecimento de Saúde",
   "status": "active",
   "experimental": false,
-  "date": "2024-07-16",
+  "date": "2024-07-11",
   "publisher": "Alexandre Savaris",
   "contact": [
     {
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código da característica da classificação referente ao serviço especializado ofertado pelo estabelecimento de saúde.",
+  "description": "Nome do Diretor responsável pelo Estabelecimento de Saúde.",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Caracterizar a classificação de um serviço especializado ofertado por um estabelecimento de saúde por meio de um código.",
+  "purpose": "Identificar o Diretor responsável pelo Estabelecimento de Saúde por meio do seu nome.",
   "fhirVersion": "4.0.1",
   "kind": "complex-type",
   "abstract": true,
@@ -52,7 +52,7 @@
       {
         "id": "Extension.url",
         "path": "Extension.url",
-        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica"
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/NomeDiretor"
       }
     ]
   }

@@ -1,14 +1,14 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-servicoespecializadoclassificacaocnes",
+  "id": "extension-cnes-caracteristicaclassificacaoservicoespecializado",
   "language": "pt-BR",
-  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCnes",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado",
   "version": "1.0.0",
-  "name": "ServicoEspecializadoClassificacaoCnes",
-  "title": "CNES da classificação do Serviço especializado ofertado pelo estabelecimento de saúde",
+  "name": "CaracteristicaClassificacaoServicoEspecializado",
+  "title": "Característica da Classificação do Serviço Especializado ofertado pelo Estabelecimento de Saúde",
   "status": "active",
   "experimental": false,
-  "date": "2024-07-17",
+  "date": "2024-07-16",
   "publisher": "Alexandre Savaris",
   "contact": [
     {
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Número no CNES da classificação referente ao serviço especializado ofertado pelo estabelecimento de saúde.",
+  "description": "Código da Característica da Classificação referente ao Serviço Especializado ofertado pelo Estabelecimento de Saúde.",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Vincular a classificação de um serviço especializado ofertado por um estabelecimento de saúde a outro estabelecimento de saúde por meio de um número no CNES.",
+  "purpose": "Caracterizar a Classificação de um Serviço Especializado ofertado por um Estabelecimento de Saúde por meio de um código.",
   "fhirVersion": "4.0.1",
   "kind": "complex-type",
   "abstract": true,
@@ -52,7 +52,7 @@
       {
         "id": "Extension.url",
         "path": "Extension.url",
-        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCnes"
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica"
       }
     ]
   }

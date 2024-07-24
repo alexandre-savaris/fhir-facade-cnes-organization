@@ -1,14 +1,14 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-codigoufibge",
+  "id": "extension-cnes-fluxoclientela",
   "language": "pt-BR",
-  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/FluxoClientela",
   "version": "1.0.0",
-  "name": "CodigoUfIbge",
-  "title": "Código da UF no IBGE",
+  "name": "FluxoClientela",
+  "title": "Fluxo de clientela esperado para o Estabelecimento de Saúde",
   "status": "active",
   "experimental": false,
-  "date": "2024-07-11",
+  "date": "2024-07-17",
   "publisher": "Alexandre Savaris",
   "contact": [
     {
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código da UF mantido pelo Instituto Brasileiro de Geografia e Estatística (IBGE).",
+  "description": "Código descritivo do fluxo de clientela esperado para o Estabelecimento de Saúde.",
   "jurisdiction": [
     {
       "coding": [
@@ -34,14 +34,14 @@
       ]
     }
   ],
-  "purpose": "Identificar uma UF por meio de um código definido e mantido pelo IBGE.",
+  "purpose": "Caracterizar o fluxo de clientela esperado para um Estabelecimento de Saúde por meio de um código descritivo.",
   "fhirVersion": "4.0.1",
   "kind": "complex-type",
   "abstract": true,
   "context": [
     {
       "type": "element",
-      "expression": "Organization.address.state"
+      "expression": "Organization"
     }
   ],
   "type": "Extension",
@@ -52,7 +52,7 @@
       {
         "id": "Extension.url",
         "path": "Extension.url",
-        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge"
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/FluxoClientela"
       }
     ]
   }

@@ -5,7 +5,7 @@
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CpfDiretor",
   "version": "1.0.0",
   "name": "CpfDiretor",
-  "title": "Número do CPF do Diretor do estabelecimento de saúde",
+  "title": "Número do CPF do Diretor do Estabelecimento de Saúde",
   "status": "active",
   "experimental": false,
   "date": "2024-07-11",
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Número do CPF (Cadastro de Pessoa Física) do Diretor responsável pelo estabelecimento de saúde.",
+  "description": "Número do CPF (Cadastro de Pessoa Física) do Diretor responsável pelo Estabelecimento de Saúde.",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Identificar o Diretor do estabelecimento de saúde por meio do seu número de CPF.",
+  "purpose": "Identificar o Diretor do Estabelecimento de Saúde por meio do seu número de CPF.",
   "fhirVersion": "4.0.1",
   "kind": "complex-type",
   "abstract": true,

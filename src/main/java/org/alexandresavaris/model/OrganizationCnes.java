@@ -455,7 +455,7 @@ public class OrganizationCnes extends Organization {
                 shortDefinition
                     = "The classification for the Specialized Service provided by the Organization.")
             @ca.uhn.fhir.model.api.annotation.Extension(
-                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacao",
+                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacaoServicoEspecializado",
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassification")
@@ -466,7 +466,7 @@ public class OrganizationCnes extends Organization {
                 shortDefinition
                     = "The Characteristic from the Classification for the Specialized Service provided by the Organization.")
             @ca.uhn.fhir.model.api.annotation.Extension(
-                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica",
+                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado",
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCharacteristic")
@@ -475,7 +475,7 @@ public class OrganizationCnes extends Organization {
             // Specialized Service Classification Cnes.
             @Description(shortDefinition = "The CNES from the Classification for the Specialized Service provided by the Organization.")
             @ca.uhn.fhir.model.api.annotation.Extension(
-                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCnes",
+                url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CnesClassificacaoServicoEspecializado",
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCnes")

@@ -21,7 +21,7 @@ public class FileBalpSink implements IBalpAuditEventSink {
         = LoggerFactory.getLogger(FileBalpSink.class);
     // FHIR context for encoding the resource content.
     private final FhirContext ctx;
-    // Path to store the files.
+    // Path for storing the files.
     private final String path;
     
     public FileBalpSink(FhirContext ctx, String path) {
@@ -38,7 +38,10 @@ public class FileBalpSink implements IBalpAuditEventSink {
         String encoded = jsonParser.encodeResourceToString(theAuditEvent);
         
         try {
-            Files.write(Paths.get(this.path + "/aaa.json"), encoded.getBytes());
+            System.out.println("------------------------------------------");
+            System.out.println(encoded);
+            System.out.println("------------------------------------------");
+            Files.write(Paths.get(this.path + "/AuditEvent.json"), encoded.getBytes());
         } catch (IOException ex) {
             logger.error(
                 "Error saving the AuditEvent resource instance: {}",

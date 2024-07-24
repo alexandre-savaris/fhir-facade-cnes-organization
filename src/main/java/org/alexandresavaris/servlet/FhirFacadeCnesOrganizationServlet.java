@@ -137,7 +137,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             // Generation and persistence of AuditEvent instances.
             registerInterceptor(
                 // TODO: review (not working).
-                new org.alexandresavaris.interceptor.balp.BalpAuditCaptureInterceptor(
+                new BalpAuditCaptureInterceptor(
                     new FileBalpSink(this.getFhirContext(), "/data"),
                     new BalpAuditContextService()
                 )

@@ -1,14 +1,14 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-servicoespecializadoclassificacao",
+  "id": "extension-cnes-dataatualizacao",
   "language": "pt-BR",
-  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacao",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao",
   "version": "1.0.0",
-  "name": "ServicoEspecializadoClassificacao",
-  "title": "Classificação do Serviço especializado ofertado pelo estabelecimento de saúde",
+  "name": "DataAtualizacao",
+  "title": "Data da atualização dos dados do Estabelecimento de Saúde",
   "status": "active",
   "experimental": false,
-  "date": "2024-07-16",
+  "date": "2024-07-11",
   "publisher": "Alexandre Savaris",
   "contact": [
     {
@@ -21,7 +21,7 @@
       ]
     }
   ],
-  "description": "Código, descrição e outras informações referentes ao serviço especializado ofertado pelo estabelecimento de saúde.",
+  "description": "Data em que os dados do Estabelecimento de Saúde foram atualizados.",
   "jurisdiction": [
     {
       "coding": [
@@ -34,7 +34,7 @@
       ]
     }
   ],
-  "purpose": "Caracterizar a classificação de um serviço especializado ofertado por um estabelecimento de saúde por meio de um código, uma descrição e outras informações.",
+  "purpose": "Registrar a data em que os dados do Estabelecimento de Saúde foram atualizados.",
   "fhirVersion": "4.0.1",
   "kind": "complex-type",
   "abstract": true,
@@ -52,7 +52,7 @@
       {
         "id": "Extension.url",
         "path": "Extension.url",
-        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacao"
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao"
       }
     ]
   }
