@@ -5,7 +5,6 @@ import ca.uhn.fhir.model.api.annotation.*;
 import ca.uhn.fhir.util.ElementUtil;
 import java.util.ArrayList;
 import java.util.List;
-import org.alexandresavaris.util.*;
 import org.hl7.fhir.r4.model.*;
 
 @ResourceDef(name = "Organization")

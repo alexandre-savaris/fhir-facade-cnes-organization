@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.alexandresavaris.provider.OrganizationCnesResourceProvider;
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -45,7 +46,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
     public void initialize() {
             
         try {
-            
+
             // Load the properties file.
             String rootPath = Thread.currentThread()
                 .getContextClassLoader()
@@ -101,24 +102,31 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              * Resource providers that handle specific types of resources.
              */
             List<IResourceProvider> providers = new ArrayList<>();
-            providers.add(new OrganizationCnesResourceProvider(
-                endpointEstabelecimentoSaudeService,
-                username,
-                password,
-                soapEnvelopeContent,
-                cnesFilter,
-                cnpjFilter));
+            providers.add(
+                new OrganizationCnesResourceProvider(
+                    endpointEstabelecimentoSaudeService,
+                    username,
+                    password,
+                    soapEnvelopeContent,
+                    cnesFilter,
+                    cnpjFilter
+                )
+            );
             setResourceProviders(providers);
-                
+
             /*
              * Use a narrative generator. This is a completely optional step,
              * but can be useful as it causes HAPI to generate narratives for
              * resources which don't otherwise have one.
              */
-            INarrativeGenerator narrativeGen
-                = new DefaultThymeleafNarrativeGenerator();
+//            INarrativeGenerator narrativeGen
+//                = new DefaultThymeleafNarrativeGenerator();
+            CustomThymeleafNarrativeGenerator narrativeGen
+                = new CustomThymeleafNarrativeGenerator(
+                    "classpath:org/alexandresavaris/narratives/narratives.properties"
+                );
             getFhirContext().setNarrativeGenerator(narrativeGen);
-                
+            
             /*
              * Use nice coloured HTML when a browser is used to request the
              * content.

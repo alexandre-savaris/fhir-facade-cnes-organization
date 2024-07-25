@@ -1,5 +1,6 @@
 package org.alexandresavaris.provider;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -91,7 +92,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none
      * exists.
      */
-    @Read()
+    @Read(type = OrganizationCnes.class)
     public OrganizationCnes getResourceById(@IdParam IdType theId) {
         // The expected length for a CNES value.
         final int expectedCnesLength = 7;
@@ -152,8 +153,10 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             
             // Fill in the resource with data from the response.
             retVal = new OrganizationCnes();
-            retVal.setId(IdType.newRandomUuid());
-
+            
+            // The logical ID replicates the Organization's CNES.
+            retVal.setId(theId);
+            
             // XML parsing for content extraction.
             DocumentBuilderFactory factory
                 = DocumentBuilderFactory.newInstance();
