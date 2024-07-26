@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-dataatualizacao",
+  "id": "extension-cnes-data-atualizacao",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao",
   "version": "1.0.0",

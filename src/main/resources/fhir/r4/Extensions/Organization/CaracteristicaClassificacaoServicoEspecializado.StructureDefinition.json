@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-caracteristicaclassificacaoservicoespecializado",
+  "id": "extension-cnes-caracteristica-classificacao-servico-especializado",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado",
   "version": "1.0.0",
@@ -52,7 +52,7 @@
       {
         "id": "Extension.url",
         "path": "Extension.url",
-        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacaoCaracteristica"
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado"
       }
     ]
   }

@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-nomediretor",
+  "id": "extension-cnes-nome-diretor",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/NomeDiretor",
   "version": "1.0.0",

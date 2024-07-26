@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "namingsystem-cnes-classificacaoservicoespecializado",
+  "id": "namingsystem-cnes-classificacao-servico-especializado",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado",
   "version": "1.0.0",

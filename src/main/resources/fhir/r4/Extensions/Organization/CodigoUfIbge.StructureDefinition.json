@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-codigoufibge",
+  "id": "extension-cnes-codigo-uf-ibge",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge",
   "version": "1.0.0",

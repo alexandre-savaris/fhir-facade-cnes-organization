@@ -5,13 +5,29 @@ a browser.
 -->
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="narrative.css"/>
+        <link rel="stylesheet" type="text/css" href="hapi-narrative.css"/>
     </head>
     <body>
 <!--*/-->
 <div>
     <th:block th:unless="${#strings.isEmpty(resource.name)}">
         <div class="hapiHeaderText" th:text="${resource.name}"/>
+    </th:block>
+    <th:block th:unless="${#arrays.isEmpty(resource.identifier)}">
+        <br />
+        <div class="hapiHeaderText" th:text="Identificadores"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr th:each="identifier : ${resource.identifier}">
+                    <td th:text="${identifier.value}"></td>
+                    <div th:switch="${identifier.system}">
+                        <td th:case="'http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes'">Número no CNES</td>
+                        <td th:case="'https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade'">Código da Unidade no CNES</td>
+                        <td th:case="'http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj'">CNPJ</td>
+                    </div>
+                </tr>
+            </tbody>
+        </table>
     </th:block>
     <!--
     <table class="hapiPropertyTable">

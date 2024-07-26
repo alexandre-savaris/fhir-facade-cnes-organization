@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-classificacaoservicoespecializado",
+  "id": "extension-cnes-classificacao-servico-especializado",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacaoServicoEspecializado",
   "version": "1.0.0",
@@ -52,7 +52,7 @@
       {
         "id": "Extension.url",
         "path": "Extension.url",
-        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializadoClassificacao"
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacaoServicoEspecializado"
       }
     ]
   }

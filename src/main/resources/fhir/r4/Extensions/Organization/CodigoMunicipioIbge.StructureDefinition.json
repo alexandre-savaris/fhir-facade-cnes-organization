@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "extension-cnes-codigomunicipioibge",
+  "id": "extension-cnes-codigo-municipio-ibge",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoMunicipioIbge",
   "version": "1.0.0",

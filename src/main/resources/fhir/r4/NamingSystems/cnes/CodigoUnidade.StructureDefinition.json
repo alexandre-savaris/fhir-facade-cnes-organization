@@ -1,6 +1,6 @@
 {
   "resourceType": "StructureDefinition",
-  "id": "namingsystem-cnes-codigounidade",
+  "id": "namingsystem-cnes-codigo-unidade",
   "language": "pt-BR",
   "url": "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade",
   "version": "1.0.0",
