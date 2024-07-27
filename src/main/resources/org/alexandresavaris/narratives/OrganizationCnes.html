@@ -10,12 +10,43 @@ a browser.
     <body>
 <!--*/-->
 <div>
+    <!-- Name. -->
     <th:block th:unless="${#strings.isEmpty(resource.name)}">
         <div class="hapiHeaderText" th:text="${resource.name}"/>
     </th:block>
+    <!-- Alias. -->
+    <th:block th:unless="${#arrays.isEmpty(resource.alias)}">
+        <br />
+        <div class="hapiHeaderText" th:text="'Nome empresarial'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr th:each="alias : ${resource.alias}">
+                    <td th:text="${alias.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- Type. -->
+    <th:block th:unless="${#arrays.isEmpty(resource.type)}">
+        <br />
+        <div class="hapiHeaderText" th:text="'Tipo de Estabelecimento'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <div th:each="type : ${resource.type}">
+                    <th:block th:unless="${#arrays.isEmpty(type.coding)}">
+                        <tr th:each="coding : ${type.coding}">
+                            <td th:text="${coding.code}"></td>
+                            <td th:text="${coding.display}"></td>
+                        </tr>
+                    </th:block>
+                </div>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- Identifiers. -->
     <th:block th:unless="${#arrays.isEmpty(resource.identifier)}">
         <br />
-        <div class="hapiHeaderText" th:text="Identificadores"/>
+        <div class="hapiHeaderText" th:text="'Identificadores'"/>
         <table class="hapiPropertyTable">
             <tbody>
                 <tr th:each="identifier : ${resource.identifier}">
@@ -29,20 +60,107 @@ a browser.
             </tbody>
         </table>
     </th:block>
-    <!--
-    <table class="hapiPropertyTable">
-        <tbody>
-            <tr th:if="${not resource.identifier.empty}">
-                <td>Identifier</td>
-                <td th:narrative="${resource.identifier[0]}"></td>
-            </tr>
-            <tr th:if="${not resource.address.empty}">
-                <td>Address</td>
-                <td th:narrative="${resource.address[0]}"></td>
-            </tr>
-        </tbody>
-    </table>
-    -->
+    <!-- Address. -->
+    <th:block th:unless="${#arrays.isEmpty(resource.address)}">
+        <br />
+        <div class="hapiHeaderText" th:text="'Endereço'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr th:each="address : ${resource.address}">
+                    <td th:text="${address.text}"></td>
+                    <td th:text="${address.postalCode}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <th:block th:unless="${resource.cityCodeIbge} == null OR ${resource.stateCodeIbge} == null">
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr>
+                    <td th:text="${resource.cityCodeIbge.code}"></td>
+                    <td th:text="${resource.stateCodeIbge.code}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <th:block th:unless="${resource.geolocation} == null">
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr>
+                    <td th:text="${resource.geolocation.latitude.value}"></td>
+                    <td th:text="${resource.geolocation.longitude.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- SUS. -->
+    <th:block th:unless="${resource.isSus} == null OR ${resource.clientFlow} == null">
+        <br />
+        <div class="hapiHeaderText" th:text="'Sistema Único de Saúde'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr>
+                    <div th:switch="${resource.isSus.value}">
+                        <td th:case="true">Sim</td>
+                        <td th:case="false">Não</td>
+                    </div>
+                    <td th:text="${resource.clientFlow.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- Director. -->
+    <th:block th:unless="${resource.directorCpf} == null OR ${resource.directorName} == null">
+        <br />
+        <div class="hapiHeaderText" th:text="'Diretor'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr>
+                    <td th:text="${resource.directorCpf.code}"></td>
+                    <td th:text="${resource.directorName.text}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- Extensions - Specialized Services. -->
+    <th:block th:unless="${#arrays.isEmpty(resource.specializedServices)}">
+        <br />
+        <div class="hapiHeaderText" th:text="'Serviços Especializados'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <div th:each="specializedService : ${resource.specializedServices}">
+                    <tr>
+                        <td th:text="${specializedService.specializedService.code}"></td>
+                        <td th:text="${specializedService.specializedService.display}"></td>
+                    </tr>
+                    <th:block th:unless="${#arrays.isEmpty(specializedService.specializedServiceClassifications)}">
+                        <tr>
+                            <td th:text="'Classificações do Serviço Especializado'"></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr th:each="specializedServiceClassification : ${specializedService.specializedServiceClassifications}">
+                            <td th:text="${specializedServiceClassification.specializedServiceClassification.code}"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassification.display}"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassificationCharacteristic.code}"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassificationCnes.code}"></td>
+                        </tr>
+                    </th:block>
+                </div>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- Update date. -->
+    <th:block th:unless="${resource.updateDate} == null">
+        <br />
+        <div class="hapiHeaderText" th:text="'Data de atualização'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr>
+                    <td th:text="${#dates.format(resource.updateDate.value, 'dd/MM/yyyy')}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
 </div>
 <!--/*-->
     </body>
