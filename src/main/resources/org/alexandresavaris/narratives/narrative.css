@@ -1,0 +1,29 @@
+body {
+    font-family: sans-serif;
+}
+
+div.hapiHeaderText {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+div.hapiSubHeaderText {
+    font-size: 1.3em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+table.hapiPropertyTable tbody tr td {
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid #EEE;
+    vertical-align: top;
+    padding: 4px;
+    margin: 1px;
+}
+
+table.hapiPropertyTable th {
+    font-weight: bold;
+    border: 1px solid #EEE;
+    text-align: left;
+}

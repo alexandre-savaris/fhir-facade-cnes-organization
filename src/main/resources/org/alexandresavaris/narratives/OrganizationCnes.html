@@ -5,7 +5,7 @@ a browser.
 -->
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="hapi-narrative.css"/>
+        <link rel="stylesheet" type="text/css" href="narrative.css"/>
     </head>
     <body>
 <!--*/-->
@@ -17,7 +17,7 @@ a browser.
     <!-- Alias. -->
     <th:block th:unless="${#arrays.isEmpty(resource.alias)}">
         <br />
-        <div class="hapiHeaderText" th:text="'Nome empresarial'"/>
+        <div class="hapiSubHeaderText" th:text="'Nome empresarial'"/>
         <table class="hapiPropertyTable">
             <tbody>
                 <tr th:each="alias : ${resource.alias}">
@@ -29,7 +29,7 @@ a browser.
     <!-- Type. -->
     <th:block th:unless="${#arrays.isEmpty(resource.type)}">
         <br />
-        <div class="hapiHeaderText" th:text="'Tipo de Estabelecimento'"/>
+        <div class="hapiSubHeaderText" th:text="'Tipo de Estabelecimento'"/>
         <table class="hapiPropertyTable">
             <tbody>
                 <div th:each="type : ${resource.type}">
@@ -46,7 +46,7 @@ a browser.
     <!-- Identifiers. -->
     <th:block th:unless="${#arrays.isEmpty(resource.identifier)}">
         <br />
-        <div class="hapiHeaderText" th:text="'Identificadores'"/>
+        <div class="hapiSubHeaderText" th:text="'Identificadores'"/>
         <table class="hapiPropertyTable">
             <tbody>
                 <tr th:each="identifier : ${resource.identifier}">
@@ -63,9 +63,13 @@ a browser.
     <!-- Address. -->
     <th:block th:unless="${#arrays.isEmpty(resource.address)}">
         <br />
-        <div class="hapiHeaderText" th:text="'Endereço'"/>
+        <div class="hapiSubHeaderText" th:text="'Endereço'"/>
         <table class="hapiPropertyTable">
             <tbody>
+                <tr>
+                    <th>Logradouro</th>
+                    <th>CEP</th>
+                </tr>
                 <tr th:each="address : ${resource.address}">
                     <td th:text="${address.text}"></td>
                     <td th:text="${address.postalCode}"></td>
@@ -77,6 +81,10 @@ a browser.
         <table class="hapiPropertyTable">
             <tbody>
                 <tr>
+                    <th>Código do Município no IBGE</th>
+                    <th>Código da UF no IBGE</th>
+                </tr>
+                <tr>
                     <td th:text="${resource.cityCodeIbge.code}"></td>
                     <td th:text="${resource.stateCodeIbge.code}"></td>
                 </tr>
@@ -87,8 +95,36 @@ a browser.
         <table class="hapiPropertyTable">
             <tbody>
                 <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                </tr>
+                <tr>
                     <td th:text="${resource.geolocation.latitude.value}"></td>
                     <td th:text="${resource.geolocation.longitude.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <!-- Contact. -->
+    <th:block th:unless="${#arrays.isEmpty(resource.contact)}">
+        <br />
+        <div class="hapiSubHeaderText" th:text="'Contatos'"/>
+        <table class="hapiPropertyTable">
+            <tbody>
+                <tr>
+                    <th>Contato</th>
+                    <th>Meio</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                </tr>
+                <tr th:each="contact : ${resource.contact}">
+                    <td th:text="${contact.telecom[0].value}"></td>
+                    <div th:switch="${contact.telecom[0].system.name}">
+                        <td th:case="PHONE">Telefone</td>
+                        <td th:case="EMAIL">E-mail</td>
+                    </div>
+                    <td th:text="${contact.purpose.coding[0].code}"></td>
+                    <td th:text="${contact.purpose.coding[0].display}"></td>
                 </tr>
             </tbody>
         </table>
@@ -96,9 +132,13 @@ a browser.
     <!-- SUS. -->
     <th:block th:unless="${resource.isSus} == null OR ${resource.clientFlow} == null">
         <br />
-        <div class="hapiHeaderText" th:text="'Sistema Único de Saúde'"/>
+        <div class="hapiSubHeaderText" th:text="'Sistema Único de Saúde'"/>
         <table class="hapiPropertyTable">
             <tbody>
+                <tr>
+                    <th>Atende ao SUS?</th>
+                    <th>Fluxo de clientela</th>
+                </tr>
                 <tr>
                     <div th:switch="${resource.isSus.value}">
                         <td th:case="true">Sim</td>
@@ -112,9 +152,13 @@ a browser.
     <!-- Director. -->
     <th:block th:unless="${resource.directorCpf} == null OR ${resource.directorName} == null">
         <br />
-        <div class="hapiHeaderText" th:text="'Diretor'"/>
+        <div class="hapiSubHeaderText" th:text="'Diretor'"/>
         <table class="hapiPropertyTable">
             <tbody>
+                <tr>
+                    <th>CPF</th>
+                    <th>Nome</th>
+                </tr>
                 <tr>
                     <td th:text="${resource.directorCpf.code}"></td>
                     <td th:text="${resource.directorName.text}"></td>
@@ -125,21 +169,33 @@ a browser.
     <!-- Extensions - Specialized Services. -->
     <th:block th:unless="${#arrays.isEmpty(resource.specializedServices)}">
         <br />
-        <div class="hapiHeaderText" th:text="'Serviços Especializados'"/>
+        <div class="hapiSubHeaderText" th:text="'Serviços Especializados'"/>
         <table class="hapiPropertyTable">
             <tbody>
                 <div th:each="specializedService : ${resource.specializedServices}">
+                    <tr>
+                        <td colspan="2" style="border: 0px">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                    </tr>
                     <tr>
                         <td th:text="${specializedService.specializedService.code}"></td>
                         <td th:text="${specializedService.specializedService.display}"></td>
                     </tr>
                     <th:block th:unless="${#arrays.isEmpty(specializedService.specializedServiceClassifications)}">
                         <tr>
-                            <td th:text="'Classificações do Serviço Especializado'"></td>
-                            <td>&nbsp;</td>
+                            <td th:text="'Classificações do Serviço Especializado'" colspan="4" style="font-weight: bold"></td>
+                        </tr>
+                        <tr>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Característica</th>
+                            <th>CNES</th>
                         </tr>
                         <tr th:each="specializedServiceClassification : ${specializedService.specializedServiceClassifications}">
-                            <td th:text="${specializedServiceClassification.specializedServiceClassification.code}"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassification.code}" style="text-align: right"></td>
                             <td th:text="${specializedServiceClassification.specializedServiceClassification.display}"></td>
                             <td th:text="${specializedServiceClassification.specializedServiceClassificationCharacteristic.code}"></td>
                             <td th:text="${specializedServiceClassification.specializedServiceClassificationCnes.code}"></td>
@@ -152,7 +208,7 @@ a browser.
     <!-- Update date. -->
     <th:block th:unless="${resource.updateDate} == null">
         <br />
-        <div class="hapiHeaderText" th:text="'Data de atualização'"/>
+        <div class="hapiSubHeaderText" th:text="'Data de atualização'"/>
         <table class="hapiPropertyTable">
             <tbody>
                 <tr>
