@@ -1,6 +1,5 @@
 package org.alexandresavaris.provider;
 
-import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -112,7 +111,9 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     this.codeSnippetForFilteringByCnes, theId.getIdPart()
                 );
             } else if (theId.getIdPart().length() == expectedCnpjLength) {
-                // Filter by CNPJ. TODO: it's not working.
+                // Filter by CNPJ.
+                // TODO: following the documentation from DATASUS, it's not
+                // working. Shall be reviewed in the next release.
                 snippetFilter = MessageFormat.format(
                     this.codeSnippetForFilteringByCnpj, theId.getIdPart()
                 );

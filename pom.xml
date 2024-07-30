@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
-    <groupId>test</groupId>
-    <artifactId>hapi-fhirstarters-rest-server-skeleton</artifactId>
-    <version>5.0.0</version>
+    <groupId>org.alexandresavaris</groupId>
+    <artifactId>fhir-facade-cnes-organization</artifactId>
+    <version>1.0.0</version>
     <packaging>war</packaging>
-    <name>HAPI FHIR Sample RESTful Server</name>
+    <name>FHIR Facade for CNES</name>
     
     <repositories>
         <repository>
@@ -20,7 +20,7 @@
     </repositories>
     
     <properties>
-        <hapifhir_version>7.0.2</hapifhir_version>
+        <hapifhir_version>7.2.2</hapifhir_version>
     </properties>
     
     <dependencies>
@@ -106,9 +106,8 @@
     </dependencies>
     
     <build>
-        <!-- Tells Maven to name the generated WAR file as
-             restful-server-example.war -->
-        <finalName>restful-server-example</finalName>
+        <!-- Naming the generated WAR. -->
+        <finalName>fhir-facade-cnes-organization</finalName>
         <!-- The following is not required for the application to build, but
              allows you to test it by issuing "mvn jetty:run" from the command
              line. -->

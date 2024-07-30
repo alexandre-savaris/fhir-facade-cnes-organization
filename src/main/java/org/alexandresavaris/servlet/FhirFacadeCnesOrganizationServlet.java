@@ -6,8 +6,6 @@ import java.util.List;
 import org.alexandresavaris.provider.OrganizationCnesResourceProvider;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
-import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
-import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 import ca.uhn.fhir.rest.server.interceptor.ResponseHighlighterInterceptor;
@@ -119,8 +117,6 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              * but can be useful as it causes HAPI to generate narratives for
              * resources which don't otherwise have one.
              */
-//            INarrativeGenerator narrativeGen
-//                = new DefaultThymeleafNarrativeGenerator();
             CustomThymeleafNarrativeGenerator narrativeGen
                 = new CustomThymeleafNarrativeGenerator(
                     "classpath:org/alexandresavaris/narratives/narratives.properties"
@@ -143,6 +139,8 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             
             // For Basic Audit Log Patterns (BALP).
             // Generation and persistence of AuditEvent instances.
+            // Following the documentation, the interceptor is not working.
+            // TODO: shall be reviewed in the next release.
             registerInterceptor(
                 // TODO: review (not working).
                 new BalpAuditCaptureInterceptor(
@@ -150,7 +148,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
                     new BalpAuditContextService()
                 )
             );
-            
+
         } catch (IOException ex) {
             Logger.getLogger(FhirFacadeCnesOrganizationServlet.class.getName())
                 .log(Level.SEVERE, null, ex);
