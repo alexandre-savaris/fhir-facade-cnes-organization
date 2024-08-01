@@ -38,10 +38,11 @@ public class FileBalpSink implements IBalpAuditEventSink {
         String encoded = jsonParser.encodeResourceToString(theAuditEvent);
         
         try {
-            System.out.println("------------------------------------------");
-            System.out.println(encoded);
-            System.out.println("------------------------------------------");
-            Files.write(Paths.get(this.path + "/AuditEvent.json"), encoded.getBytes());
+            
+            Files.write(
+                Paths.get(this.path + "/AuditEvent.json"), encoded.getBytes()
+            );
+            
         } catch (IOException ex) {
             logger.error(
                 "Error saving the AuditEvent resource instance: {}",
