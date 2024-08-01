@@ -1,12 +1,9 @@
-package org.alexandresavaris.metadata;
+package org.alexandresavaris.test;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.i18n.Msg;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.HardcodedServerAddressStrategy;
-import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.IncomingRequestAddressStrategy;
 import ca.uhn.fhir.rest.server.provider.ServerCapabilityStatementProvider;
 import ca.uhn.fhir.system.HapiSystemProperties;
@@ -15,7 +12,7 @@ import ca.uhn.fhir.test.utilities.server.RestfulServerExtension;
 import ca.uhn.fhir.util.TestUtil;
 import ca.uhn.fhir.util.VersionUtil;
 import java.nio.charset.StandardCharsets;
-import org.alexandresavaris.model.OrganizationCnes;
+import org.alexandresavaris.test.provider.OrganizationCnesResourceProvider;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -23,7 +20,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.hl7.fhir.r4.model.CapabilityStatement;
-import org.hl7.fhir.r4.model.IdType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +28,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 // Tests regarding the Metadata Capability Statement.
 public class MetadataCapabilityStatementTest {
+    
     // For using the R4 cached context.
     private static final FhirContext ourCtx = FhirContext.forR4Cached();
     
@@ -40,7 +37,7 @@ public class MetadataCapabilityStatementTest {
     private final RestfulServerExtension ourServer
         = new RestfulServerExtension(ourCtx)
             .setDefaultResponseEncoding(EncodingEnum.XML)
-            .registerProvider(new DummyOrganizationCnesResourceProvider())
+            .registerProvider(new OrganizationCnesResourceProvider())
             .setDefaultPrettyPrint(false)
             .withServer(
                 s -> s.setServerConformanceProvider(
@@ -144,9 +141,10 @@ public class MetadataCapabilityStatementTest {
          */
         try {
             
-            httpGet = new HttpGet(ourServer.getBaseUrl() + "/Patient/metadata");
+            httpGet = new HttpGet(ourServer.getBaseUrl()
+                + "/Organization/metadata");
             status = ourClient.execute(httpGet);
-		assertEquals(404, status.getStatusLine().getStatusCode());
+		assertEquals(400, status.getStatusLine().getStatusCode());
                 
 	} finally {
             IOUtils.closeQuietly(status.getEntity().getContent());
@@ -257,23 +255,5 @@ public class MetadataCapabilityStatementTest {
     public static void afterClassClearContext() throws Exception {
         
 	TestUtil.randomizeLocaleAndTimezone();
-    }
-    
-    // Provide a dummy OrganizationCnes instance.
-    @SuppressWarnings("unused")
-    static class DummyOrganizationCnesResourceProvider
-        implements IResourceProvider {
-        
-        @Override
-        public Class<OrganizationCnes> getResourceType() {
-            
-            return OrganizationCnes.class;
-        }
-        
-        @Read(type = OrganizationCnes.class)
-        public OrganizationCnes getResourceById(@IdParam IdType theId) {
-            
-            return null;
-        }
     }
 }
