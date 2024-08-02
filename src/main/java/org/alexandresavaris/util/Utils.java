@@ -18,6 +18,8 @@ public class Utils {
     public static final Map<String, String> valueSets = new HashMap<>();
     // Map of OIDs used in the OrganizationCnes instance.
     public static final Map<String, String> oids = new HashMap<>();
+    // Map of Extensions used in the OrganizationCnes instance.
+    public static final Map<String, String> extensions = new HashMap<>();
     
     static {
 
@@ -176,5 +178,13 @@ public class Utils {
         oids.put("cnes", "2.16.840.1.113883.13.36");
         oids.put("ibgeCode", "2.16.840.1.113883.4.707");
         oids.put("cpf", "2.16.840.1.113883.13.237");
+        
+        // Insert Extensions.
+        extensions.put(
+            "geolocation", "http://hl7.org/fhir/StructureDefinition/geolocation"
+        );
+        extensions.put("latitude", "latitude");
+        extensions.put("longitude", "longitude");
+
     }
 }

@@ -79,16 +79,32 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
         String addressText = java.text.MessageFormat.format(
             addressTextTemplate, street, number, neighborhood, city, state);
-        retVal.addAddress(
-            new Address()
-                .setUse(Address.AddressUse.WORK)
-                .setType(Address.AddressType.BOTH)
-                .setText(addressText)
-                .setCity(city)
-                .setState(state)
-                .setPostalCode("33333")
-                .setCountry("BRA")
-        );
+        
+        Address address = new Address()
+            .setUse(Address.AddressUse.WORK)
+            .setType(Address.AddressType.BOTH)
+            .setText(addressText)
+            .setCity(city)
+            .setState(state)
+            .setPostalCode("33333")
+            .setCountry("BRA");
+
+        // Geolocation extensions.
+        Extension geolocationExtension
+            = new Extension(Utils.extensions.get("geolocation"));
+        Extension latitudeExtension
+            = new Extension(Utils.extensions.get("latitude"));
+        latitudeExtension.setValue(new DecimalType("-99.99999"));
+        Extension longitudeExtension
+            = new Extension(Utils.extensions.get("longitude"));
+        longitudeExtension.setValue(new DecimalType("-99.99999"));
+        geolocationExtension.addExtension(latitudeExtension);
+        geolocationExtension.addExtension(longitudeExtension);
+        
+        // Completing the address to be returned.
+        address.addExtension(geolocationExtension);
+        retVal.addAddress(address);
+        
         // IBGE codes.
         OrganizationCnes.IbgeCode ibgeCode = new OrganizationCnes.IbgeCode();
         ibgeCode.setMunicipalityIbgeCode(
@@ -182,13 +198,6 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 )
             );
             
-        // Localizacao -> Extension (geolocation).
-        OrganizationCnes.Geolocation geolocation
-            = new OrganizationCnes.Geolocation();
-        geolocation.setLatitude(new DecimalType("-99.99999"));
-        geolocation.setLongitude(new DecimalType("-99.99999"));
-        retVal.setGeolocation(geolocation);
-
         // perteceSistemaSUS -> Extension (Is the Organization part of SUS?).
         retVal.setIsSus(new BooleanType("true"));
 

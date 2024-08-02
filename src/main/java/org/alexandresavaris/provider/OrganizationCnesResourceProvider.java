@@ -249,21 +249,51 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
             String addressText = java.text.MessageFormat.format(
                 addressTextTemplate, street, number, neighborhood, city, state);
-            retVal.addAddress(
-                new Address()
-                    .setUse(Address.AddressUse.WORK)
-                    .setType(Address.AddressType.BOTH)
-                    .setText(addressText)
-                    .setCity(city)
-                    .setState(state)
-                    .setPostalCode(
-                        extractSingleValueFromXml(document, xpath,
-                            Utils.xpathExpressions.get("postalCode"),
-                            0
-                        )
+            
+            Address address = new Address()
+                .setUse(Address.AddressUse.WORK)
+                .setType(Address.AddressType.BOTH)
+                .setText(addressText)
+                .setCity(city)
+                .setState(state)
+                .setPostalCode(
+                    extractSingleValueFromXml(document, xpath,
+                        Utils.xpathExpressions.get("postalCode"),
+                        0
                     )
-                    .setCountry("BRA")
+                )
+                .setCountry("BRA");
+            
+            // Geolocation extensions.
+            Extension geolocationExtension
+                = new Extension(Utils.extensions.get("geolocation"));
+            Extension latitudeExtension
+                = new Extension(Utils.extensions.get("latitude"));
+            latitudeExtension.setValue(
+                new DecimalType(
+                    extractSingleValueFromXml(document, xpath,
+                        Utils.xpathExpressions.get("latitude"),
+                        0
+                    )
+                )
             );
+            Extension longitudeExtension
+                = new Extension(Utils.extensions.get("longitude"));
+            longitudeExtension.setValue(
+                new DecimalType(
+                    extractSingleValueFromXml(document, xpath,
+                        Utils.xpathExpressions.get("longitude"),
+                        0
+                    )
+                )
+            );
+            geolocationExtension.addExtension(latitudeExtension);
+            geolocationExtension.addExtension(longitudeExtension);
+            
+            // Completing the address to be returned.
+            address.addExtension(geolocationExtension);
+            retVal.addAddress(address);
+            
             // IBGE codes.
             OrganizationCnes.IbgeCode ibgeCode = new OrganizationCnes.IbgeCode();
             ibgeCode.setMunicipalityIbgeCode(
@@ -425,27 +455,6 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     )
                 );
             
-            // Localizacao -> Extension (geolocation).
-            OrganizationCnes.Geolocation geolocation
-                = new OrganizationCnes.Geolocation();
-            geolocation.setLatitude(
-                new DecimalType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("latitude"),
-                        0
-                    )
-                )
-            );
-            geolocation.setLongitude(
-                new DecimalType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("longitude"),
-                        0
-                    )
-                )
-            );
-            retVal.setGeolocation(geolocation);
-
             // perteceSistemaSUS -> Extension (Is the Organization part of SUS?).
             retVal.setIsSus(
                 new BooleanType(

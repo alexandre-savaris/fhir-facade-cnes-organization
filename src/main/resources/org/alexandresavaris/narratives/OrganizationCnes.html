@@ -69,10 +69,14 @@ a browser.
                 <tr>
                     <th>Logradouro</th>
                     <th>CEP</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
                 </tr>
                 <tr th:each="address : ${resource.address}">
                     <td th:text="${address.text}"></td>
                     <td th:text="${address.postalCode}"></td>
+                    <td th:text="${address.extension[0].extension[0].value.value}"></td>
+                    <td th:text="${address.extension[0].extension[1].value.value}"></td>
                 </tr>
             </tbody>
         </table>
@@ -87,20 +91,6 @@ a browser.
                 <tr>
                     <td th:text="${resource.ibgeCode.municipalityIbgeCode.code}"></td>
                     <td th:text="${resource.ibgeCode.stateIbgeCode.code}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </th:block>
-    <th:block th:unless="${resource.geolocation} == null">
-        <table class="hapiPropertyTable">
-            <tbody>
-                <tr>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                </tr>
-                <tr>
-                    <td th:text="${resource.geolocation.latitude.value}"></td>
-                    <td th:text="${resource.geolocation.longitude.value}"></td>
                 </tr>
             </tbody>
         </table>

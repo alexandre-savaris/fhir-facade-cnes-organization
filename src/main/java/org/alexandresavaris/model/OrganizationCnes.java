@@ -43,15 +43,6 @@ public class OrganizationCnes extends Organization {
     @Child(name = "directorName")
     private HumanName directorName;
 
-    // Geolocation.
-    @Description(shortDefinition = "The Organization's geolocation.")
-    @ca.uhn.fhir.model.api.annotation.Extension(
-        url = "http://hl7.org/fhir/StructureDefinition/geolocation",
-        isModifier = false,
-        definedLocally = false)
-    @Child(name = "geolocation")
-    private Geolocation geolocation;
-    
     // Is the Organization part of SUS?
     @Description(shortDefinition = "Is the Organization part of SUS?")
     @ca.uhn.fhir.model.api.annotation.Extension(
@@ -138,20 +129,6 @@ public class OrganizationCnes extends Organization {
         this.directorName = directorName;
     }
 
-    public Geolocation getGeolocation() {
-        
-        if (this.geolocation == null) {
-            this.geolocation = new Geolocation();
-        }
-        
-        return this.geolocation;
-    }
-    
-    public void setGeolocation(Geolocation geolocation) {
-        
-        this.geolocation = geolocation;
-    }
-
     public BooleanType getIsSus() {
         
         if (this.isSus == null) {
@@ -226,95 +203,12 @@ public class OrganizationCnes extends Organization {
           this.updateDate,
           this.directorCpf,
           this.directorName,
-          this.geolocation,
           this.isSus,
           this.clientFlow,
           this.ibgeCode,
           this.specializedServices);
     }
     
-    /**
-     * This "block definition" defines an extension type with multiple child
-     * extensions.
-     */
-    @Block
-    public static class Geolocation extends BackboneElement {
-        
-        // Latitude.
-        @Description(
-            shortDefinition = "The latitude of the Organization's location."
-        )
-        @ca.uhn.fhir.model.api.annotation.Extension(
-            url = "latitude",
-            isModifier = false,
-            definedLocally = false)
-        @Child(name = "latitude")
-        private DecimalType latitude;
-        
-        // Longitude.
-        @Description(
-            shortDefinition = "The longitude of the Organization's location."
-        )
-        @ca.uhn.fhir.model.api.annotation.Extension(
-            url = "longitude",
-            isModifier = false,
-            definedLocally = false)
-        @Child(name = "longitude")
-        private DecimalType longitude;
-        
-        // Getters and Setters.
-        public DecimalType getLatitude() {
-            
-            if (this.latitude == null) {
-                this.latitude = new DecimalType();
-            }
-            
-            return this.latitude;
-        }
-        
-        public void setLatitude(DecimalType latitude) {
-            
-            this.latitude = latitude;
-        }
-        
-        public DecimalType getLongitude() {
-            
-            if (this.longitude == null) {
-                this.longitude = new DecimalType();
-            }
-            
-            return this.longitude;
-        }
-        
-        public void setLongitude(DecimalType longitude) {
-            
-            this.longitude = longitude;
-        }
-        
-        /* *****************************
-         * Boilerplate methods- Hopefully these will be removed or made optional
-         * in a future version of HAPI but for now they need to be added to all
-         * block types. These two methods follow a simple pattern where a
-         * utility method from ElementUtil is called and all fields are passed
-         * in.
-         * *****************************/
-        @Override
-        public BackboneElement copy() {
-            
-            Geolocation geolocation = new Geolocation();
-            geolocation.setLatitude(this.latitude);
-            geolocation.setLongitude(this.longitude);
-            
-            return geolocation;
-        }
-        
-        @Override
-        public boolean isEmpty() {
-            
-            return ElementUtil.isEmpty(this.latitude, this.longitude);
-        }
-    }
-
     /**
      * This "block definition" defines an extension type with multiple child
      * extensions.
