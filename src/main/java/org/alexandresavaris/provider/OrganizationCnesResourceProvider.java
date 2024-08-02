@@ -5,6 +5,7 @@ import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -180,7 +181,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
 
             // CodigoCNES -> Identifier: CNES.
             retVal.addIdentifier()
-                .setSystem(Utils.namingSystems.get("cnes"))
+                .setSystem("urn:oid:" + Utils.oids.get("cnes"))
                 .setValue(
                     extractSingleValueFromXml(document, xpath,
                         Utils.xpathExpressions.get("cnes"),
@@ -263,24 +264,41 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     )
                     .setCountry("BRA")
             );
-            // Extension - city code.
-            retVal.setCityCodeIbge(
-                new CodeType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("cityCodeIbge"),
-                        0
+            // IBGE codes.
+            OrganizationCnes.IbgeCode ibgeCode = new OrganizationCnes.IbgeCode();
+            ibgeCode.setMunicipalityIbgeCode(
+                new Coding()
+                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                    .setCode(
+                        extractSingleValueFromXml(document, xpath,
+                            Utils.xpathExpressions.get("cityCodeIbge"),
+                            0
+                        )
                     )
-                )
-            );
-            // Extension - state code.
-            retVal.setStateCodeIbge(
-                new CodeType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("stateCodeIbge"),
-                        0
+                    .setDisplay(
+                        new String(
+                            "Código do município no IBGE".getBytes("ISO-8859-1"),
+                            "UTF-8"
+                        )
                     )
-                )
             );
+            ibgeCode.setStateIbgeCode(
+                new Coding()
+                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                    .setCode(
+                        extractSingleValueFromXml(document, xpath,
+                            Utils.xpathExpressions.get("stateCodeIbge"),
+                            0
+                        )
+                    )
+                    .setDisplay(
+                        new String(
+                            "Código da UF no IBGE".getBytes("ISO-8859-1"),
+                            "UTF-8"
+                        )
+                    )
+            );
+            retVal.setIbgeCode(ibgeCode);
 
             // dataAtualizacao -> Extension (update date).
             retVal.setUpdateDate(
@@ -294,12 +312,20 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
 
             // numeroCPF -> Extension (Director's CPF).
             retVal.setDirectorCpf(
-                new CodeType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("directorCpf"),
-                        0
+                new Coding()
+                    .setSystem("urn:oid:" + Utils.oids.get("cpf"))
+                    .setCode(
+                        extractSingleValueFromXml(document, xpath,
+                            Utils.xpathExpressions.get("directorCpf"),
+                            0
+                        )
                     )
-                )
+                    .setDisplay(
+                        new String(
+                            "Número do CPF do Diretor".getBytes("ISO-8859-1"),
+                            "UTF-8"
+                        )
+                    )
             );
 
             // Nome -> Extension (Director's name).
@@ -487,7 +513,8 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     private void fillInResourceInstanceWithSpecializedServices(
         NodeList nodeList,
         String path,
-        List<OrganizationCnes.SpecializedService> specializedServices) {
+        List<OrganizationCnes.SpecializedService> specializedServices)
+        throws UnsupportedEncodingException {
 
         // Nothing to do here.
         if (nodeList == null || nodeList.getLength() == 0) {
@@ -620,8 +647,14 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                                 specializedServices
                             );
                     specializedServiceClassification.getSpecializedServiceClassificationCnes()
-                        .setSystem(Utils.namingSystems.get("cnes"))
-                        .setValue(node.getNodeValue());
+                        .setSystem("urn:oid:" + Utils.oids.get("cnes"))
+                        .setCode(node.getNodeValue())
+                        .setDisplay(
+                            new String(
+                                "Número no CNES".getBytes("ISO-8859-1"),
+                                "UTF-8"
+                            )
+                        );
                 }
             }
             fillInResourceInstanceWithSpecializedServices(

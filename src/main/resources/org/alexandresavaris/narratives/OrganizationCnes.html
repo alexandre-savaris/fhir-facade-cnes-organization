@@ -77,7 +77,7 @@ a browser.
             </tbody>
         </table>
     </th:block>
-    <th:block th:unless="${resource.cityCodeIbge} == null OR ${resource.stateCodeIbge} == null">
+    <th:block th:unless="${resource.ibgeCode} == null">
         <table class="hapiPropertyTable">
             <tbody>
                 <tr>
@@ -85,8 +85,8 @@ a browser.
                     <th>Código da UF no IBGE</th>
                 </tr>
                 <tr>
-                    <td th:text="${resource.cityCodeIbge.code}"></td>
-                    <td th:text="${resource.stateCodeIbge.code}"></td>
+                    <td th:text="${resource.ibgeCode.municipalityIbgeCode.code}"></td>
+                    <td th:text="${resource.ibgeCode.stateIbgeCode.code}"></td>
                 </tr>
             </tbody>
         </table>

@@ -10,29 +10,6 @@ import org.hl7.fhir.r4.model.*;
 @ResourceDef(name = "Organization")
 public class OrganizationCnes extends Organization {
 
-    // City code.
-    @Description(
-        shortDefinition
-            = "The city code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE)."
-    )
-    @ca.uhn.fhir.model.api.annotation.Extension(
-        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoMunicipioIbge",
-        isModifier = false,
-        definedLocally = true)
-    @Child(name = "cityCodeIbge")
-    private CodeType cityCodeIbge;
-
-    // State code.
-    @Description(
-        shortDefinition
-            = "The state code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE).")
-    @ca.uhn.fhir.model.api.annotation.Extension(
-        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge",
-        isModifier = false,
-        definedLocally = true)
-    @Child(name = "stateCodeIbge")
-    private CodeType stateCodeIbge;
-    
     // Update date.
     @Description(
         shortDefinition
@@ -53,7 +30,7 @@ public class OrganizationCnes extends Organization {
         isModifier = false,
         definedLocally = true)
     @Child(name = "directorCpf")
-    private CodeType directorCpf;
+    private Coding directorCpf;
     
     // Director's name.
     @Description(
@@ -95,6 +72,18 @@ public class OrganizationCnes extends Organization {
     @Child(name = "clientFlow")
     private CodeType clientFlow;
 
+    // IBGE codes for Municipalities and States.
+    @Description(
+        shortDefinition
+            = "The Municipality and State codes defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE)."
+    )
+    @ca.uhn.fhir.model.api.annotation.Extension(
+        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoIbge",
+        isModifier = false,
+        definedLocally = true)
+    @Child(name = "ibgeCodes")
+    private IbgeCode ibgeCode;
+
     // Specialized Services.
     @Description(
         shortDefinition
@@ -107,35 +96,6 @@ public class OrganizationCnes extends Organization {
     @Child(name = "specializedServices")
     private List<SpecializedService> specializedServices;
     
-    // Getters and Setters.
-    public CodeType getCityCodeIbge() {
-        
-        if (this.cityCodeIbge == null) {
-            this.cityCodeIbge = new CodeType();
-        }
-        
-        return this.cityCodeIbge;
-    }
-    
-    public void setCityCodeIbge(CodeType cityCodeIbge) {
-        
-        this.cityCodeIbge = cityCodeIbge;
-    }
-
-    public CodeType getStateCodeIbge() {
-        
-        if (this.stateCodeIbge == null) {
-            this.stateCodeIbge = new CodeType();
-        }
-        
-        return this.stateCodeIbge;
-    }
-    
-    public void setStateCodeIbge(CodeType stateCodeIbge) {
-        
-        this.stateCodeIbge = stateCodeIbge;
-    }
-
     public DateType getUpdateDate() {
         
         if (this.updateDate == null) {
@@ -150,16 +110,16 @@ public class OrganizationCnes extends Organization {
         this.updateDate = updateDate;
     }
 
-    public CodeType getDirectorCpf() {
+    public Coding getDirectorCpf() {
         
         if (this.directorCpf == null) {
-            this.directorCpf = new CodeType();
+            this.directorCpf = new Coding();
         }
         
         return this.directorCpf;
     }
     
-    public void setDirectorCpf(CodeType directorCpf) {
+    public void setDirectorCpf(Coding directorCpf) {
         
         this.directorCpf = directorCpf;
     }
@@ -220,6 +180,20 @@ public class OrganizationCnes extends Organization {
         this.clientFlow = clientFlow;
     }
 
+    public IbgeCode getIbgeCode() {
+        
+        if (this.ibgeCode == null) {
+            this.ibgeCode = new IbgeCode();
+        }
+        
+        return this.ibgeCode;
+    }
+    
+    public void setIbgeCode(IbgeCode ibgeCode) {
+        
+        this.ibgeCode = ibgeCode;
+    }
+
     public List<SpecializedService> getSpecializedServices() {
         
         if (this.specializedServices == null) {
@@ -249,14 +223,13 @@ public class OrganizationCnes extends Organization {
     public boolean isEmpty() {
         
       return super.isEmpty() && ElementUtil.isEmpty(
-          this.cityCodeIbge,
-          this.stateCodeIbge,
           this.updateDate,
           this.directorCpf,
           this.directorName,
           this.geolocation,
           this.isSus,
           this.clientFlow,
+          this.ibgeCode,
           this.specializedServices);
     }
     
@@ -339,6 +312,92 @@ public class OrganizationCnes extends Organization {
         public boolean isEmpty() {
             
             return ElementUtil.isEmpty(this.latitude, this.longitude);
+        }
+    }
+
+    /**
+     * This "block definition" defines an extension type with multiple child
+     * extensions.
+     */
+    @Block
+    public static class IbgeCode extends BackboneElement {
+    
+        // IBGE code for a Municipality.
+        @Description(
+            shortDefinition
+                = "The Municipality code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE)."
+        )
+        @ca.uhn.fhir.model.api.annotation.Extension(
+            url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoMunicipioIbge",
+            isModifier = false,
+            definedLocally = true)
+        @Child(name = "municipalityIbgeCode")
+        private Coding municipalityIbgeCode;
+
+        // IBGE code for a State.
+        @Description(
+            shortDefinition
+                = "The State code defined and maintained by the Brazilian Institute of Geography and Statistics (IBGE)."
+        )
+        @ca.uhn.fhir.model.api.annotation.Extension(
+            url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge",
+            isModifier = false,
+            definedLocally = true)
+        @Child(name = "StateIbgeCode")
+        private Coding stateIbgeCode;
+        
+        // Getters and Setters.
+        public Coding getMunicipalityIbgeCode() {
+            
+            if (this.municipalityIbgeCode == null) {
+                this.municipalityIbgeCode = new Coding();
+            }
+            
+            return this.municipalityIbgeCode;
+        }
+        
+        public void setMunicipalityIbgeCode(Coding municipalityIbgeCode) {
+            
+            this.municipalityIbgeCode = municipalityIbgeCode;
+        }
+
+        public Coding getStateIbgeCode() {
+            
+            if (this.stateIbgeCode == null) {
+                this.stateIbgeCode = new Coding();
+            }
+            
+            return this.stateIbgeCode;
+        }
+        
+        public void setStateIbgeCode(Coding stateIbgeCode) {
+            
+            this.stateIbgeCode = stateIbgeCode;
+        }
+
+        /* *****************************
+         * Boilerplate methods- Hopefully these will be removed or made optional
+         * in a future version of HAPI but for now they need to be added to all
+         * block types. These two methods follow a simple pattern where a
+         * utility method from ElementUtil is called and all fields are passed
+         * in.
+         * *****************************/
+        @Override
+        public BackboneElement copy() {
+            
+            IbgeCode ibgeCode = new IbgeCode();
+            ibgeCode.setMunicipalityIbgeCode(this.municipalityIbgeCode);
+            ibgeCode.setStateIbgeCode(this.stateIbgeCode);
+            
+            return ibgeCode;
+        }
+        
+        @Override
+        public boolean isEmpty() {
+            
+            return ElementUtil.isEmpty(
+                this.municipalityIbgeCode, this.stateIbgeCode
+            );
         }
     }
     
@@ -478,7 +537,7 @@ public class OrganizationCnes extends Organization {
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCnes")
-            private CodeType specializedServiceClassificationCnes;
+            private Coding specializedServiceClassificationCnes;
 
             // Getters and Setters.
             public Coding getSpecializedServiceClassification() {
@@ -518,17 +577,17 @@ public class OrganizationCnes extends Organization {
                 return this;
             }
 
-            public CodeType getSpecializedServiceClassificationCnes() {
+            public Coding getSpecializedServiceClassificationCnes() {
 
                 if (this.specializedServiceClassificationCnes == null) {
-                    this.specializedServiceClassificationCnes = new CodeType();
+                    this.specializedServiceClassificationCnes = new Coding();
                 }
 
                 return this.specializedServiceClassificationCnes;
             }
 
             public SpecializedServiceClassification setSpecializedServiceClassificationCnes(
-                CodeType specializedServiceClassificationCnes) {
+                Coding specializedServiceClassificationCnes) {
 
                 this.specializedServiceClassificationCnes
                     = specializedServiceClassificationCnes;

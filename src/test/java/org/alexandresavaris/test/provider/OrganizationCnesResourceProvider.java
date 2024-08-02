@@ -37,9 +37,11 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
      * of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none
      * exists.
+     * @throws java.lang.Exception
      */
     @Read(type = OrganizationCnes.class)
-    public OrganizationCnes getResourceById(@IdParam IdType theId) {
+    public OrganizationCnes getResourceById(@IdParam IdType theId)
+        throws Exception {
         
         // Fill in the resource with test data.
         OrganizationCnes retVal = new OrganizationCnes();
@@ -49,7 +51,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             
         // CodigoCNES -> Identifier: CNES.
         retVal.addIdentifier()
-            .setSystem(Utils.namingSystems.get("cnes"))
+            .setSystem("urn:oid:" + Utils.oids.get("cnes"))
             .setValue(theId.getValue());
 
         // CodigoUnidade -> Identifier: Unity code.
@@ -87,16 +89,47 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .setPostalCode("33333")
                 .setCountry("BRA")
         );
-        // Extension - city code.
-        retVal.setCityCodeIbge(new CodeType("444444"));
-        // Extension - state code.
-        retVal.setStateCodeIbge(new CodeType("55"));
-
+        // IBGE codes.
+        OrganizationCnes.IbgeCode ibgeCode = new OrganizationCnes.IbgeCode();
+        ibgeCode.setMunicipalityIbgeCode(
+            new Coding()
+                .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                .setCode("444444")
+                .setDisplay(
+                    new String(
+                        "Código do município no IBGE".getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                )
+        );
+        ibgeCode.setStateIbgeCode(
+            new Coding()
+                .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                .setCode("55")
+                .setDisplay(
+                    new String(
+                        "Código da UF no IBGE".getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                )
+        );
+        retVal.setIbgeCode(ibgeCode);
+        
         // dataAtualizacao -> Extension (update date).
         retVal.setUpdateDate(new DateType("1980-01-01"));
 
         // numeroCPF -> Extension (Director's CPF).
-        retVal.setDirectorCpf(new CodeType("66666666666"));
+        retVal.setDirectorCpf(
+            new Coding()
+                .setSystem("urn:oid:" + Utils.oids.get("cpf"))
+                .setCode("66666666666")
+                .setDisplay(
+                    new String(
+                        "Número do CPF do Diretor".getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                )
+        );
 
         // Nome -> Extension (Director's name).
         retVal.setDirectorName(
@@ -209,8 +242,14 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             .setValue("9");
         specializedServiceClassification
             .getSpecializedServiceClassificationCnes()
-            .setSystem(Utils.namingSystems.get("cnes"))
-            .setValue("THE SPECIALIZED SERVICE CLASSIFICATION CHARACTERISTIC CNES");
+            .setSystem("urn:oid:" + Utils.oids.get("cnes"))
+            .setCode("THE SPECIALIZED SERVICE CLASSIFICATION CHARACTERISTIC CNES")
+            .setDisplay(
+                new String(
+                    "Número no CNES".getBytes("ISO-8859-1"),
+                    "UTF-8"
+                )
+            );
         
         specializedServiceClassifications.add(specializedServiceClassification);
         specializedServices.add(specializedService);

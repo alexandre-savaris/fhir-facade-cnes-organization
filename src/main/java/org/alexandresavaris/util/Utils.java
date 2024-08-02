@@ -16,6 +16,8 @@ public class Utils {
     public static final Map<String, String> namingSystems = new HashMap<>();
     // Map of ValueSets used in the OrganizationCnes instance.
     public static final Map<String, String> valueSets = new HashMap<>();
+    // Map of OIDs used in the OrganizationCnes instance.
+    public static final Map<String, String> oids = new HashMap<>();
     
     static {
 
@@ -148,8 +150,6 @@ public class Utils {
         );
         
         // Insert NamingSystems.
-        namingSystems.put("cnes",
-            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes");
         namingSystems.put("unityCode",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade");
         namingSystems.put("cnpj",
@@ -170,5 +170,11 @@ public class Utils {
         // Insert ValueSets.
         valueSets.put("type",
             "http://www.saude.gov.br/fhir/r4/ValueSet/BRTipoEstabelecimentoSaude-1.0");
+
+        // Insert OIDs.
+        // https://www.hl7.org/oid/index.cfm
+        oids.put("cnes", "2.16.840.1.113883.13.36");
+        oids.put("ibgeCode", "2.16.840.1.113883.4.707");
+        oids.put("cpf", "2.16.840.1.113883.13.237");
     }
 }
