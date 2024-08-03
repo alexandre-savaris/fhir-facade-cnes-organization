@@ -1,0 +1,59 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "extension-cnes-classificacoes-servico-especializado",
+  "language": "pt-BR",
+  "url": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacoesServicoEspecializado",
+  "version": "1.0.0",
+  "name": "ClassificacoesServicoEspecializado",
+  "title": "Relação de Classificações de um Serviço especializado ofertado pelo Estabelecimento de Saúde",
+  "status": "active",
+  "experimental": false,
+  "date": "2024-08-03",
+  "publisher": "Alexandre Savaris",
+  "contact": [
+    {
+      "name": "Alexandre Savaris",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "alexandre.savaris@gmail.com"
+        }
+      ]
+    }
+  ],
+  "description": "Relação de Classificações de um Serviço Especializado ofertado pelo Estabelecimento de Saúde.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "urn:iso:std:iso:3166",
+          "code": "BRA",
+          "display": "Brazil",
+          "userSelected": false
+        }
+      ]
+    }
+  ],
+  "purpose": "Relacionar as Classificações de um Serviço Especializado ofertado por um Estabelecimento de Saúde.",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": true,
+  "context": [
+    {
+      "type": "element",
+      "expression": "Organization"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacoesServicoEspecializado"
+      }
+    ]
+  }
+}
