@@ -41,7 +41,7 @@
   "context": [
     {
       "type": "element",
-      "expression": "Organization.address.city"
+      "expression": "Organization.address"
     }
   ],
   "type": "Extension",

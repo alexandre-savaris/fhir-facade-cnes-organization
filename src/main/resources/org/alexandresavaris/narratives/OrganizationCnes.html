@@ -69,28 +69,18 @@ a browser.
                 <tr>
                     <th>Logradouro</th>
                     <th>CEP</th>
+                    <th>Código do Município no IBGE</th>
+                    <th>Código da UF no IBGE</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
                 </tr>
                 <tr th:each="address : ${resource.address}">
                     <td th:text="${address.text}"></td>
                     <td th:text="${address.postalCode}"></td>
-                    <td th:text="${address.extension[0].extension[0].value.value}"></td>
-                    <td th:text="${address.extension[0].extension[1].value.value}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </th:block>
-    <th:block th:unless="${resource.ibgeCode} == null">
-        <table class="hapiPropertyTable">
-            <tbody>
-                <tr>
-                    <th>Código do Município no IBGE</th>
-                    <th>Código da UF no IBGE</th>
-                </tr>
-                <tr>
-                    <td th:text="${resource.ibgeCode.municipalityIbgeCode.code}"></td>
-                    <td th:text="${resource.ibgeCode.stateIbgeCode.code}"></td>
+                    <td th:text="${address.extension[0].value.code}"></td>
+                    <td th:text="${address.extension[1].value.code}"></td>
+                    <td th:text="${address.extension[2].extension[0].value.value}"></td>
+                    <td th:text="${address.extension[2].extension[1].value.value}"></td>
                 </tr>
             </tbody>
         </table>

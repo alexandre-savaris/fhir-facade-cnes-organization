@@ -89,6 +89,39 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             .setPostalCode("33333")
             .setCountry("BRA");
 
+        // Extensions for IBGE codes.
+        Extension cityCodeIbgeExtension
+            = new Extension(Utils.extensions.get("cityCodeIbge"));
+        cityCodeIbgeExtension.setValue(
+            new Coding()
+                .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                .setCode("444444")
+                .setDisplay(
+                    new String(
+                        "Código do município no IBGE".getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                )
+        );
+
+        Extension stateCodeIbgeExtension
+            = new Extension(Utils.extensions.get("stateCodeIbge"));
+        stateCodeIbgeExtension.setValue(
+            new Coding()
+                .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                .setCode("55")
+                .setDisplay(
+                    new String(
+                        "Código da UF no IBGE".getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                )
+        );
+
+        // Completing the address to be returned.
+        address.addExtension(cityCodeIbgeExtension);
+        address.addExtension(stateCodeIbgeExtension);
+        
         // Geolocation extensions.
         Extension geolocationExtension
             = new Extension(Utils.extensions.get("geolocation"));
@@ -105,32 +138,6 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         address.addExtension(geolocationExtension);
         retVal.addAddress(address);
         
-        // IBGE codes.
-        OrganizationCnes.IbgeCode ibgeCode = new OrganizationCnes.IbgeCode();
-        ibgeCode.setMunicipalityIbgeCode(
-            new Coding()
-                .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                .setCode("444444")
-                .setDisplay(
-                    new String(
-                        "Código do município no IBGE".getBytes("ISO-8859-1"),
-                        "UTF-8"
-                    )
-                )
-        );
-        ibgeCode.setStateIbgeCode(
-            new Coding()
-                .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                .setCode("55")
-                .setDisplay(
-                    new String(
-                        "Código da UF no IBGE".getBytes("ISO-8859-1"),
-                        "UTF-8"
-                    )
-                )
-        );
-        retVal.setIbgeCode(ibgeCode);
-        
         // dataAtualizacao -> Extension (update date).
         retVal.setUpdateDate(new DateType("1980-01-01"));
 
@@ -138,7 +145,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         retVal.setDirectorCpf(
             new Coding()
                 .setSystem("urn:oid:" + Utils.oids.get("cpf"))
-                .setCode("66666666666")
+                .setCode("42424242424")
                 .setDisplay(
                     new String(
                         "Número do CPF do Diretor".getBytes("ISO-8859-1"),
@@ -149,7 +156,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
 
         // Nome -> Extension (Director's name).
         retVal.setDirectorName(
-            new HumanName().setText("THE DIRECTOR")
+            new HumanName().setText("Marvin the Paranoid Android")
         );
 
         // tipoUnidade -> type.

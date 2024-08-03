@@ -264,6 +264,49 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 )
                 .setCountry("BRA");
             
+            // Extensions for IBGE codes.
+            Extension cityCodeIbgeExtension
+                = new Extension(Utils.extensions.get("cityCodeIbge"));
+            cityCodeIbgeExtension.setValue(
+                new Coding()
+                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                    .setCode(
+                        extractSingleValueFromXml(document, xpath,
+                            Utils.xpathExpressions.get("cityCodeIbge"),
+                            0
+                        )
+                    )
+                    .setDisplay(
+                        new String(
+                            "Código do município no IBGE".getBytes("ISO-8859-1"),
+                            "UTF-8"
+                        )
+                    )
+            );
+
+            Extension stateCodeIbgeExtension
+                = new Extension(Utils.extensions.get("stateCodeIbge"));
+            stateCodeIbgeExtension.setValue(
+                new Coding()
+                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                    .setCode(
+                        extractSingleValueFromXml(document, xpath,
+                            Utils.xpathExpressions.get("stateCodeIbge"),
+                            0
+                        )
+                    )
+                    .setDisplay(
+                        new String(
+                            "Código da UF no IBGE".getBytes("ISO-8859-1"),
+                            "UTF-8"
+                        )
+                    )
+            );
+
+            // Completing the address to be returned.
+            address.addExtension(cityCodeIbgeExtension);
+            address.addExtension(stateCodeIbgeExtension);
+
             // Geolocation extensions.
             Extension geolocationExtension
                 = new Extension(Utils.extensions.get("geolocation"));
@@ -294,42 +337,6 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             address.addExtension(geolocationExtension);
             retVal.addAddress(address);
             
-            // IBGE codes.
-            OrganizationCnes.IbgeCode ibgeCode = new OrganizationCnes.IbgeCode();
-            ibgeCode.setMunicipalityIbgeCode(
-                new Coding()
-                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                    .setCode(
-                        extractSingleValueFromXml(document, xpath,
-                            Utils.xpathExpressions.get("cityCodeIbge"),
-                            0
-                        )
-                    )
-                    .setDisplay(
-                        new String(
-                            "Código do município no IBGE".getBytes("ISO-8859-1"),
-                            "UTF-8"
-                        )
-                    )
-            );
-            ibgeCode.setStateIbgeCode(
-                new Coding()
-                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                    .setCode(
-                        extractSingleValueFromXml(document, xpath,
-                            Utils.xpathExpressions.get("stateCodeIbge"),
-                            0
-                        )
-                    )
-                    .setDisplay(
-                        new String(
-                            "Código da UF no IBGE".getBytes("ISO-8859-1"),
-                            "UTF-8"
-                        )
-                    )
-            );
-            retVal.setIbgeCode(ibgeCode);
-
             // dataAtualizacao -> Extension (update date).
             retVal.setUpdateDate(
                 new DateType(
@@ -341,15 +348,13 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             );
 
             // numeroCPF -> Extension (Director's CPF).
+            // NOTE: despite its availability in the original response from the
+            // SOAP Webservice, the Director's CPF is considered personal data
+            // and is replaced by a fake one.
             retVal.setDirectorCpf(
                 new Coding()
                     .setSystem("urn:oid:" + Utils.oids.get("cpf"))
-                    .setCode(
-                        extractSingleValueFromXml(document, xpath,
-                            Utils.xpathExpressions.get("directorCpf"),
-                            0
-                        )
-                    )
+                    .setCode("42424242424")
                     .setDisplay(
                         new String(
                             "Número do CPF do Diretor".getBytes("ISO-8859-1"),
@@ -359,13 +364,11 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             );
 
             // Nome -> Extension (Director's name).
+            // NOTE: despite its availability in the original response from the
+            // SOAP Webservice, the Director's name is considered personal data
+            // and is replaced by a fake one.
             retVal.setDirectorName(
-                new HumanName().setText(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("directorName"),
-                        0
-                    )
-                )
+                new HumanName().setText("Marvin the Paranoid Android")
             );
 
             // tipoUnidade -> type.

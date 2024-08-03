@@ -185,6 +185,13 @@ public class Utils {
         );
         extensions.put("latitude", "latitude");
         extensions.put("longitude", "longitude");
-
+        extensions.put(
+            "cityCodeIbge",
+            "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoMunicipioIbge"
+        );
+        extensions.put(
+            "stateCodeIbge",
+            "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge"
+        );
     }
 }
