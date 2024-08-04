@@ -45,7 +45,7 @@ public class OrganizationCnes extends Organization {
     // Is the Organization part of SUS?
     @Description(shortDefinition = "Is the Organization part of SUS?")
     @ca.uhn.fhir.model.api.annotation.Extension(
-        url = "http://www.saude.gov.br/fhir/r4/StructureDefinition/BRAtendeSUS-1.0",
+        url = "https://rnds-fhir.saude.gov.br/StructureDefinition/BRAtendeSUS-1.0",
         isModifier = false,
         definedLocally = false)
     @Child(name = "isSus")

@@ -50,12 +50,14 @@ a browser.
         <table class="hapiPropertyTable">
             <tbody>
                 <tr th:each="identifier : ${resource.identifier}">
-                    <td th:text="${identifier.value}"></td>
-                    <div th:switch="${identifier.system}">
-                        <td th:case="'http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnes'">Número no CNES</td>
-                        <td th:case="'https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade'">Código da Unidade no CNES</td>
-                        <td th:case="'http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj'">CNPJ</td>
-                    </div>
+                    <th:block th:unless="${#strings.isEmpty(identifier.value)}">
+                        <td th:text="${identifier.value}"></td>
+                        <div th:switch="${identifier.system}">
+                            <td th:case="'urn:oid:2.16.840.1.113883.13.36'">Número no CNES</td>
+                            <td th:case="'https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade'">Código da Unidade no CNES</td>
+                            <td th:case="'http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj'">CNPJ</td>
+                        </div>
+                    </th:block>
                 </tr>
             </tbody>
         </table>

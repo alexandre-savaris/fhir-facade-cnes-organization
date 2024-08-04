@@ -50,9 +50,23 @@
   "differential": {
     "element": [
       {
+        "id": "Extension.id",
+        "path": "Extension.id",
+        "max": "0"
+      },
+      {
         "id": "Extension.url",
         "path": "Extension.url",
         "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/CpfDiretor"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "type": [
+          {
+            "code": "Coding"
+          }
+        ]
       }
     ]
   }

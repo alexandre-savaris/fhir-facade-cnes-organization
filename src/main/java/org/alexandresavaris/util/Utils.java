@@ -171,7 +171,7 @@ public class Utils {
 
         // Insert ValueSets.
         valueSets.put("type",
-            "http://www.saude.gov.br/fhir/r4/ValueSet/BRTipoEstabelecimentoSaude-1.0");
+            "https://rnds-fhir.saude.gov.br/ValueSet/BRTipoEstabelecimentoSaude-1.0");
 
         // Insert OIDs.
         // https://www.hl7.org/oid/index.cfm

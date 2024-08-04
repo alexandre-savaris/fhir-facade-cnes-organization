@@ -50,9 +50,63 @@
   "differential": {
     "element": [
       {
+        "id": "Extension.id",
+        "path": "Extension.id",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:ServicoEspecializado",
+        "path": "Extension.extension",
+        "sliceName": "ServicoEspecializado"
+      },
+      {
+        "id": "Extension.extension:ServicoEspecializado.id",
+        "path": "Extension.extension.id",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:ServicoEspecializado.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado"
+      },
+      {
+        "id": "Extension.extension:ServicoEspecializado.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "Coding"
+          }
+        ]
+      },
+      {
+        "id": "Extension.extension:ClassificacoesServicoEspecializado",
+        "path": "Extension.extension",
+        "sliceName": "ClassificacoesServicoEspecializado"
+      },
+      {
+        "id": "Extension.extension:ClassificacoesServicoEspecializado.id",
+        "path": "Extension.extension.id",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:ClassificacoesServicoEspecializado.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacoesServicoEspecializado"
+      },
+      {
+        "id": "Extension.extension:ClassificacoesServicoEspecializado.value[x]",
+        "path": "Extension.extension.value[x]",
+        "max": "0"
+      },
+      {
         "id": "Extension.url",
         "path": "Extension.url",
         "fixedUri": "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicosEspecializados"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
       }
     ]
   }

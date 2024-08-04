@@ -517,6 +517,9 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         Object result = expr.evaluate(document, XPathConstants.NODESET);
         NodeList nodes = (NodeList) result;
         
+        if (nodes == null || nodes.item(index) == null) {
+            return null;
+        }
         return nodes.item(index).getNodeValue();
     }
     
