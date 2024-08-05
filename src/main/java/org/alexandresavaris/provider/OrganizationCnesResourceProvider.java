@@ -119,7 +119,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     this.codeSnippetForFilteringByCnpj, theId.getIdPart()
                 );
             }
-            this.contentOfSoapEnvelope = MessageFormat.format(
+            String updatedContentOfSoapEnvelope = MessageFormat.format(
                 this.contentOfSoapEnvelope, username, password, snippetFilter
             );
             
@@ -128,7 +128,8 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .uri(new URI(this.endpointEstabelecimentoSaudeService))
                 .version(HttpClient.Version.HTTP_2)
                 .POST(HttpRequest.BodyPublishers.ofString(
-                    this.contentOfSoapEnvelope))
+                    updatedContentOfSoapEnvelope)
+                )
                 .header("Content-Type", "text/xml")
                 .header("charset", "UTF-8")
                 .build();
@@ -180,50 +181,60 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             xpath.setNamespaceContext(context);
 
             // CodigoCNES -> Identifier: CNES.
-            retVal.addIdentifier()
-                .setSystem("urn:oid:" + Utils.oids.get("cnes"))
-                .setValue(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("cnes"),
-                        0
-                    )
+            String cnes
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("cnes"),
+                    0
                 );
+            if (cnes != null) {
+                retVal.addIdentifier()
+                    .setSystem("urn:oid:" + Utils.oids.get("cnes"))
+                    .setValue(cnes);
+            }
 
             // CodigoUnidade -> Identifier: Unity code.
-            retVal.addIdentifier()
-                .setSystem(Utils.namingSystems.get("unityCode"))
-                .setValue(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("unityCode"),
-                        0
-                    )
+            String unityCode =
+                extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("unityCode"),
+                    0
                 );
+            if (unityCode != null) {
+                retVal.addIdentifier()
+                    .setSystem(Utils.namingSystems.get("unityCode"))
+                    .setValue(unityCode);
+            }
 
             // numeroCNPJ -> Identifier: CNPJ.
-            retVal.addIdentifier()
-                .setSystem(Utils.namingSystems.get("cnpj"))
-                .setValue(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("cnpj"),
-                        0
-                    )
+            String cnpj
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("cnpj"),
+                    0
                 );
+            if (cnpj != null) {
+                retVal.addIdentifier()
+                    .setSystem(Utils.namingSystems.get("cnpj"))
+                    .setValue(cnpj);
+            }
 
             // nomeFantasia -> name.
-            retVal.setName(
-                extractSingleValueFromXml(document, xpath,
+            String name
+                = extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("name"),
                     0
-                )
-            );
+                );
+            if (name != null) {
+                retVal.setName(name);
+            }
 
             // nomeEmpresarial -> alias.
-            retVal.addAlias(
-                extractSingleValueFromXml(document, xpath,
+            String alias
+                = extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("alias"),
                     0
-                )
-            );
+                );
+            if (alias != null) {
+                retVal.addAlias(alias);
+            }
             
             // Endereco -> Address.
             String street = extractSingleValueFromXml(document, xpath,
@@ -338,14 +349,16 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             retVal.addAddress(address);
             
             // dataAtualizacao -> Extension (update date).
-            retVal.setUpdateDate(
-                new DateType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("updateDate"),
-                        0
-                    )
-                )
-            );
+            String updateDate
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("updateDate"),
+                    0
+                );
+            if (updateDate != null) {
+                retVal.setUpdateDate(
+                    new DateType(updateDate)
+                );
+            }
 
             // numeroCPF -> Extension (Director's CPF).
             // NOTE: despite its availability in the original response from the
@@ -372,112 +385,127 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             );
 
             // tipoUnidade -> type.
-            retVal.addType(
-                new CodeableConcept(
-                    new Coding()
-                        .setSystem(Utils.valueSets.get("type"))
-                        .setCode(
-                            extractSingleValueFromXml(document, xpath,
-                                Utils.xpathExpressions.get("unityType"),
-                                0
-                            )
-                        )
-                        .setDisplay(
-                            extractSingleValueFromXml(document, xpath,
-                                Utils.xpathExpressions.get("unityDescription"),
-                                0
-                            )
-                        )
-                )
-            );
-                
-            // Telefone -> contact
-            String phoneTemplate = "{0} {1}";
-            String phone = java.text.MessageFormat.format(
-                phoneTemplate,
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("phoneAreaCode"),
-                        0
-                    ),
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("phoneNumber"),
-                        0
-                    )
+            String unityType
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("unityType"),
+                    0
                 );
-            retVal.addContact()
-                .addTelecom(
-                    new ContactPoint()
-                        .setSystem(ContactPoint.ContactPointSystem.PHONE)
-                        .setValue(phone)
-                        .setUse(ContactPoint.ContactPointUse.WORK)
-                )
-                .setPurpose(
+            if (unityType != null) {
+                retVal.addType(
                     new CodeableConcept(
                         new Coding()
-                            .setSystem(Utils.namingSystems.get("phoneType"))
-                            .setCode(
-                                extractSingleValueFromXml(document, xpath,
-                                    Utils.xpathExpressions.get("phoneType"),
-                                    0
-                                )
-                            )
+                            .setSystem(Utils.valueSets.get("type"))
+                            .setCode(unityType)
                             .setDisplay(
                                 extractSingleValueFromXml(document, xpath,
                                     Utils.xpathExpressions.get(
-                                        "phoneDescription"
+                                        "unityDescription"
                                     ),
                                     0
                                 )
                             )
                     )
                 );
+            }
+                
+            // Telefone -> contact
+            String phoneNumber
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("phoneNumber"),
+                    0
+                );
+            if (phoneNumber != null) {
+                String phoneTemplate = "{0} {1}";
+                String phone = java.text.MessageFormat.format(
+                    phoneTemplate,
+                    extractSingleValueFromXml(document, xpath,
+                        Utils.xpathExpressions.get("phoneAreaCode"),
+                        0
+                    ),
+                    phoneNumber
+                );
+                retVal.addContact()
+                    .addTelecom(
+                        new ContactPoint()
+                            .setSystem(ContactPoint.ContactPointSystem.PHONE)
+                            .setValue(phone)
+                            .setUse(ContactPoint.ContactPointUse.WORK)
+                    )
+                    .setPurpose(
+                        new CodeableConcept(
+                            new Coding()
+                                .setSystem(Utils.namingSystems.get("phoneType"))
+                                .setCode(
+                                    extractSingleValueFromXml(document, xpath,
+                                        Utils.xpathExpressions.get("phoneType"),
+                                        0
+                                    )
+                                )
+                                .setDisplay(
+                                    extractSingleValueFromXml(document, xpath,
+                                        Utils.xpathExpressions.get(
+                                            "phoneDescription"
+                                        ),
+                                        0
+                                    )
+                                )
+                        )
+                    );
+            }
 
             // Email -> contact
-            retVal.addContact()
-                .addTelecom(
-                    new ContactPoint()
-                        .setSystem(ContactPoint.ContactPointSystem.EMAIL)
-                        .setValue(
-                            extractSingleValueFromXml(document, xpath,
-                                Utils.xpathExpressions.get("email"),
-                                0
-                            )
-                        )
-                        .setUse(ContactPoint.ContactPointUse.WORK)
-                )
-                .setPurpose(
-                    new CodeableConcept(
-                        new Coding()
-                            .setSystem(Utils.namingSystems.get("emailType"))
-                            .setCode(
-                                extractSingleValueFromXml(document, xpath,
-                                    Utils.xpathExpressions.get("emailType"),
-                                    0
-                                )
-                            )
-                    )
+            String email
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("email"),
+                    0
                 );
+            if (email != null) {
+                retVal.addContact()
+                    .addTelecom(
+                        new ContactPoint()
+                            .setSystem(ContactPoint.ContactPointSystem.EMAIL)
+                            .setValue(email)
+                            .setUse(ContactPoint.ContactPointUse.WORK)
+                    )
+                    .setPurpose(
+                        new CodeableConcept(
+                            new Coding()
+                                .setSystem(Utils.namingSystems.get("emailType"))
+                                .setCode(
+                                    extractSingleValueFromXml(document, xpath,
+                                        Utils.xpathExpressions.get("emailType"),
+                                        0
+                                    )
+                                )
+                        )
+                    );
+            }
             
             // perteceSistemaSUS -> Extension (Is the Organization part of SUS?).
-            retVal.setIsSus(
-                new BooleanType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("isSus"),
-                        0
-                    )
-                )
-            );
+            String isSus
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("isSus"),
+                    0
+                );
+            if (isSus != null) {
+                retVal.setIsSus(
+                    new BooleanType(isSus)
+                );
+            }
 
             // fluxoClientela -> Extension (The client flow expected for the
             // Organization).
-            retVal.setClientFlow(
-                new CodeType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("clientFlow"),
-                        0
-                    )
-                ).setSystem(Utils.namingSystems.get("clientFlow"))
-            );
+            String clientFlow
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("clientFlow"),
+                    0
+                );
+            if (clientFlow != null) {
+                retVal.setClientFlow(
+                    new CodeType(clientFlow)
+                        .setSystem(Utils.namingSystems.get("clientFlow"))
+                );
+            }
             
             // servicoespecializados -> Extension (specializedServices).
             XPathExpression expr

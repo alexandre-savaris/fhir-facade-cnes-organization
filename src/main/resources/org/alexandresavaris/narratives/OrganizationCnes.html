@@ -21,7 +21,9 @@ a browser.
         <table class="hapiPropertyTable">
             <tbody>
                 <tr th:each="alias : ${resource.alias}">
-                    <td th:text="${alias.value}"></td>
+                    <th:block th:unless="${#strings.isEmpty(alias.value)}">
+                        <td th:text="${alias.value}"></td>
+                    </th:block>
                 </tr>
             </tbody>
         </table>
@@ -35,8 +37,10 @@ a browser.
                 <div th:each="type : ${resource.type}">
                     <th:block th:unless="${#arrays.isEmpty(type.coding)}">
                         <tr th:each="coding : ${type.coding}">
-                            <td th:text="${coding.code}"></td>
-                            <td th:text="${coding.display}"></td>
+                            <th:block th:unless="${#arrays.isEmpty(coding.code)}">
+                                <td th:text="${coding.code}"></td>
+                                <td th:text="${coding.display}"></td>
+                            </th:block>
                         </tr>
                     </th:block>
                 </div>
@@ -77,12 +81,14 @@ a browser.
                     <th>Longitude</th>
                 </tr>
                 <tr th:each="address : ${resource.address}">
-                    <td th:text="${address.text}"></td>
-                    <td th:text="${address.postalCode}"></td>
-                    <td th:text="${address.extension[0].value.code}"></td>
-                    <td th:text="${address.extension[1].value.code}"></td>
-                    <td th:text="${address.extension[2].extension[0].value.value}"></td>
-                    <td th:text="${address.extension[2].extension[1].value.value}"></td>
+                    <th:block th:unless="${#strings.isEmpty(address.text)}">
+                        <td th:text="${address.text}"></td>
+                        <td th:text="${address.postalCode}"></td>
+                        <td th:text="${address.extension[0].value.code}"></td>
+                        <td th:text="${address.extension[1].value.code}"></td>
+                        <td th:text="${address.extension[2].extension[0].value.value}"></td>
+                        <td th:text="${address.extension[2].extension[1].value.value}"></td>
+                    </th:block>
                 </tr>
             </tbody>
         </table>
@@ -100,13 +106,15 @@ a browser.
                     <th>Descrição</th>
                 </tr>
                 <tr th:each="contact : ${resource.contact}">
-                    <td th:text="${contact.telecom[0].value}"></td>
-                    <div th:switch="${contact.telecom[0].system.name}">
-                        <td th:case="PHONE">Telefone</td>
-                        <td th:case="EMAIL">E-mail</td>
-                    </div>
-                    <td th:text="${contact.purpose.coding[0].code}"></td>
-                    <td th:text="${contact.purpose.coding[0].display}"></td>
+                    <th:block th:unless="${#strings.isEmpty(contact.telecom[0].value)}">
+                        <td th:text="${contact.telecom[0].value}"></td>
+                        <div th:switch="${contact.telecom[0].system.name}">
+                            <td th:case="PHONE">Telefone</td>
+                            <td th:case="EMAIL">E-mail</td>
+                        </div>
+                        <td th:text="${contact.purpose.coding[0].code}"></td>
+                        <td th:text="${contact.purpose.coding[0].display}"></td>
+                    </th:block>
                 </tr>
             </tbody>
         </table>
