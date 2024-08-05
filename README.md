@@ -25,4 +25,4 @@ Using a REST client, execute a GET request to the following URL: http://localhos
 - Use the Bearer token `0190dfc9-288e-70b3-80a5-70eb9a03d68e` for authentication.
 
 ## Notes
-The facade accesses the homologation instance of the SOAP webservice, whose data are available for __test use only__. 
+The facade accesses the homologation instance of the SOAP webservice, whose data are available for __tests use only__. 
