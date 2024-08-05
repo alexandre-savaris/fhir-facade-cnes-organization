@@ -20,7 +20,7 @@ To run the REST server using Docker (from the project's root directory):
 2. `docker build -t fhir-facade-cnes-organization .`
 3. `docker run -p 8080:8080 fhir-facade-cnes-organization`
 
-Using a REST client, execute a GET request to the following URL: http://localhost:8080/fhir/Organization/`{9999999}`
+Using a REST client, execute a GET request to the following URL: http://localhost:8080/fhir/Organization/{9999999}
 - Replace the placeholder `{9999999}` with a valid CNES number. (You can search for valid CNES numbers [here](https://cnes.datasus.gov.br/pages/estabelecimentos/consulta.jsp)).
 - Use the Bearer token `0190dfc9-288e-70b3-80a5-70eb9a03d68e` for authentication.
 
