@@ -276,76 +276,80 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .setCountry("BRA");
             
             // Extensions for IBGE codes.
-            Extension cityCodeIbgeExtension
-                = new Extension(Utils.extensions.get("cityCodeIbge"));
-            cityCodeIbgeExtension.setValue(
-                new Coding()
-                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                    .setCode(
-                        extractSingleValueFromXml(document, xpath,
-                            Utils.xpathExpressions.get("cityCodeIbge"),
-                            0
+            String cityCodeIbge
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("cityCodeIbge"),
+                    0
+                );
+            if (cityCodeIbge != null) {
+                Extension cityCodeIbgeExtension
+                    = new Extension(Utils.extensions.get("cityCodeIbge"));
+                cityCodeIbgeExtension.setValue(
+                    new Coding()
+                        .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                        .setCode(cityCodeIbge)
+                        .setDisplay(
+                            new String(
+                                "Código do município no IBGE"
+                                    .getBytes("ISO-8859-1"),
+                                "UTF-8"
+                            )
                         )
-                    )
-                    .setDisplay(
-                        new String(
-                            "Código do município no IBGE".getBytes("ISO-8859-1"),
-                            "UTF-8"
+                );
+                address.addExtension(cityCodeIbgeExtension);
+            }
+            String stateCodeIbge
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("stateCodeIbge"),
+                    0
+                );
+            if (stateCodeIbge != null) {
+                Extension stateCodeIbgeExtension
+                    = new Extension(Utils.extensions.get("stateCodeIbge"));
+                stateCodeIbgeExtension.setValue(
+                    new Coding()
+                        .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                        .setCode(stateCodeIbge)
+                        .setDisplay(
+                            new String(
+                                "Código da UF no IBGE".getBytes("ISO-8859-1"),
+                                "UTF-8"
+                            )
                         )
-                    )
-            );
-
-            Extension stateCodeIbgeExtension
-                = new Extension(Utils.extensions.get("stateCodeIbge"));
-            stateCodeIbgeExtension.setValue(
-                new Coding()
-                    .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                    .setCode(
-                        extractSingleValueFromXml(document, xpath,
-                            Utils.xpathExpressions.get("stateCodeIbge"),
-                            0
-                        )
-                    )
-                    .setDisplay(
-                        new String(
-                            "Código da UF no IBGE".getBytes("ISO-8859-1"),
-                            "UTF-8"
-                        )
-                    )
-            );
-
-            // Completing the address to be returned.
-            address.addExtension(cityCodeIbgeExtension);
-            address.addExtension(stateCodeIbgeExtension);
-
-            // Geolocation extensions.
-            Extension geolocationExtension
-                = new Extension(Utils.extensions.get("geolocation"));
-            Extension latitudeExtension
-                = new Extension(Utils.extensions.get("latitude"));
-            latitudeExtension.setValue(
-                new DecimalType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("latitude"),
-                        0
-                    )
-                )
-            );
-            Extension longitudeExtension
-                = new Extension(Utils.extensions.get("longitude"));
-            longitudeExtension.setValue(
-                new DecimalType(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("longitude"),
-                        0
-                    )
-                )
-            );
-            geolocationExtension.addExtension(latitudeExtension);
-            geolocationExtension.addExtension(longitudeExtension);
+                );
+                address.addExtension(stateCodeIbgeExtension);
+            }
             
-            // Completing the address to be returned.
-            address.addExtension(geolocationExtension);
+            // Geolocation extensions.
+            String latitude
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("latitude"),
+                    0
+                );
+            String longitude
+                = extractSingleValueFromXml(document, xpath,
+                    Utils.xpathExpressions.get("longitude"),
+                    0
+                );
+            if (latitude != null && longitude != null) {
+                Extension geolocationExtension
+                    = new Extension(Utils.extensions.get("geolocation"));
+                Extension latitudeExtension
+                    = new Extension(Utils.extensions.get("latitude"));
+                latitudeExtension.setValue(
+                    new DecimalType(latitude)
+                );
+                Extension longitudeExtension
+                    = new Extension(Utils.extensions.get("longitude"));
+                longitudeExtension.setValue(
+                    new DecimalType(longitude)
+                );
+                geolocationExtension.addExtension(latitudeExtension);
+                geolocationExtension.addExtension(longitudeExtension);
+                // Completing the address to be returned.
+                address.addExtension(geolocationExtension);
+            }
+            
             retVal.addAddress(address);
             
             // dataAtualizacao -> Extension (update date).

@@ -72,24 +72,46 @@ a browser.
         <div class="hapiSubHeaderText" th:text="'Endereço'"/>
         <table class="hapiPropertyTable">
             <tbody>
-                <tr>
-                    <th>Logradouro</th>
-                    <th>CEP</th>
-                    <th>Código do Município no IBGE</th>
-                    <th>Código da UF no IBGE</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                </tr>
-                <tr th:each="address : ${resource.address}">
-                    <th:block th:unless="${#strings.isEmpty(address.text)}">
+                <div th:each="address : ${resource.address}">
+                    <tr>
+                        <th>Logradouro</th>
+                        <th>CEP</th>
+                    </tr>
+                    <tr>
                         <td th:text="${address.text}"></td>
                         <td th:text="${address.postalCode}"></td>
-                        <td th:text="${address.extension[0].value.code}"></td>
-                        <td th:text="${address.extension[1].value.code}"></td>
-                        <td th:text="${address.extension[2].extension[0].value.value}"></td>
-                        <td th:text="${address.extension[2].extension[1].value.value}"></td>
+                    </tr>
+                    <th:block th:unless="${#arrays.isEmpty(address.extension)}">
+                        <tr>
+                            <td colspan="2" style="border: 0px">&nbsp;</td>
+                        </tr>
+                        <tr th:each="extensionLevel1 : ${address.extension}">
+                            <div th:if="${extensionLevel1.value}">
+                                <td th:text="${extensionLevel1.value.code}"></td>
+                                <div th:if="${#strings.length(extensionLevel1.value.code) > 2}">
+                                    <td th:text="'Código do Município no IBGE'"></td>
+                                </div>
+                                <div th:unless="${#strings.length(extensionLevel1.value.code) > 2}">
+                                    <td th:text="'Código da UF no IBGE'"></td>
+                                </div>
+                            </div>
+                            <th:block th:unless="${#arrays.isEmpty(extensionLevel1.extension)}">
+                                <tr>
+                                    <td colspan="2" style="border: 0px">&nbsp;</td>
+                                </tr>
+                                <tr th:each="extensionLevel2 : ${extensionLevel1.extension}">
+                                    <div th:if="${extensionLevel2.value}">
+                                        <td th:text="${extensionLevel2.value.value}"></td>
+                                        <div th:switch="${extensionLevel2.url}">
+                                            <td th:case="'latitude'">Latitude</td>
+                                            <td th:case="'longitude'">Longitude</td>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </th:block>
+                        </tr>
                     </th:block>
-                </tr>
+                </div>
             </tbody>
         </table>
     </th:block>
