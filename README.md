@@ -26,3 +26,9 @@ Using a REST client, execute a GET request to the following URL: http://localhos
 
 ## Notes
 The facade accesses the homologation instance of the SOAP webservice, whose data are available for __tests use only__. 
+
+## Release Notes
+
+### 1.0.0
+
+Initial release.
