@@ -1,4 +1,4 @@
-package org.alexandresavaris.interceptor.balp;
+package org.alexandresavaris.fhir.facade.cnes.organization.interceptor.balp;
 
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.storage.interceptor.balp.IBalpAuditContextServices;

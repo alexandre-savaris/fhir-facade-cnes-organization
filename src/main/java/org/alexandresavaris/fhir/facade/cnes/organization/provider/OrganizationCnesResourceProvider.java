@@ -1,4 +1,4 @@
-package org.alexandresavaris.provider;
+package org.alexandresavaris.fhir.facade.cnes.organization.provider;
 
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
@@ -25,9 +25,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import org.alexandresavaris.model.OrganizationCnes;
-import org.alexandresavaris.util.NamespaceContextMap;
-import org.alexandresavaris.util.Utils;
+import org.alexandresavaris.fhir.facade.cnes.organization.model.OrganizationCnes;
+import org.alexandresavaris.fhir.facade.cnes.organization.util.NamespaceContextMap;
+import org.alexandresavaris.fhir.facade.cnes.organization.util.Utils;
 import org.hl7.fhir.r4.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

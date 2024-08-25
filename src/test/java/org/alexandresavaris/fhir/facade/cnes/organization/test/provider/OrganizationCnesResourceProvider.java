@@ -1,12 +1,12 @@
-package org.alexandresavaris.test.provider;
+package org.alexandresavaris.fhir.facade.cnes.organization.test.provider;
 
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.ArrayList;
 import java.util.List;
-import org.alexandresavaris.model.OrganizationCnes;
-import org.alexandresavaris.util.Utils;
+import org.alexandresavaris.fhir.facade.cnes.organization.model.OrganizationCnes;
+import org.alexandresavaris.fhir.facade.cnes.organization.util.Utils;
 import org.hl7.fhir.r4.model.*;
 
 /**

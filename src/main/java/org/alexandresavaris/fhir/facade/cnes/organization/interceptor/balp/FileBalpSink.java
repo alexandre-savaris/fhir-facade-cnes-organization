@@ -1,4 +1,4 @@
-package org.alexandresavaris.interceptor.balp;
+package org.alexandresavaris.fhir.facade.cnes.organization.interceptor.balp;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;

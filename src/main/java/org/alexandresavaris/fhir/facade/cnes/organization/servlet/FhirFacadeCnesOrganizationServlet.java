@@ -1,9 +1,9 @@
-package org.alexandresavaris.servlet;
+package org.alexandresavaris.fhir.facade.cnes.organization.servlet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.alexandresavaris.provider.OrganizationCnesResourceProvider;
+import org.alexandresavaris.fhir.facade.cnes.organization.provider.OrganizationCnesResourceProvider;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.CustomThymeleafNarrativeGenerator;
 import ca.uhn.fhir.rest.server.IResourceProvider;
@@ -18,10 +18,10 @@ import java.nio.file.Files;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.alexandresavaris.interceptor.BearerAuthorizationInterceptor;
-import org.alexandresavaris.interceptor.LoggingInterceptor;
-import org.alexandresavaris.interceptor.balp.BalpAuditContextService;
-import org.alexandresavaris.interceptor.balp.FileBalpSink;
+import org.alexandresavaris.fhir.facade.cnes.organization.interceptor.BearerAuthorizationInterceptor;
+import org.alexandresavaris.fhir.facade.cnes.organization.interceptor.LoggingInterceptor;
+import org.alexandresavaris.fhir.facade.cnes.organization.interceptor.balp.BalpAuditContextService;
+import org.alexandresavaris.fhir.facade.cnes.organization.interceptor.balp.FileBalpSink;
 
 /**
  * This servlet is the actual FHIR server itself.
@@ -119,7 +119,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
              */
             CustomThymeleafNarrativeGenerator narrativeGen
                 = new CustomThymeleafNarrativeGenerator(
-                    "classpath:org/alexandresavaris/narratives/narratives.properties"
+                    "classpath:org/alexandresavaris/fhir/facade/cnes/organization/narratives/narratives.properties"
                 );
             getFhirContext().setNarrativeGenerator(narrativeGen);
             

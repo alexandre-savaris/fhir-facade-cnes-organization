@@ -1,4 +1,4 @@
-package org.alexandresavaris.model;
+package org.alexandresavaris.fhir.facade.cnes.organization.model;
 
 import ca.uhn.fhir.model.api.annotation.*;
 import ca.uhn.fhir.util.ElementUtil;

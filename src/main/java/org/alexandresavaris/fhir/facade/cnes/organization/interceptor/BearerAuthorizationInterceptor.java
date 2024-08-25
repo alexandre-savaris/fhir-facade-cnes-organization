@@ -1,4 +1,4 @@
-package org.alexandresavaris.interceptor;
+package org.alexandresavaris.fhir.facade.cnes.organization.interceptor;
 
 import ca.uhn.fhir.i18n.Msg;
 import ca.uhn.fhir.rest.api.server.RequestDetails;

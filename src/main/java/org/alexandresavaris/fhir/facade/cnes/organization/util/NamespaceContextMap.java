@@ -1,4 +1,4 @@
-package org.alexandresavaris.util;
+package org.alexandresavaris.fhir.facade.cnes.organization.util;
 
 import java.util.Collections;
 import java.util.HashMap;

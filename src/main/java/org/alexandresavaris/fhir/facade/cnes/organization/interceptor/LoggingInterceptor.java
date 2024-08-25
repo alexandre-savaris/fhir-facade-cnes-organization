@@ -1,4 +1,4 @@
-package org.alexandresavaris.interceptor;
+package org.alexandresavaris.fhir.facade.cnes.organization.interceptor;
 
 import ca.uhn.fhir.interceptor.api.Hook;
 import ca.uhn.fhir.interceptor.api.Pointcut;
