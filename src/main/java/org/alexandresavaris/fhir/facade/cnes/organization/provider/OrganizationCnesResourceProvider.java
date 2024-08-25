@@ -130,7 +130,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 .POST(HttpRequest.BodyPublishers.ofString(
                     updatedContentOfSoapEnvelope)
                 )
-                .header("Content-Type", "text/xml")
+                .header("Content-Type", "application/soap+xml")
                 .header("charset", "UTF-8")
                 .build();
             HttpResponse<String> response = HttpClient.newBuilder()
