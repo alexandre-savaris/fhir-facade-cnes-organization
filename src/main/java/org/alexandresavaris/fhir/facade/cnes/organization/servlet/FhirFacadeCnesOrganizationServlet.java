@@ -139,10 +139,7 @@ public class FhirFacadeCnesOrganizationServlet extends RestfulServer {
             
             // For Basic Audit Log Patterns (BALP).
             // Generation and persistence of AuditEvent instances.
-            // Following the documentation, the interceptor is not working.
-            // TODO: shall be reviewed in the next release.
             registerInterceptor(
-                // TODO: review (not working).
                 new BalpAuditCaptureInterceptor(
                     new FileBalpSink(this.getFhirContext(), "/data"),
                     new BalpAuditContextService()

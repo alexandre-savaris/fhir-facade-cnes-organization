@@ -6,6 +6,8 @@ import ca.uhn.fhir.storage.interceptor.balp.IBalpAuditEventSink;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +41,16 @@ public class FileBalpSink implements IBalpAuditEventSink {
         
         try {
             
+            String fileNameTemplate = this.path + "/AuditEvent_{0}.json";
+            String currentTimestamp
+                = new SimpleDateFormat(
+                    "yyyyMMdd_HHmmss_SSS").format(new Date()
+                );
+            String fileName = java.text.MessageFormat.format(
+                fileNameTemplate, currentTimestamp);
+
             Files.write(
-                Paths.get(this.path + "/AuditEvent.json"), encoded.getBytes()
+                Paths.get(fileName), encoded.getBytes()
             );
             
         } catch (IOException ex) {

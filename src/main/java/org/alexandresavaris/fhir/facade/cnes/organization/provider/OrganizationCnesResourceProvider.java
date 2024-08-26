@@ -1,8 +1,12 @@
 package org.alexandresavaris.fhir.facade.cnes.organization.provider;
 
+import ca.uhn.fhir.interceptor.api.IInterceptorBroadcaster;
 import ca.uhn.fhir.rest.annotation.IdParam;
 import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.interceptor.ServerInterceptorUtil;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -13,6 +17,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +33,7 @@ import javax.xml.xpath.XPathFactory;
 import org.alexandresavaris.fhir.facade.cnes.organization.model.OrganizationCnes;
 import org.alexandresavaris.fhir.facade.cnes.organization.util.NamespaceContextMap;
 import org.alexandresavaris.fhir.facade.cnes.organization.util.Utils;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -89,11 +95,17 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be
      * of type IdDt and must be annotated with the "@Read.IdParam" annotation.
+     * @param theRequestDetails Details from the performed request.
+     * @param theInterceptorBroadcaster For broadcasting the related event to
+     * known interceptors.
      * @return Returns a resource matching this identifier, or null if none
      * exists.
      */
     @Read(type = OrganizationCnes.class)
-    public OrganizationCnes getResourceById(@IdParam IdType theId) {
+    public OrganizationCnes getResourceById(
+        @IdParam IdType theId,
+        RequestDetails theRequestDetails,
+        IInterceptorBroadcaster theInterceptorBroadcaster) {
         // The expected length for a CNES value.
         final int expectedCnesLength = 7;
         // The expected length for a CNPJ value.
@@ -150,7 +162,9 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             
             int responseStatusCode = response.statusCode();
             if (responseStatusCode != 200) {
-                throw new Exception(
+                // TODO: verify why the message used for the exception doesn't
+                // appear in the OperationOutcome instance.
+                throw new InternalErrorException(
                     "O webservice SOAP retornou o código de status HTTP "
                         + responseStatusCode
                         + " ao acessar os dados do estabelecimento de saúde com o Id: "
@@ -538,7 +552,17 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     .log(Level.SEVERE, null, ex);
         }
         
-        return retVal;
+        // Fire the event for the STORAGE_PRESHOW_RESOURCES Pointcut.
+        // TODO: for some requests it's generating duplicated AuditEvent
+        // instances. Review and correct.
+        List<IBaseResource> fireStoragePreshowResource
+            = ServerInterceptorUtil.fireStoragePreshowResource(
+                Arrays.asList(retVal),
+                theRequestDetails,
+                theInterceptorBroadcaster
+            );
+        
+        return (OrganizationCnes)fireStoragePreshowResource.get(0);
     }
 
     // Extract a single value from the XML document based on an XPath expression.

@@ -13,10 +13,10 @@ public class BalpAuditContextService implements IBalpAuditContextServices {
     public Reference getAgentClientWho(RequestDetails theRequestDetails) {
         
         Reference client = new Reference();
-        client.setDisplay("Growth Chart Application");
-        client.getIdentifier()
-            .setSystem("http://example.org/clients")
-            .setValue("growth_chart");
+        client.setDisplay("<REPLACE_WITH_CLIENT_AGENT>");
+//        client.getIdentifier()
+//            .setSystem("http://example.org/clients")
+//            .setValue("growth_chart");
         
         return client;
     }
@@ -26,9 +26,10 @@ public class BalpAuditContextService implements IBalpAuditContextServices {
     public Reference getAgentUserWho(RequestDetails theRequestDetails) {
         
         Reference user = new Reference();
-        user.getIdentifier()
-            .setSystem("http://example.org/users")
-            .setValue("my_username");
+        user.setDisplay("<REPLACE_WITH_CLIENT_USER>");
+//        user.getIdentifier()
+//            .setSystem("http://example.org/users")
+//            .setValue("my_username");
         
         return user;
     }
