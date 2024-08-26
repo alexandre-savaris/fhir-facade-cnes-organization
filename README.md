@@ -32,3 +32,9 @@ The facade accesses the homologation instance of the SOAP webservice, whose data
 ### 1.0.0
 
 Initial release.
+
+### 1.1.0
+
+- Packages were renamed for a better grouping of features and a clearer separation from other projects.
+- Fixed the "Content-Type" in calling the SOAP Webservice.
+- Fixed the generation of AuditEvent instances.

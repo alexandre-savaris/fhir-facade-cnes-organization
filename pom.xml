@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.alexandresavaris</groupId>
     <artifactId>fhir-facade-cnes-organization</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <packaging>war</packaging>
     <name>FHIR Facade for CNES</name>
     
