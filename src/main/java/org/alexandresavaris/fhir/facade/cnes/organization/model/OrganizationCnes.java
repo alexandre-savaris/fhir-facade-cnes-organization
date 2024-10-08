@@ -268,10 +268,13 @@ public class OrganizationCnes extends Organization {
         @Override
         public BackboneElement copy() {
             
-            SpecializedService specializedService = new SpecializedService();
-            specializedService.setSpecializedService(this.specializedService);
+            SpecializedService localSpecializedService
+                = new SpecializedService();
+            localSpecializedService.setSpecializedService(
+                this.specializedService
+            );
             
-            return specializedService;
+            return localSpecializedService;
         }
         
         @Override
@@ -385,12 +388,13 @@ public class OrganizationCnes extends Organization {
             @Override
             public BackboneElement copy() {
 
-                SpecializedServiceClassification specializedServiceClassification
+                SpecializedServiceClassification localSpecializedServiceClassification
                     = new SpecializedServiceClassification();
-                specializedServiceClassification.setSpecializedServiceClassification(
-                    this.specializedServiceClassification);
+                localSpecializedServiceClassification.setSpecializedServiceClassification(
+                    this.specializedServiceClassification
+                );
 
-                return specializedServiceClassification;
+                return localSpecializedServiceClassification;
             }
 
             @Override
