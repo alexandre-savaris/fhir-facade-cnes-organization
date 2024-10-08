@@ -29,12 +29,16 @@ The facade accesses the homologation instance of the SOAP webservice, whose data
 
 ## Release Notes
 
-### 1.0.0
+### 1.2.0
 
-Initial release.
+- Upgrading to HAPI FHIR 7.4.0 and refactoring.
 
 ### 1.1.0
 
 - Packages were renamed for a better grouping of features and a clearer separation from other projects.
 - Fixed the "Content-Type" in calling the SOAP Webservice.
 - Fixed the generation of AuditEvent instances.
+
+### 1.0.0
+
+Initial release.
