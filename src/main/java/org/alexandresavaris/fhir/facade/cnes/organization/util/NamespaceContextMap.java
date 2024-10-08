@@ -45,7 +45,7 @@ public final class NamespaceContextMap implements NamespaceContext {
     
     private static Map<String, String> toMap(String... mappingPairs) {
         
-        Map<String, String> prefixMappings = new HashMap<String, String>(
+        Map<String, String> prefixMappings = new HashMap<>(
             mappingPairs.length / 2);
         for (int i = 0; i < mappingPairs.length; i++) {
             prefixMappings.put(mappingPairs[i], mappingPairs[++i]);
@@ -56,12 +56,12 @@ public final class NamespaceContextMap implements NamespaceContext {
     
     private Map<String, String> createPrefixMap(Map<String, String> prefixMappings) {
         
-        Map<String, String> prefixMap = new HashMap<String, String>(prefixMappings);
-        addConstant(prefixMap, XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
-        addConstant(prefixMap, XMLConstants.XMLNS_ATTRIBUTE,
+        Map<String, String> localPrefixMap = new HashMap<>(prefixMappings);
+        addConstant(localPrefixMap, XMLConstants.XML_NS_PREFIX, XMLConstants.XML_NS_URI);
+        addConstant(localPrefixMap, XMLConstants.XMLNS_ATTRIBUTE,
             XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
         
-        return Collections.unmodifiableMap(prefixMap);
+        return Collections.unmodifiableMap(localPrefixMap);
     }
     
     private void addConstant(Map<String, String> prefixMap, String prefix, String nsURI) {
@@ -75,22 +75,22 @@ public final class NamespaceContextMap implements NamespaceContext {
     
     private Map<String, Set<String>> createNamespaceMap(Map<String, String> prefixMap) {
         
-        Map<String, Set<String>> nsMap = new HashMap<String, Set<String>>();
+        Map<String, Set<String>> localNsMap = new HashMap<>();
         for (Map.Entry<String, String> entry : prefixMap.entrySet()) {
             String nsURI = entry.getValue();
-            Set<String> prefixes = nsMap.get(nsURI);
+            Set<String> prefixes = localNsMap.get(nsURI);
             if (prefixes == null) {
-                prefixes = new HashSet<String>();
-                nsMap.put(nsURI, prefixes);
+                prefixes = new HashSet<>();
+                localNsMap.put(nsURI, prefixes);
             }
             prefixes.add(entry.getKey());
         }
-        for (Map.Entry<String, Set<String>> entry : nsMap.entrySet()) {
+        for (Map.Entry<String, Set<String>> entry : localNsMap.entrySet()) {
             Set<String> readOnly = Collections.unmodifiableSet(entry.getValue());
             entry.setValue(readOnly);
         }
         
-        return nsMap;
+        return localNsMap;
     }
     
     @Override
