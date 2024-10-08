@@ -20,7 +20,7 @@
     </repositories>
     
     <properties>
-        <hapifhir_version>7.2.2</hapifhir_version>
+        <hapifhir_version>7.4.0</hapifhir_version>
     </properties>
     
     <dependencies>
