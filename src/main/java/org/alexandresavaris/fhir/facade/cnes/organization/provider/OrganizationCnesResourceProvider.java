@@ -165,10 +165,19 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 // TODO: verify why the message used for the exception doesn't
                 // appear in the OperationOutcome instance.
                 throw new InternalErrorException(
-                    "O webservice SOAP retornou o código de status HTTP "
-                        + responseStatusCode
-                        + " ao acessar os dados do estabelecimento de saúde com o Id: "
-                        + theId);
+                    new String(
+                        "O webservice SOAP retornou o código de status HTTP "
+                            .getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                    + responseStatusCode
+                    + new String(
+                        " ao acessar os dados do estabelecimento de saúde com o Id: "
+                            .getBytes("ISO-8859-1"),
+                        "UTF-8"
+                    )
+                    + theId
+                );
             }
             
             // Fill in the resource with data from the response.
@@ -298,7 +307,16 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
 
                 String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
                 String addressText = java.text.MessageFormat.format(
-                    addressTextTemplate, street, number, neighborhood, city, state
+                    addressTextTemplate,
+                    (street != null ? street : "<SEM LOGRADOURO>"),
+                    (number != null
+                        ? number
+                        : new String(
+                            "<SEM NÙMERO>".getBytes("ISO-8859-1"), "UTF-8")
+                        ),
+                    (neighborhood != null ? neighborhood : "<SEM BAIRRO>"),
+                    (city != null ? city : "<SEM CIDADE>"),
+                    (state != null ? state : "<SEM UF>")
                 );
             
                 Address address = new Address()
