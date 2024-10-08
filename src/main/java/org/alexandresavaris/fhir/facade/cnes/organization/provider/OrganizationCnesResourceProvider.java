@@ -542,12 +542,12 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 specializedServices);
             retVal.setSpecializedServices(specializedServices);
 
-        } catch (URISyntaxException | IOException | InterruptedException
-            | ParserConfigurationException | SAXException
-            | XPathExpressionException ex) {
-            Logger.getLogger(OrganizationCnesResourceProvider.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
+        } catch (URISyntaxException
+                     | IOException
+                     | InterruptedException
+                     | ParserConfigurationException
+                     | SAXException
+                     | XPathExpressionException ex) {
             Logger.getLogger(OrganizationCnesResourceProvider.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
