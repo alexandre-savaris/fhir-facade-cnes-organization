@@ -271,70 +271,16 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 Utils.xpathExpressions.get("state"),
                 0
             );
-            String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
-            String addressText = java.text.MessageFormat.format(
-                addressTextTemplate, street, number, neighborhood, city, state);
-            
-            Address address = new Address()
-                .setUse(Address.AddressUse.WORK)
-                .setType(Address.AddressType.BOTH)
-                .setText(addressText)
-                .setCity(city)
-                .setState(state)
-                .setPostalCode(
-                    extractSingleValueFromXml(document, xpath,
-                        Utils.xpathExpressions.get("postalCode"),
-                        0
-                    )
-                )
-                .setCountry("BRA");
-            
-            // Extensions for IBGE codes.
             String cityCodeIbge
                 = extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("cityCodeIbge"),
                     0
                 );
-            if (cityCodeIbge != null) {
-                Extension cityCodeIbgeExtension
-                    = new Extension(Utils.extensions.get("cityCodeIbge"));
-                cityCodeIbgeExtension.setValue(
-                    new Coding()
-                        .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                        .setCode(cityCodeIbge)
-                        .setDisplay(
-                            new String(
-                                "Código do município no IBGE"
-                                    .getBytes("ISO-8859-1"),
-                                "UTF-8"
-                            )
-                        )
-                );
-                address.addExtension(cityCodeIbgeExtension);
-            }
             String stateCodeIbge
                 = extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("stateCodeIbge"),
                     0
                 );
-            if (stateCodeIbge != null) {
-                Extension stateCodeIbgeExtension
-                    = new Extension(Utils.extensions.get("stateCodeIbge"));
-                stateCodeIbgeExtension.setValue(
-                    new Coding()
-                        .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
-                        .setCode(stateCodeIbge)
-                        .setDisplay(
-                            new String(
-                                "Código da UF no IBGE".getBytes("ISO-8859-1"),
-                                "UTF-8"
-                            )
-                        )
-                );
-                address.addExtension(stateCodeIbgeExtension);
-            }
-            
-            // Geolocation extensions.
             String latitude
                 = extractSingleValueFromXml(document, xpath,
                     Utils.xpathExpressions.get("latitude"),
@@ -345,26 +291,88 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     Utils.xpathExpressions.get("longitude"),
                     0
                 );
-            if (latitude != null && longitude != null) {
-                Extension geolocationExtension
-                    = new Extension(Utils.extensions.get("geolocation"));
-                Extension latitudeExtension
-                    = new Extension(Utils.extensions.get("latitude"));
-                latitudeExtension.setValue(
-                    new DecimalType(latitude)
+            if (street != null || number != null || neighborhood != null
+                || city != null || state != null || cityCodeIbge != null
+                || stateCodeIbge != null || latitude != null
+                || longitude != null) {
+
+                String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
+                String addressText = java.text.MessageFormat.format(
+                    addressTextTemplate, street, number, neighborhood, city, state
                 );
-                Extension longitudeExtension
-                    = new Extension(Utils.extensions.get("longitude"));
-                longitudeExtension.setValue(
-                    new DecimalType(longitude)
-                );
-                geolocationExtension.addExtension(latitudeExtension);
-                geolocationExtension.addExtension(longitudeExtension);
-                // Completing the address to be returned.
-                address.addExtension(geolocationExtension);
-            }
             
-            retVal.addAddress(address);
+                Address address = new Address()
+                    .setUse(Address.AddressUse.WORK)
+                    .setType(Address.AddressType.BOTH)
+                    .setText(addressText)
+                    .setCity(city)
+                    .setState(state)
+                    .setPostalCode(
+                        extractSingleValueFromXml(document, xpath,
+                            Utils.xpathExpressions.get("postalCode"),
+                            0
+                        )
+                    )
+                    .setCountry("BRA");
+            
+                // Extensions for IBGE codes.
+                if (cityCodeIbge != null) {
+                    Extension cityCodeIbgeExtension
+                        = new Extension(Utils.extensions.get("cityCodeIbge"));
+                    cityCodeIbgeExtension.setValue(
+                        new Coding()
+                            .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                            .setCode(cityCodeIbge)
+                            .setDisplay(
+                                new String(
+                                    "Código do município no IBGE"
+                                        .getBytes("ISO-8859-1"),
+                                    "UTF-8"
+                                )
+                            )
+                    );
+                    address.addExtension(cityCodeIbgeExtension);
+                }
+                if (stateCodeIbge != null) {
+                    Extension stateCodeIbgeExtension
+                        = new Extension(Utils.extensions.get("stateCodeIbge"));
+                    stateCodeIbgeExtension.setValue(
+                        new Coding()
+                            .setSystem("urn:oid:" + Utils.oids.get("ibgeCode"))
+                            .setCode(stateCodeIbge)
+                            .setDisplay(
+                                new String(
+                                    "Código da UF no IBGE".getBytes("ISO-8859-1"),
+                                    "UTF-8"
+                                )
+                            )
+                    );
+                    address.addExtension(stateCodeIbgeExtension);
+                }
+            
+                // Geolocation extensions.
+                if (latitude != null && longitude != null) {
+                    Extension geolocationExtension
+                        = new Extension(Utils.extensions.get("geolocation"));
+                    Extension latitudeExtension
+                        = new Extension(Utils.extensions.get("latitude"));
+                    latitudeExtension.setValue(
+                        new DecimalType(latitude)
+                    );
+                    Extension longitudeExtension
+                        = new Extension(Utils.extensions.get("longitude"));
+                    longitudeExtension.setValue(
+                        new DecimalType(longitude)
+                    );
+                    geolocationExtension.addExtension(latitudeExtension);
+                    geolocationExtension.addExtension(longitudeExtension);
+                    // Completing the address to be returned.
+                    address.addExtension(geolocationExtension);
+                }
+            
+                retVal.addAddress(address);
+                
+            }
             
             // dataAtualizacao -> Extension (update date).
             String updateDate
