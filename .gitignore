@@ -32,3 +32,5 @@ target/
 bin/
 *.iml
 .settings/
+
+*IG/template
