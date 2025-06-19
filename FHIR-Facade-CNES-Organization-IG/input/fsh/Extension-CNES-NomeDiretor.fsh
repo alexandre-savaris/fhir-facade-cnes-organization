@@ -19,3 +19,11 @@ Context: Organization
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/NomeDiretor" (exactly)
 * value[x] only HumanName
+* valueHumanName 1..1
+* valueHumanName.use 0..0
+* valueHumanName.text 1..1
+* valueHumanName.family 0..0
+* valueHumanName.given 0..0
+* valueHumanName.prefix 0..0
+* valueHumanName.suffix 0..0
+* valueHumanName.period 0..0

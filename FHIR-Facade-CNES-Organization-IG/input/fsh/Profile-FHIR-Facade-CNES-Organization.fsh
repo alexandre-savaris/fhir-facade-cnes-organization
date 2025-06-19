@@ -4,13 +4,14 @@ Parent: br-core-organization
 * identifier MS SU
 // Suppress the "cpf" slice.
 * identifier[cpf] 0..0
+// Configure the remaining slices.
+* identifier[cnes].use 0..0
+* identifier[cnpj].use 0..0
 // Add a new slice for "codigoUnidade".
 * identifier contains codigoUnidade 0..1
 * identifier[codigoUnidade] ^short = "Identificador do estabelecimento"
 * identifier[codigoUnidade] ^definition = "Identificador do estabelecimento"
-* identifier[codigoUnidade].use ^short = "Uso do identificador do estabelecimento"
-* identifier[codigoUnidade].use ^definition = "usual: identificador usual do estabelecimento. official: identificador oficial do estabelecimento. temp: identificador temporário do estabelecimento. secondary: identificador secundário do estabelecimento."
-* identifier[codigoUnidade].use = #official (exactly)
+* identifier[codigoUnidade].use 0..0
 * identifier[codigoUnidade].system ^short = "Sistema do identificador do estabelecimento"
 * identifier[codigoUnidade].system ^definition = "Sistema que identifica o tipo do identificador do estabelecimento"
 * identifier[codigoUnidade].system = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade"  (exactly)
@@ -37,3 +38,6 @@ Parent: br-core-organization
 * extension contains DataAtualizacao named dataAtualizacao 0..1
 * extension contains CpfDiretor named cpfDiretor 0..1
 * extension contains NomeDiretor named nomeDiretor 0..1
+* extension contains BRAtendeSUS named atendeSus 0..1
+* extension contains ExtensionFluxoClientela named fluxoClientela 0..1
+* extension contains ServicosEspecializados named servicosEspecializados 0..*

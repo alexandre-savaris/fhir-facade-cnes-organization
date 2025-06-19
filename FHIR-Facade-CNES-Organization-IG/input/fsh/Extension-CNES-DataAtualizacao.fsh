@@ -19,3 +19,4 @@ Context: Organization
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao" (exactly)
 * value[x] only date
+* valueDate 1..1

@@ -27,20 +27,11 @@ publisher:
 dependencies:
 #   hl7.fhir.us.core: 3.1.0
   br.gov.saude.br-core.fhir: dev
-#   br.gov.saude.terminologia.fhir: dev
+  rnds: dev
 #   hl7.fhir.us.mcode:
 #     id: mcode
 #     uri: http://hl7.org/fhir/us/mcode/ImplementationGuide/hl7.fhir.us.mcode
 #     version: 1.0.0
-#   br.gov.saude.br-core.fhir:
-#     id: BRCORE
-#     uri: https://hl7.org.br/fhir/core/
-#     version: dev
-#   br.gov.saude.terminologia.fhir:
-#     id: TerminologiaBrasil
-#     uri: https://terminologia.saude.gov.br/fhir/v1.0.0
-#     version: 1.0.0
-#
 #
 # The pages property corresponds to IG.definition.page. SUSHI can
 # auto-generate the page list, but if the author includes pages in

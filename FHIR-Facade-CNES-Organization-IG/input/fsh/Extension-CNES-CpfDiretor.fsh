@@ -19,3 +19,7 @@ Context: Organization
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CpfDiretor" (exactly)
 * value[x] only Coding
+* valueCoding 1..1
+* valueCoding.system 1..1
+* valueCoding.code 1..1
+* valueCoding.display 1..1
