@@ -5,9 +5,9 @@ Description: "Número no CNES da Classificação referente ao Serviço Especiali
 Context: Organization.extension.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CnesClassificacaoServicoEspecializado"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-17"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email
@@ -19,3 +19,12 @@ Context: Organization.extension.extension
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CnesClassificacaoServicoEspecializado" (exactly)
 * value[x] only Coding
+* valueCoding 1..1
+* valueCoding.id 0..0
+* valueCoding.extension 0..0
+* valueCoding.system 1..1
+* valueCoding.system = "https://terminologia.saude.gov.br/fhir/NamingSystem/cnes"
+* valueCoding.version 0..0
+* valueCoding.code 1..1
+* valueCoding.display 0..1
+* valueCoding.userSelected 0..0

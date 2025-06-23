@@ -5,9 +5,9 @@ Description: "Código da Unidade Federativa (UF) mantido pelo Instituto Brasilei
 Context: Organization.address
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-11"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email

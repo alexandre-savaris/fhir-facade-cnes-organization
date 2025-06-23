@@ -5,9 +5,9 @@ Description: "Data em que os dados do Estabelecimento de Saúde foram atualizado
 Context: Organization
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/DataAtualizacao"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-11"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email

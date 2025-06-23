@@ -5,10 +5,10 @@ Title: "Código do Tipo de Telefone"
 Description: "Código do Tipo de Telefone, mantido pelo Departamento de Informação e Informática do Sistema Único de Saúde do Brasil (DATASUS)."
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoTelefone"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^status = #active
 * ^experimental = false
-* ^date = "2024-07-13"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email

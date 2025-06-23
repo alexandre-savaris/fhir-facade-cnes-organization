@@ -5,9 +5,9 @@ Description: "Número do CPF (Cadastro de Pessoa Física) do Diretor responsáve
 Context: Organization
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CpfDiretor"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-11"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email
@@ -20,6 +20,11 @@ Context: Organization
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CpfDiretor" (exactly)
 * value[x] only Coding
 * valueCoding 1..1
+* valueCoding.id 0..0
+* valueCoding.extension 0..0
 * valueCoding.system 1..1
+* valueCoding.system = "https://terminologia.saude.gov.br/fhir/NamingSystem/cpf"
+* valueCoding.version 0..0
 * valueCoding.code 1..1
 * valueCoding.display 1..1
+* valueCoding.userSelected 0..0

@@ -5,9 +5,9 @@ Description: "Código da Característica da Classificação referente ao Serviç
 Context: Organization.extension.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-16"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email
@@ -18,4 +18,13 @@ Context: Organization.extension.extension
 * ^abstract = true
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado" (exactly)
-* value[x] only code
+* value[x] only Coding
+* valueCoding 1..1
+* valueCoding.id 0..0
+* valueCoding.extension 0..0
+* valueCoding.system 1..1
+* valueCoding.system = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CaracteristicaClassificacaoServicoEspecializado"
+* valueCoding.version 0..0
+* valueCoding.code 1..1
+* valueCoding.display 0..1
+* valueCoding.userSelected 0..0

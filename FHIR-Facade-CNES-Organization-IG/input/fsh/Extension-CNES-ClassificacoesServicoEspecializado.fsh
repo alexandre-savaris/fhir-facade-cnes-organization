@@ -5,9 +5,9 @@ Description: "Relação de Classificações de um Serviço Especializado ofertad
 Context: Organization.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacoesServicoEspecializado"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-08-03"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email
@@ -18,13 +18,7 @@ Context: Organization.extension
 * ^abstract = true
 * id ..0
 * extension contains
-    ClassificacaoServicoEspecializado 0..* and
-    CaracteristicaClassificacaoServicoEspecializado 0..* and
-    CnesClassificacaoServicoEspecializado 0..*
-* extension[ClassificacaoServicoEspecializado].id ..0
-* extension[ClassificacaoServicoEspecializado].value[x] only Coding
-* extension[CaracteristicaClassificacaoServicoEspecializado].id ..0
-* extension[CaracteristicaClassificacaoServicoEspecializado].value[x] only code
-* extension[CnesClassificacaoServicoEspecializado].id ..0
-* extension[CnesClassificacaoServicoEspecializado].value[x] only Coding
+    ClassificacaoServicoEspecializado named classificacaoServicoEspecializado 1..1 and
+    CaracteristicaClassificacaoServicoEspecializado named caracteristicaClassificacaoServicoEspecializado 1..1 and
+    CnesClassificacaoServicoEspecializado named cnesClassificacaoServicoEspecializado 1..1
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacoesServicoEspecializado" (exactly)

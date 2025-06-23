@@ -5,9 +5,9 @@ Description: "Código, descrição e outras informações referentes à Classifi
 Context: Organization.extension.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacaoServicoEspecializado"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-16"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email
@@ -19,3 +19,12 @@ Context: Organization.extension.extension
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacaoServicoEspecializado" (exactly)
 * value[x] only Coding
+* valueCoding 1..1
+* valueCoding.id 0..0
+* valueCoding.extension 0..0
+* valueCoding.system 1..1
+* valueCoding.system = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado"
+* valueCoding.version 0..0
+* valueCoding.code 1..1
+* valueCoding.display 1..1
+* valueCoding.userSelected 0..0

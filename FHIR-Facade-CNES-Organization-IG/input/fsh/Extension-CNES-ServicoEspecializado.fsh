@@ -5,9 +5,9 @@ Description: "Código, descrição e classificações do Serviço Especializado 
 Context: Organization.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado"
-* ^version = "1.0.0"
+* ^version = "2.0.0"
 * ^experimental = false
-* ^date = "2024-07-14"
+* ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"
 * ^contact.name = "Alexandre Savaris"
 * ^contact.telecom.system = #email
@@ -17,6 +17,7 @@ Context: Organization.extension
 * ^purpose = "Caracterizar um Serviço Especializado ofertado por um Estabelecimento de Saúde por meio de um código, uma descrição e uma ou mais classificações."
 * ^abstract = true
 * id ..0
+* extension contains
+    EspecificacaoServicoEspecializado named especificacaoServicoEspecializado 1..1 and
+    ClassificacoesServicoEspecializado named classificacoesServicoEspecializado 1..*
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado" (exactly)
-* value[x] only Coding
-* valueCoding.system = "https://terminologia.saude.gov.br/fhir/ValueSet/BRServicoEspecializado"
