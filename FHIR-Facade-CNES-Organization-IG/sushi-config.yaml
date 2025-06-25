@@ -5,20 +5,20 @@
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
 id: fhir-facade-cnes-organization-ig
 canonical: https://alexandresavaris.org
-name: FHIR-Facade-CNES-Organization-IG
-# title: Example Title
-# description: Example Implementation Guide for getting started with SUSHI
+name: FHIRFacadeCNESOrganization
+title: Guia de Implementação da fachada HL7® FHIR® para acesso aos dados do Cadastro Nacional de Estabelecimentos de Saúde (CNES)
+# description: ABCDE
 status: draft # draft | active | retired | unknown
 version: 2.0.0
 fhirVersion: 4.0.1 # https://www.hl7.org/fhir/valueset-FHIR-version.html
 copyrightYear: 2025+
 releaseLabel: ci-build
-# license: CC0-1.0 # https://www.hl7.org/fhir/valueset-spdx-license.html
-# jurisdiction: urn:iso:std:iso:3166#US "United States of America" # https://www.hl7.org/fhir/valueset-jurisdiction.html
+license: MIT # https://www.hl7.org/fhir/valueset-spdx-license.html
+jurisdiction: urn:iso:std:iso:3166#BRA "Brazil" # https://www.hl7.org/fhir/valueset-jurisdiction.html
 publisher:
   name: Alexandre Savaris
   url: https://alexandresavaris.org
-  # email: test@example.org
+  email: alexandre.savaris@gmail.com
 
 # The dependencies property corresponds to IG.dependsOn. The key is the
 # package id and the value is the version (or dev/current). For advanced
@@ -76,8 +76,10 @@ dependencies:
 # │ property below.                                                                                │
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
 menu:
-  Home: index.html
-  Artifacts: artifacts.html
+  Início: index.html
+  Índice: toc.html
+  Lista de artefatos: artifacts.html
+  Baixar: downloads.html
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
 # │  Uncomment the properties below to configure additional properties on the ImplementationGuide  │

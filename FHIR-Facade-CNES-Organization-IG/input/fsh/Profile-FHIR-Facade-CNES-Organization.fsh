@@ -32,6 +32,37 @@ Parent: br-core-organization
 * address.extension contains CodigoUfIbge named codigoUfIbge 0..1
 // Suppress the "partOf" attribute.
 * partOf 0..0
+// Configure the "address" attribute.
+* address.use 1..1
+* address.type 1..1
+* address.text 1..1
+* address.line 0..0
+* address.city 1..1
+* address.district 0..0
+* address.state 1..1
+* address.postalCode 1..1
+* address.country 1..1
+* address.period 0..0
+* address.extension contains geolocation named geolocation 0..1
+// Configure the "contact" attribute.
+* contact.id 0..0
+* contact.extension 0..0
+* contact.purpose 1..1
+* contact.purpose.coding 1..1
+* contact.purpose.coding.system 1..1
+* contact.purpose.coding.version 0..0
+* contact.purpose.coding.code 1..1
+* contact.purpose.coding.display 1..1
+* contact.purpose.coding.userSelected 0..0
+* contact.purpose.text 0..0
+* contact.name 0..0
+* contact.telecom 1..1
+* contact.telecom.system 1..1
+* contact.telecom.value 1..1
+* contact.telecom.use 1..1
+* contact.telecom.rank 0..0
+* contact.telecom.period 0..0
+* contact.address 0..0
 // Suppress the "endpoint" attribute.
 * endpoint 0..0
 // Adding extensions to the root of the resource.

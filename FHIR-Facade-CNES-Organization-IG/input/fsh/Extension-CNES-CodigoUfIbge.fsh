@@ -19,3 +19,12 @@ Context: Organization.address
 * id ..0
 * url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge" (exactly)
 * value[x] only Coding
+* valueCoding 1..1
+* valueCoding.id 0..0
+* valueCoding.extension 0..0
+* valueCoding.system 1..1
+* valueCoding.system = "urn:oid:2.16.840.1.113883.4.707"
+* valueCoding.version 0..0
+* valueCoding.code 1..1
+* valueCoding.display 1..1
+* valueCoding.userSelected 0..0
