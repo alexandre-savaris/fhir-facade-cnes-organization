@@ -5,7 +5,7 @@
 # ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
 id: fhir-facade-cnes-organization-ig
 canonical: https://alexandresavaris.org
-name: FHIRFacadeCNESOrganization
+name: FHIRFacadeCNESOrganizationIG
 title: Guia de Implementação da fachada HL7® FHIR® para acesso aos dados do Cadastro Nacional de Estabelecimentos de Saúde (CNES)
 # description: ABCDE
 status: draft # draft | active | retired | unknown
@@ -79,7 +79,7 @@ menu:
   Início: index.html
   Índice: toc.html
   Lista de artefatos: artifacts.html
-  Baixar: downloads.html
+  Downloads: downloads.html
 
 # ╭───────────────────────────Less Common Implementation Guide Properties──────────────────────────╮
 # │  Uncomment the properties below to configure additional properties on the ImplementationGuide  │
