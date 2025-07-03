@@ -20,7 +20,9 @@ public class Utils {
     public static final Map<String, String> oids = new HashMap<>();
     // Map of Extensions used in the OrganizationCnes instance.
     public static final Map<String, String> extensions = new HashMap<>();
-    
+    // Map of Unique IDs used in the OrganizationCnes instance.
+    public static final Map<String, String> uniqueIds = new HashMap<>();
+
     static {
 
         // Insert namespaces.
@@ -154,8 +156,8 @@ public class Utils {
         // Insert NamingSystems.
         namingSystems.put("unityCode",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade");
-        namingSystems.put("cnpj",
-            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj");
+//        namingSystems.put("cnpj",
+//            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj");
         namingSystems.put("phoneType",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoTelefone");
         namingSystems.put("emailType",
@@ -168,16 +170,18 @@ public class Utils {
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado");
         namingSystems.put("specializedServiceClassificationCharacteristic",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CaracteristicaClassificacaoServicoEspecializado");
+        namingSystems.put("cpf",
+            "https://terminologia.saude.gov.br/fhir/NamingSystem/cpf");
 
         // Insert ValueSets.
         valueSets.put("type",
-            "https://rnds-fhir.saude.gov.br/ValueSet/BRTipoEstabelecimentoSaude-1.0");
+            "https://terminologia.saude.gov.br/fhir/ValueSet/BRTipoEstabelecimentoSaude");
 
         // Insert OIDs.
         // https://www.hl7.org/oid/index.cfm
-        oids.put("cnes", "2.16.840.1.113883.13.36");
+//        oids.put("cnes", "2.16.840.1.113883.13.36");
         oids.put("ibgeCode", "2.16.840.1.113883.4.707");
-        oids.put("cpf", "2.16.840.1.113883.13.237");
+//        oids.put("cpf", "2.16.840.1.113883.13.237");
         
         // Insert Extensions.
         extensions.put(
@@ -193,5 +197,9 @@ public class Utils {
             "stateCodeIbge",
             "https://alexandresavaris.org/fhir/r4/Extension/cnes/CodigoUfIbge"
         );
+
+        // Insert Unique IDs.
+        uniqueIds.put("cnes", "https://saude.gov.br/fhir/sid/cnes");
+        uniqueIds.put("cnpj", "https://saude.gov.br/fhir/sid/cnpj");
     }
 }
