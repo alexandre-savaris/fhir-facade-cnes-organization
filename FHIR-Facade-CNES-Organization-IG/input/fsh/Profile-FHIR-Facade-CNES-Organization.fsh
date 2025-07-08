@@ -28,6 +28,7 @@ Parent: br-core-organization
 // Suppress the "telecom" attribute.
 * telecom 0..0
 // Adding extensions to the "address" attribute.
+* address
 * address.extension contains CodigoMunicipioIbge named codigoMunicipioIbge 0..1
 * address.extension contains CodigoUfIbge named codigoUfIbge 0..1
 // Suppress the "partOf" attribute.

@@ -156,8 +156,8 @@ public class Utils {
         // Insert NamingSystems.
         namingSystems.put("unityCode",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CodigoUnidade");
-//        namingSystems.put("cnpj",
-//            "http://rnds.saude.gov.br/fhir/r4/NamingSystem/cnpj");
+        namingSystems.put("cnpj",
+            "https://saude.gov.br/fhir/sid/cnpj");
         namingSystems.put("phoneType",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoTelefone");
         namingSystems.put("emailType",
