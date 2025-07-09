@@ -211,7 +211,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                 );
             if (cnes != null) {
                 retVal.addIdentifier()
-                    .setSystem(Utils.uniqueIds.get("cnes"))
+                    .setSystem(Utils.namingSystems.get("cnes"))
                     .setValue(cnes);
             }
 
@@ -745,7 +745,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                                 specializedServices
                             );
                     specializedServiceClassification.getSpecializedServiceClassificationCnes()
-                        .setSystem("urn:oid:" + Utils.oids.get("cnes"))
+                        .setSystem(Utils.namingSystems.get("cnes"))
                         .setCode(node.getNodeValue())
                         .setDisplay(
                             new String(
