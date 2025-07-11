@@ -153,14 +153,14 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
 
             // For debugging purposes.
             // Uncomment to see the response body from the SOAP Webservice.
-            System.out.println(
-                "----------------------------------------------------------"
-            );
-            System.out.println(response.statusCode());
-            System.out.println(response.body());
-            System.out.println(
-                "----------------------------------------------------------"
-            );
+//            System.out.println(
+//                "----------------------------------------------------------"
+//            );
+//            System.out.println(response.statusCode());
+//            System.out.println(response.body());
+//            System.out.println(
+//                "----------------------------------------------------------"
+//            );
 
             int responseStatusCode = response.statusCode();
             if (responseStatusCode != 200) {
@@ -563,7 +563,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             // For debugging purposes.
             // Uncomment to see the nodes extracted from the XML received from the
             // SOAP Webservice.
-            printNode(nodeList, 0, "");
+//            printNode(nodeList, 0, "");
 
             List<SpecializedService> specializedServices
                 = new ArrayList<>();
@@ -800,19 +800,19 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     // For debugging purposes.
     // Uncomment to see the nodes extracted from the XML received from the
     // SOAP Webservice.
-    private static void printNode(NodeList nodeList, int level, String path) {
-
-        level++;
-
-        if (nodeList != null && nodeList.getLength() > 0) {
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                path = path + "/" + node.getNodeName();
-                if (node.getNodeType() == Node.TEXT_NODE) {
-                    System.out.println(path + ": " + node.getNodeType());
-                }
-                printNode(node.getChildNodes(), level, path);
-            }
-        }
-    }
+//    private static void printNode(NodeList nodeList, int level, String path) {
+//
+//        level++;
+//
+//        if (nodeList != null && nodeList.getLength() > 0) {
+//            for (int i = 0; i < nodeList.getLength(); i++) {
+//                Node node = nodeList.item(i);
+//                path = path + "/" + node.getNodeName();
+//                if (node.getNodeType() == Node.TEXT_NODE) {
+//                    System.out.println(path + ": " + node.getNodeType());
+//                }
+//                printNode(node.getChildNodes(), level, path);
+//            }
+//        }
+//    }
 }

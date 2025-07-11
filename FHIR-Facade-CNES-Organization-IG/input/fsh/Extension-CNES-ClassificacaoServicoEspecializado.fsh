@@ -2,7 +2,7 @@ Extension: ClassificacaoServicoEspecializado
 Id: extension-cnes-classificacao-servico-especializado
 Title: "Classificação do Serviço especializado ofertado pelo Estabelecimento de Saúde"
 Description: "Código, descrição e outras informações referentes à Classificação do Serviço Especializado ofertado pelo Estabelecimento de Saúde."
-Context: Organization.extension.extension.extension
+Context: Organization.extension.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ClassificacaoServicoEspecializado"
 * ^version = "2.0.0"

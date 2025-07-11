@@ -72,4 +72,4 @@ Parent: br-core-organization
 * extension contains NomeDiretor named nomeDiretor 0..1
 * extension contains BRAtendeSUS named atendeSus 0..1
 * extension contains ExtensionFluxoClientela named fluxoClientela 0..1
-* extension contains ServicosEspecializados named servicosEspecializados 0..1
+* extension contains ServicoEspecializado named servicoEspecializado 1..*

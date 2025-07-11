@@ -68,7 +68,7 @@ public class OrganizationCnes extends Organization {
             = "Specialized Services offered by the Organization."
     )
     @ca.uhn.fhir.model.api.annotation.Extension(
-        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicosEspecializados",
+        url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado",
         isModifier = false,
         definedLocally = true)
     @Child(name = "specializedServices")

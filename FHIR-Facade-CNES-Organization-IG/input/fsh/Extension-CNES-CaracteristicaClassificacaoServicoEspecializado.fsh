@@ -2,7 +2,7 @@ Extension: CaracteristicaClassificacaoServicoEspecializado
 Id: extension-cnes-caract-classificacao-servico-especializado
 Title: "Característica da Classificação do Serviço Especializado ofertado pelo Estabelecimento de Saúde"
 Description: "Código da Característica da Classificação referente ao Serviço Especializado ofertado pelo Estabelecimento de Saúde."
-Context: Organization.extension.extension.extension
+Context: Organization.extension.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/CaracteristicaClassificacaoServicoEspecializado"
 * ^version = "2.0.0"

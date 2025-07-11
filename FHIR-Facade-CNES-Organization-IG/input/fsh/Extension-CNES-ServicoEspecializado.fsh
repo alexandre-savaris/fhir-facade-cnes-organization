@@ -2,7 +2,7 @@ Extension: ServicoEspecializado
 Id: extension-cnes-servico-especializado
 Title: "Serviço Especializado ofertado pelo Estabelecimento de Saúde"
 Description: "Código, descrição e classificações do Serviço Especializado ofertado pelo Estabelecimento de Saúde."
-Context: Organization.extension
+Context: Organization
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/ServicoEspecializado"
 * ^version = "2.0.0"

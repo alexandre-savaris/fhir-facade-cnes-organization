@@ -215,8 +215,10 @@ public class Utils {
         valueSets.put("type",
             "https://terminologia.saude.gov.br/fhir/ValueSet/BRTipoEstabelecimentoSaude");
 
-        // Insert OIDs.
-        // https://www.hl7.org/oid/index.cfm
+        /*
+             Insert OIDs.
+             https://www.hl7.org/oid/index.cfm
+         */
         oids.put("ibgeCode", "2.16.840.1.113883.4.707");
 
         // Insert Extensions.
@@ -235,7 +237,6 @@ public class Utils {
         );
 
         // Insert Unique IDs.
-//        uniqueIds.put("cnes", "https://saude.gov.br/fhir/sid/cnes");
         uniqueIds.put("cnpj", "https://saude.gov.br/fhir/sid/cnpj");
     }
 }
