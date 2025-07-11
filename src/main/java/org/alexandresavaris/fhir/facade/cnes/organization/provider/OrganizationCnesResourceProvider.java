@@ -727,7 +727,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                                 "specializedServiceClassificationCharacteristic"
                             )
                         )
-                        .setValue(node.getNodeValue());
+                        .setCode(node.getNodeValue());
                 } else if (
                     path.endsWith(
                         Utils.xpathExpressionSuffixes.get(

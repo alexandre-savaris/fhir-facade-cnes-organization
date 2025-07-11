@@ -86,8 +86,8 @@ a browser.
                         <tr>
                             <td colspan="2" style="border: 0px">&nbsp;</td>
                         </tr>
-                        <tr th:each="extensionLevel1 : ${address.extension}">
-                            <th:block th:if="${extensionLevel1.value}">
+                        <th:block th:each="extensionLevel1 : ${address.extension}">
+                            <tr th:if="${extensionLevel1.value}">
                                 <td th:text="${extensionLevel1.value.code}"></td>
                                 <th:block th:if="${#strings.length(extensionLevel1.value.code) > 2}">
                                     <td th:text="'Código do Município no IBGE'"></td>
@@ -95,26 +95,19 @@ a browser.
                                 <th:block th:unless="${#strings.length(extensionLevel1.value.code) > 2}">
                                     <td th:text="'Código da UF no IBGE'"></td>
                                 </th:block>
-                            </th:block>
+                            </tr>
                             <th:block th:unless="${#arrays.isEmpty(extensionLevel1.extension)}">
-                                <table class="hapiPropertyTable">
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2" style="border: 0px">&nbsp;</td>
-                                        </tr>
-                                        <tr th:each="extensionLevel2 : ${extensionLevel1.extension}">
-                                            <th:block th:if="${extensionLevel2.value}">
-                                                <td th:text="${extensionLevel2.value.value}"></td>
-                                                <th:block th:switch="${extensionLevel2.url}">
-                                                    <td th:case="'latitude'">Latitude</td>
-                                                    <td th:case="'longitude'">Longitude</td>
-                                                </th:block>
-                                            </th:block>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <tr th:each="extensionLevel2 : ${extensionLevel1.extension}">
+                                    <th:block th:if="${extensionLevel2.value}">
+                                        <td th:text="${extensionLevel2.value.value}"></td>
+                                        <th:block th:switch="${extensionLevel2.url}">
+                                            <td th:case="'latitude'">Latitude</td>
+                                            <td th:case="'longitude'">Longitude</td>
+                                        </th:block>
+                                    </th:block>
+                                </tr>
                             </th:block>
-                        </tr>
+                        </th:block>
                     </th:block>
                 </tbody>
             </table>
@@ -202,25 +195,21 @@ a browser.
                         <td th:text="${specializedService.specializedService.display}"></td>
                     </tr>
                     <th:block th:unless="${#arrays.isEmpty(specializedService.specializedServiceClassifications)}">
-                        <table class="hapiPropertyTable">
-                            <tbody>
-                                <tr>
-                                    <td th:text="'Classificações do Serviço Especializado'" colspan="4" style="font-weight: bold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Descrição</th>
-                                    <th>Característica</th>
-                                    <th>CNES</th>
-                                </tr>
-                                <tr th:each="specializedServiceClassification : ${specializedService.specializedServiceClassifications}">
-                                    <td th:text="${specializedServiceClassification.specializedServiceClassification.code}" style="text-align: right"></td>
-                                    <td th:text="${specializedServiceClassification.specializedServiceClassification.display}"></td>
-                                    <td th:text="${specializedServiceClassification.specializedServiceClassificationCharacteristic.code}"></td>
-                                    <td th:text="${specializedServiceClassification.specializedServiceClassificationCnes.code}"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <tr>
+                            <td th:text="'Classificações do Serviço Especializado'" colspan="4" style="font-weight: bold"></td>
+                        </tr>
+                        <tr>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Característica</th>
+                            <th>CNES</th>
+                        </tr>
+                        <tr th:each="specializedServiceClassification : ${specializedService.specializedServiceClassifications}">
+                            <td th:text="${specializedServiceClassification.specializedServiceClassification.code}" style="text-align: right"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassification.display}"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassificationCharacteristic.code}"></td>
+                            <td th:text="${specializedServiceClassification.specializedServiceClassificationCnes.code}"></td>
+                        </tr>
                     </th:block>
                 </tbody>
             </table>

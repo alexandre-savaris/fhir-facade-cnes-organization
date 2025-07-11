@@ -312,7 +312,7 @@ public class OrganizationCnes extends Organization {
                 isModifier = false,
                 definedLocally = true)
             @Child(name = "specializedServiceClassificationCharacteristic")
-            private CodeType specializedServiceClassificationCharacteristic;
+            private Coding specializedServiceClassificationCharacteristic;
 
             // Specialized Service Classification Cnes.
             @Description(shortDefinition = "The CNES from the Classification for the Specialized Service provided by the Organization.")
@@ -342,18 +342,18 @@ public class OrganizationCnes extends Organization {
                 return this;
             }
 
-            public CodeType getSpecializedServiceClassificationCharacteristic() {
+            public Coding getSpecializedServiceClassificationCharacteristic() {
 
                 if (this.specializedServiceClassificationCharacteristic == null) {
                     this.specializedServiceClassificationCharacteristic
-                        = new CodeType();
+                        = new Coding();
                 }
 
                 return this.specializedServiceClassificationCharacteristic;
             }
 
             public SpecializedServiceClassification setSpecializedServiceClassificationCharacteristic(
-                CodeType specializedServiceClassificationCharacteristic) {
+                Coding specializedServiceClassificationCharacteristic) {
 
                 this.specializedServiceClassificationCharacteristic
                     = specializedServiceClassificationCharacteristic;
