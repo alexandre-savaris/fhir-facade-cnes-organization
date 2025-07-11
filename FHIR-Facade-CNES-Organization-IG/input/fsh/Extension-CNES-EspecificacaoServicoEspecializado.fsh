@@ -2,7 +2,7 @@ Extension: EspecificacaoServicoEspecializado
 Id: extension-cnes-especificacao-servico-especializado
 Title: "Especificação do Serviço especializado ofertado pelo Estabelecimento de Saúde"
 Description: "Código, descrição e outras informações referentes à Especificação do Serviço Especializado ofertado pelo Estabelecimento de Saúde."
-Context: Organization.extension
+Context: Organization.extension.extension
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/Extension/cnes/EspecificacaoServicoEspecializado"
 * ^version = "2.0.0"

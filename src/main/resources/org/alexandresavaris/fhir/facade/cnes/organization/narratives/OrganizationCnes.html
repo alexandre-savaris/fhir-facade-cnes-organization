@@ -191,8 +191,8 @@ a browser.
                         <th>Descrição</th>
                     </tr>
                     <tr>
-                        <td th:text="${specializedService.specializedService.code}"></td>
-                        <td th:text="${specializedService.specializedService.display}"></td>
+                        <td th:text="${specializedService.specializedServiceSpecification.code}"></td>
+                        <td th:text="${specializedService.specializedServiceSpecification.display}"></td>
                     </tr>
                     <th:block th:unless="${#arrays.isEmpty(specializedService.specializedServiceClassifications)}">
                         <tr>

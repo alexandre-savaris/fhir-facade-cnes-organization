@@ -6,6 +6,8 @@ import ca.uhn.fhir.rest.server.IResourceProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.alexandresavaris.fhir.facade.cnes.organization.model.OrganizationCnes;
+import org.alexandresavaris.fhir.facade.cnes.organization.model.SpecializedService;
+import org.alexandresavaris.fhir.facade.cnes.organization.model.SpecializedServiceClassification;
 import org.alexandresavaris.fhir.facade.cnes.organization.util.Utils;
 import org.hl7.fhir.r4.model.*;
 
@@ -18,14 +20,14 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     // The empty constructor.
     public OrganizationCnesResourceProvider() {
     }
-    
+
     /**
      * The getResourceType method comes from IResourceProvider, and must be
      * overridden to indicate what type of resource this provider supplies.
      */
     @Override
     public Class<OrganizationCnes> getResourceType() {
-       
+
         return OrganizationCnes.class;
     }
 
@@ -42,13 +44,13 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     @Read(type = OrganizationCnes.class)
     public OrganizationCnes getResourceById(@IdParam IdType theId)
         throws Exception {
-        
+
         // Fill in the resource with test data.
         OrganizationCnes retVal = new OrganizationCnes();
-        
+
         // The logical ID replicates the Organization's CNES.
         retVal.setId(theId);
-            
+
         // CodigoCNES -> Identifier: CNES.
         retVal.addIdentifier()
             .setSystem("urn:oid:" + Utils.oids.get("cnes"))
@@ -69,7 +71,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
 
         // nomeEmpresarial -> alias.
         retVal.addAlias("THE TEST ORGANIZATION'S ALIAS");
-            
+
         // Endereco -> Address.
         String street = "THE STREET";
         String number = "1";
@@ -79,7 +81,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         String addressTextTemplate = "{0}, {1} - {2} - {3} - {4}";
         String addressText = java.text.MessageFormat.format(
             addressTextTemplate, street, number, neighborhood, city, state);
-        
+
         Address address = new Address()
             .setUse(Address.AddressUse.WORK)
             .setType(Address.AddressType.BOTH)
@@ -121,7 +123,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         // Completing the address to be returned.
         address.addExtension(cityCodeIbgeExtension);
         address.addExtension(stateCodeIbgeExtension);
-        
+
         // Geolocation extensions.
         Extension geolocationExtension
             = new Extension(Utils.extensions.get("geolocation"));
@@ -133,11 +135,11 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
         longitudeExtension.setValue(new DecimalType("-99.99999"));
         geolocationExtension.addExtension(latitudeExtension);
         geolocationExtension.addExtension(longitudeExtension);
-        
+
         // Completing the address to be returned.
         address.addExtension(geolocationExtension);
         retVal.addAddress(address);
-        
+
         // dataAtualizacao -> Extension (update date).
         retVal.setUpdateDate(new DateType("1980-01-01"));
 
@@ -168,7 +170,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     .setDisplay("THE UNITY TYPE")
             )
         );
-                
+
         // Telefone -> contact
         String phoneTemplate = "{0} {1}";
         String phone = java.text.MessageFormat.format(
@@ -204,40 +206,42 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                         .setCode("1")
                 )
             );
-            
+
         // perteceSistemaSUS -> Extension (Is the Organization part of SUS?).
         retVal.setIsSus(new BooleanType("true"));
 
         // fluxoClientela -> Extension (The client flow expected for the
         // Organization).
         retVal.setClientFlow(
-            new CodeType("THE EXPECTED CLIENT FLOW")
-                .setSystem(Utils.namingSystems.get("clientFlow")
-            )
+            new Coding()
+                .setSystem(
+                    Utils.namingSystems.get("clientFlow")
+                )
+                .setDisplay("THE EXPECTED CLIENT FLOW")
         );
-            
+
         // servicoespecializados -> Extension (specializedServices).
-        List<OrganizationCnes.SpecializedService> specializedServices
+        List<SpecializedService> specializedServices
             = new ArrayList<>();
 
-        OrganizationCnes.SpecializedService specializedService
-            = new OrganizationCnes.SpecializedService()
-                .setSpecializedService(
+        SpecializedService specializedService
+            = new SpecializedService()
+                .setSpecializedServiceSpecification(
                     new Coding()
                         .setSystem(
-                            Utils.namingSystems.get("specializedServiceType")
+                            Utils.namingSystems.get("specializedServiceSpecification")
                         )
                         .setCode("999")
                         .setDisplay("THE SPECIALIZED SERVICE")
                 );
 
-        List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+        List<SpecializedServiceClassification>
             specializedServiceClassifications
                 = specializedService.getSpecializedServiceClassifications();
-        
-        OrganizationCnes.SpecializedService.SpecializedServiceClassification
-            specializedServiceClassification = 
-                new OrganizationCnes.SpecializedService.SpecializedServiceClassification()
+
+        SpecializedServiceClassification
+            specializedServiceClassification =
+                new SpecializedServiceClassification()
                     .setSpecializedServiceClassification(
                         new Coding()
                             .setSystem(
@@ -255,7 +259,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     "specializedServiceClassificationCharacteristic"
                 )
             )
-            .setValue("9");
+            .setCode("9");
         specializedServiceClassification
             .getSpecializedServiceClassificationCnes()
             .setSystem("urn:oid:" + Utils.oids.get("cnes"))
@@ -266,12 +270,12 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     "UTF-8"
                 )
             );
-        
+
         specializedServiceClassifications.add(specializedServiceClassification);
         specializedServices.add(specializedService);
-        
+
         retVal.setSpecializedServices(specializedServices);
-        
+
         return retVal;
     }
 }

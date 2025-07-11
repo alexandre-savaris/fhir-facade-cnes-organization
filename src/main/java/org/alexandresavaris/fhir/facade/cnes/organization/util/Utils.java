@@ -200,8 +200,8 @@ public class Utils {
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoEmail");
         namingSystems.put("clientFlow",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/FluxoClientela");
-        namingSystems.put("specializedServiceType",
-            "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoServicoEspecializado");
+        namingSystems.put("specializedServiceSpecification",
+            "https://terminologia.saude.gov.br/fhir/ValueSet/BRServicoEspecializado");
         namingSystems.put("specializedServiceClassification",
             "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado");
         namingSystems.put("specializedServiceClassificationCharacteristic",

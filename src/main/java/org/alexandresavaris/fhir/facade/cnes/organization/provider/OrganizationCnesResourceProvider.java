@@ -31,6 +31,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.alexandresavaris.fhir.facade.cnes.organization.model.OrganizationCnes;
+import org.alexandresavaris.fhir.facade.cnes.organization.model.SpecializedService;
+import org.alexandresavaris.fhir.facade.cnes.organization.model.SpecializedServiceClassification;
 import org.alexandresavaris.fhir.facade.cnes.organization.util.NamespaceContextMap;
 import org.alexandresavaris.fhir.facade.cnes.organization.util.Utils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -563,7 +565,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
             // SOAP Webservice.
             printNode(nodeList, 0, "");
 
-            List<OrganizationCnes.SpecializedService> specializedServices
+            List<SpecializedService> specializedServices
                 = new ArrayList<>();
             fillInResourceInstanceWithSpecializedServices(nodeList, "",
                 specializedServices);
@@ -611,7 +613,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     private void fillInResourceInstanceWithSpecializedServices(
         NodeList nodeList,
         String path,
-        List<OrganizationCnes.SpecializedService> specializedServices)
+        List<SpecializedService> specializedServices)
         throws UnsupportedEncodingException {
 
         // Nothing to do here.
@@ -634,12 +636,12 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the system and code values, create a new extension
                     // instance.
                     specializedServices.add(
-                        new OrganizationCnes.SpecializedService()
-                            .setSpecializedService(
+                        new SpecializedService()
+                            .setSpecializedServiceSpecification(
                                 new Coding()
                                     .setSystem(
                                         Utils.namingSystems.get(
-                                            "specializedServiceType"
+                                            "specializedServiceSpecification"
                                         )
                                     )
                                     .setCode(node.getNodeValue())
@@ -655,9 +657,9 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // Specialized service.
                     // For the display, use the last created extension instance
                     // of Specialized Service.
-                    OrganizationCnes.SpecializedService specializedService
+                    SpecializedService specializedService
                         = getLastSpecializedService(specializedServices);
-                    specializedService.getSpecializedService()
+                    specializedService.getSpecializedServiceSpecification()
                         .setDisplay(node.getNodeValue());
                 } else if (
                     path.endsWith(
@@ -671,12 +673,12 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // extension instance of the Specialized service.
                     // Retrieve the list of Classifications, adding a new one
                     // afterward.
-                    List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+                    List<SpecializedServiceClassification>
                         specializedServiceClassifications
                         = getListOfSpecializedServiceClassifications(
                             specializedServices);
                     specializedServiceClassifications.add(
-                        new OrganizationCnes.SpecializedService.SpecializedServiceClassification()
+                        new SpecializedServiceClassification()
                             .setSpecializedServiceClassification(
                                 new Coding()
                                     .setSystem(
@@ -698,7 +700,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the display value, retrieve the last created
                     // extension instance of the Specialized service
                     // classification.
-                    OrganizationCnes.SpecializedService.SpecializedServiceClassification
+                    SpecializedServiceClassification
                         specializedServiceClassification
                             = getLastSpecializedServiceClassification(
                                 specializedServices
@@ -716,7 +718,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the characteristic code, retrieve the last created
                     // extension instance of the Specialized service
                     // classification.
-                    OrganizationCnes.SpecializedService.SpecializedServiceClassification
+                    SpecializedServiceClassification
                         specializedServiceClassification
                             = getLastSpecializedServiceClassification(
                                 specializedServices
@@ -739,7 +741,7 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
                     // For the CNES code, retrieve the last created
                     // extension instance of the Specialized service
                     // classification.
-                    OrganizationCnes.SpecializedService.SpecializedServiceClassification
+                    SpecializedServiceClassification
                         specializedServiceClassification
                             = getLastSpecializedServiceClassification(
                                 specializedServices
@@ -763,38 +765,36 @@ public class OrganizationCnesResourceProvider implements IResourceProvider {
     }
 
     // Get the last Specialized Service from the list.
-    private OrganizationCnes.SpecializedService getLastSpecializedService
-        (List<OrganizationCnes.SpecializedService> specializedServices) {
+    private SpecializedService getLastSpecializedService
+        (List<SpecializedService> specializedServices) {
 
-        return specializedServices.get(specializedServices.size() - 1);
+        return specializedServices.getLast();
     }
 
     // Get the list of Specialized Service Classifications from the last
     // Specialized Service.
-    private List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+    private List<SpecializedServiceClassification>
         getListOfSpecializedServiceClassifications(
-            List<OrganizationCnes.SpecializedService> specializedServices) {
+            List<SpecializedService> specializedServices) {
 
-        OrganizationCnes.SpecializedService specializedService
+        SpecializedService specializedService
             = getLastSpecializedService(specializedServices);
 
         return specializedService.getSpecializedServiceClassifications();
     }
 
     // Get the last Specialized Service Classification from the list.
-    private OrganizationCnes.SpecializedService.SpecializedServiceClassification
+    private SpecializedServiceClassification
         getLastSpecializedServiceClassification(
-            List<OrganizationCnes.SpecializedService> specializedServices) {
+            List<SpecializedService> specializedServices) {
 
-        List<OrganizationCnes.SpecializedService.SpecializedServiceClassification>
+        List<SpecializedServiceClassification>
             specializedServiceClassifications
                 = getListOfSpecializedServiceClassifications(
                     specializedServices
                 );
 
-        return specializedServiceClassifications.get(
-            specializedServiceClassifications.size() - 1
-        );
+        return specializedServiceClassifications.getLast();
     }
 
     // For debugging purposes.
