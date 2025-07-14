@@ -1,7 +1,8 @@
 ### FHIR-Facade-CNES-Organization-IG
 
 #### Introdução
-Este Guia de Implementação lista e descreve os artefatos componentes da Fachada HL7® FHIR® utilizada para acesso aos dados do Cadastro Nacional de Estabelecimentos de Saúde (CNES), mantidos e disponibilizados pelo Departamento de Informática do Sistema Único de Saúde (DATASUS).
+Este Guia de Implementação lista e descreve os artefatos componentes da Fachada HL7® FHIR® utilizada para acesso aos dados do Cadastro Nacional de Estabelecimentos de Saúde (CNES), mantidos e disponibilizados pelo Departamento de Informática do Sistema Único de Saúde (DATASUS).  
+A perfilização deste projeto é baseada nos Guias de Implementação (Implementation Guides - IGs) [Guia de implementação do Core do Brasil: Release 1 - BR Realm](https://hl7.org.br/fhir/core/) e [Guia de Implementação da RNDS](https://rnds-fhir.saude.gov.br/).
 
 #### Para que serve
 Originalmente, os dados do CNES são disponibilizados para acesso por entidades devidamente credenciadas através de *Webservices* SOAP (*Simple Object Access Protocol*). A Fachada descrita por este Guia viabiliza um acesso REST (*Representational State Transfer*) em conformidade às defiições do padrão HL7® FHIR®.

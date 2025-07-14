@@ -2,7 +2,7 @@ Instance: 14a679be-5b12-41b6-85e7-8793f9b4a93e
 InstanceOf: CapabilityStatement
 Usage: #definition
 * name = "RestServer"
-* status = #active
+* status = #draft
 * date = "2025-06-26T17:26:52.359-03:00"
 * publisher = "Not provided"
 * kind = #instance

@@ -6,7 +6,6 @@ Description: "Código da Característica de uma Classificação de um Serviço E
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/CaracteristicaClassificacaoServicoEspecializado"
 * ^version = "1.0.0"
-* ^status = #active
 * ^experimental = false
 * ^date = "2024-07-17"
 * ^publisher = "Alexandre Savaris"

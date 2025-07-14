@@ -6,7 +6,6 @@ Description: "C√≥digo do Tipo de Telefone, mantido pelo Departamento de Informa√
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/TipoTelefone"
 * ^version = "2.0.0"
-* ^status = #active
 * ^experimental = false
 * ^date = "2025-06-22"
 * ^publisher = "Alexandre Savaris"

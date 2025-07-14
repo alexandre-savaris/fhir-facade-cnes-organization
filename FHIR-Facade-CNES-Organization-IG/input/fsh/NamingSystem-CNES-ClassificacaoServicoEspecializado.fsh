@@ -6,7 +6,6 @@ Description: "Classificação de um Serviço Especializado, mantida pelo Departa
 * ^language = #pt-BR
 * ^url = "https://alexandresavaris.org/fhir/r4/NamingSystem/cnes/ClassificacaoServicoEspecializado"
 * ^version = "1.0.0"
-* ^status = #active
 * ^experimental = false
 * ^date = "2024-07-16"
 * ^publisher = "Alexandre Savaris"
